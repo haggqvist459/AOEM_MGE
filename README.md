@@ -80,7 +80,7 @@
 
 ### Misc: 
 - [ ] Redux state management 
-- [ ] localStorage to 
+- [ ] localStorage for data permanence 
 - [ ] Header component
     - [ ] Hamburger button with nav links to each day 
 - [ ] Footer 

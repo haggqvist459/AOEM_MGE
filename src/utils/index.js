@@ -1,1 +1,1 @@
-export { ROUTES, LOCALSTORAGE_KEY } from './constants'
+export { ROUTES, LOCALSTORAGE_KEY, POINTS_AND_MULTIPLIERS, TRIBE_LEVEL_MULTIPLIERS } from './constants'
