@@ -1,8 +1,48 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateFieldDayFour, calculateDailyScoreDayFour, resetStateDayFour } from '../../redux/slices'
+import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
+import { DAY_KEYS } from '../../utils'
 
 const DayFour = () => {
+
+  const dispatch = useDispatch()
+  const dayFourData = useSelector((state) => state.dayFour)
+
+  const handleInput = (field, value) => {
+    dispatch(updateFieldDayFour({ field, value }))
+  }
+
+  const cancelForm = () => {
+    dispatch(resetStateDayFour())
+  }
+
+  const submitForm = (e) => {
+    e.preventDefault()
+    dispatch(calculateDailyScoreDayFour())
+
+  }
+
   return (
-    <div>DayFour</div>
+    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
+      <div className='px-5'>
+        <div className=''>
+          <FormHeader title={'Day Four'} />
+          <form onSubmit={submitForm}>
+            <div className='flex flex-col md:flex-row md:pr-2'>
+              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+                {/* Input */}
+                <PreviousEventScore dayKey={DAY_KEYS.DAY_FOUR}/>
+              </div>
+              <div className='w-full md:w-1/2 relative'>
+                {/* Output */}
+              </div>
+            </div>
+            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+          </form>
+        </div>
+      </div>
+    </section>
   )
 }
 
