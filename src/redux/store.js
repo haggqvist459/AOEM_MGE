@@ -1,10 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import dayOneReducer from './dayOneSlice'; 
+import { dayOneReducer, dayTwoReducer, dayThreeReducer, dayFourReducer, dayFiveReducer, daySixReducer } from "./slices";
+import { saveData } from "../utils";
 
-export const store = configureStore({
-    reducer: {
-        dayOne: dayOneReducer, // register reducers 
-    }
-})
+const store = configureStore({
+  reducer: {
+    dayOne: dayOneReducer,
+    dayTwo: dayTwoReducer,
+    dayThree: dayThreeReducer,
+    dayFour: dayFourReducer,
+    dayFive: dayFiveReducer,
+    daySix: daySixReducer,
+  },
+});
 
-export default store
+// store.subscribe(() => {
+//     const state = store.getState();
+//     saveData(state);
+// })
+
+export default store;

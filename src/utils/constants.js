@@ -17,6 +17,15 @@ export const TRIBE_LEVEL_MULTIPLIERS = {
     'Level 29-30': 300,
 }
 
+export const DAY_KEYS = {
+    DAY_ONE: 'dayOne',
+    DAY_TWO: 'dayTwo', 
+    DAY_THREE: 'dayThree',
+    DAY_FOUR:  'dayFour',
+    DAY_FIVE: 'dayFive',
+    DAY_SIX: 'daySix',
+    DAY_SEVEN: 'daySeven'
+}
 export const POINTS_AND_MULTIPLIERS = {
     STAMINA_PER_TRIBE: 5,
     STAMINA_DAILY_BOOST: 50,

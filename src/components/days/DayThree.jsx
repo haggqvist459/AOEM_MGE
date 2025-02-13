@@ -20,6 +20,12 @@ Legendary advent spin = 1000
 Input gather marches resource gather boosts, their load capacity and potential bonuses 
 Input amount of empire coins available for spins 
 
+Gather info: 
+  Gather speed % 
+  load capacity
+  load bonus %
+
+
 
 Display max available score based on gathering
     Include rich resources, and alliance resource center 
