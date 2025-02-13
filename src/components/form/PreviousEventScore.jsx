@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../redux/slices'
-import { FormField } from '../components'
+import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../../redux/slices'
+import { FormField } from '../form'
 
 const updateActions = {
   dayOne: updateFieldDayOne,
@@ -25,11 +25,12 @@ const PreviousEventScore = ({ dayKey }) => {
   }
 
   return (
-    <div>
-      <h5 className='font-bold text-xl my-2 text-amber-600'>Previous event scores: </h5>
+    <div className='my-2 px-1'>
+      <h5 className='font-bold text-xl text-blue-900'>Previous event scores: </h5>
       <FormField
         labelValue={'Last event 1st place score: '}
         value={previousEventScore.topOne}
+        placeholder={'0'}
         id='lastTopOne'
         onChange={(value) => { handleInput('topOne', value ) }}
         required={false}
@@ -37,6 +38,7 @@ const PreviousEventScore = ({ dayKey }) => {
       <FormField
         labelValue={'Last event 10th place score: '}
         value={previousEventScore.topTen}
+        placeholder={'0'}
         id='lastTopTen'
         onChange={(value) => { handleInput('topTen', value) }}
         required={false}

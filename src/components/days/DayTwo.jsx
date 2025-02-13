@@ -1,8 +1,104 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateFieldDayTwo, calculateDailyScoreDayTwo, resetStateDayTwo } from '../../redux/slices'
+import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
+import { DAY_KEYS } from '../../utils'
+
 
 const DayTwo = () => {
+
+  const dispatch = useDispatch();
+  const dayTwoData = useSelector((state) => state.dayTwo);
+
+  const handleInput = (field, value) => {
+    dispatch(updateFieldDayTwo({ field, value }))
+  }
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    dispatch(calculateDailyScoreDayTwo());
+  }
+
+  const cancelForm = () => {
+    dispatch(resetStateDayTwo());
+  }
+
+
   return (
-    <div>DayTwo</div>
+    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
+      <div className='px-5'>
+      <FormHeader title={'Day Two'}/>
+        <form onSubmit={submitForm}>
+          <div className='flex flex-col md:flex-row md:pr-2'>
+            <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+              {/* Input */}
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Epic medals: '}
+                  placeholder={'0'}
+                  value={dayTwoData.epicMedals}
+                  id={'epicMedals'}
+                  onChange={(value) => handleInput('epicMedals', value)}
+                />
+                <FormField
+                  labelValue={'Legendary medals: '}
+                  placeholder={'0'}
+                  value={dayTwoData.legendaryMedals}
+                  id={'legendaryMedals'}
+                  onChange={(value) => handleInput('legendaryMedals', value)}
+                />
+              </div>
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Epic skill scrolls: '}
+                  placeholder={'0'}
+                  value={dayTwoData.epicScrolls}
+                  id={'epicScrolls'}
+                  onChange={(value) => handleInput('epicScrolls', value)}
+                />
+                <FormField
+                  labelValue={'Legendary skill scrolls: '}
+                  placeholder={'0'}
+                  value={dayTwoData.legendaryScrolls}
+                  id={'legendaryScrolls'}
+                  onChange={(value) => handleInput('legendaryScrolls', value)}
+                />
+              </div>
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Legendary blueprints: '}
+                  placeholder={'0'}
+                  value={dayTwoData.legendaryBlueprints}
+                  id={'legendaryBlueprints'}
+                  onChange={(value) => handleInput('legendaryBlueprints', value)}
+                />
+                <FormField
+                  labelValue={'Forging speed-ups: '}
+                  placeholder={'Enter amount in minutes'}
+                  value={dayTwoData.speedUpForge}
+                  id={'speedUpForge'}
+                  onChange={(value) => handleInput('speedUpForge', value)}
+                />
+              </div>
+              <div className='px-1 sm:w-1/2'>
+                <FormField
+                  labelValue={'Time required to forge: '}
+                  placeholder={'Enter amount in minutes'}
+                  value={dayTwoData.forgingTime}
+                  id={'forgingTime'}
+                  onChange={(value) => handleInput('forgingTime', value)}
+                />
+              </div>
+              <PreviousEventScore dayKey={DAY_KEYS.DAY_TWO} />
+            </div>
+            <div className='w-full md:w-1/2 relative'>
+              {/* Output */}
+            </div>
+          </div>
+          <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        </form>
+      </div>
+    </section>
   )
 }
 

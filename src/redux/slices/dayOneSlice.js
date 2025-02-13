@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData } from "../../utils";
+import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData } from "../../utils";
 
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
 
@@ -44,9 +44,22 @@ const dayOneSlice = createSlice({
             state.tribesHunted = validStamina / state.staminaCost
             // multiply that number with the tribe level multiplier
             state.dailyScore = state.tribesHunted * state.tribeLevelMultiplier
+        },
+        resetState: (state) => {
+            state.stamina = '',
+            state.tribeLevelMultiplier = TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[dropdownOptions.length - 1]],
+            state.staminaCost = POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE, 
+            state.dailyScore = '',
+            state.tribesHunted = '',
+            state.previousEventScore = {
+                topOne: '',
+                topTen: '',
+            };
+
+            saveData({...loadData(), dayOne: {... state }});
         }
     }
 })
 
-export const { updateField, calculateDailyScore } = dayOneSlice.actions;
+export const { updateField, calculateDailyScore, resetState } = dayOneSlice.actions;
 export default dayOneSlice.reducer;

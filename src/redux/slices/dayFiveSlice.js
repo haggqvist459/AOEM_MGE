@@ -13,12 +13,13 @@ const dayFiveSlice = createSlice({
     initialState,
     reducers: {
         updateField: (state, action) => {
-            const { day, field, value } = action.payload;
+            const { field, value } = action.payload;
             // Numeric value validation
             const cleanedValue = typeof value === 'string' ? value.replace(/[^0-9]/g, "") : value;
             const numericValue = Number(cleanedValue);
+
             // Update previous event scores if the field belongs there
-            if (field in state[day].previousEventScore) {
+            if (field in state.previousEventScore) {
                 state.previousEventScore[field] = numericValue;
             } else {
                 state[field] = numericValue;
@@ -26,9 +27,12 @@ const dayFiveSlice = createSlice({
         },
         calculateDailyScore: (state, action) => {
 
+        },
+        resetState: (state) => {
+
         }
     }
 })
 
-export const { updateField, calculateDailyScore  } = dayFiveSlice.actions;
+export const { updateField, calculateDailyScore, resetState  } = dayFiveSlice.actions;
 export default dayFiveSlice.reducer;

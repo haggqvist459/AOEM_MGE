@@ -9,10 +9,10 @@
 
 
 - [ ] Day One Component 
-    - [ ] Input available stamina
-    - [ ] Input previous event scores 
-    - [ ] Calculate available score
-    - [ ] Compare score to previous events 
+    - [x] Input available stamina
+    - [x] Input previous event scores 
+    - [x] Calculate available score
+    - [x] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Two
     - [ ] Input available epic and legendary medals 
@@ -79,8 +79,8 @@
 - [ ] Custom error page
 
 ### Misc: 
-- [ ] Redux state management 
-- [ ] localStorage for data permanence 
+- [x] Redux state management 
+- [x] localStorage for data permanence 
 - [ ] Header component
     - [ ] Hamburger button with nav links to each day 
 - [ ] Footer 
