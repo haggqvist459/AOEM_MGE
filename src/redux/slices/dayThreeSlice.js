@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
 
-const initialState = {
+const savedState = loadData();
+const initialState = savedState?.dayThree || {
+    marches: Array.from({ length: 5 }, () => ({
+        gatherSpeed: '',
+        loadCapacity: '',
+        loadBonus: '',
+    })),
+    empireCoins: '',
     dailyScore: '',
     previousEventScore: {
         topOne: '',
@@ -14,25 +22,37 @@ const dayThreeSlice = createSlice({
     reducers: {
         updateField: (state, action) => {
             const { field, value } = action.payload;
-            // Numeric value validation
-            const cleanedValue = typeof value === 'string' ? value.replace(/[^0-9]/g, "") : value;
-            const numericValue = Number(cleanedValue);
 
             // Update previous event scores if the field belongs there
             if (field in state.previousEventScore) {
-                state.previousEventScore[field] = numericValue;
+                state.previousEventScore[field] = cleanNumericValue(value);
             } else {
-                state[field] = numericValue;
+                state[field] = cleanNumericValue(value);
             }
         },
-        calculateDailyScore: (state, action) => {
+        updateMarchField: (state, action) => {
+            const {index, field, value} = action.payload;
+            state.marches[index][field] = cleanNumericValue(value);
+        },
+        calculateDailyScore: (state) => {
 
         },
         resetState: (state) => {
-
+            state.marches = Array.from({ length: 5 }, () => ({
+                gatherSpeed: '',
+                loadCapacity: '',
+                loadBonus: '',
+            })),
+            state.empireCoins = '',
+            state.dailyScore = '',
+            state.previousEventScore = {
+                topOne: '',
+                topTen: '',
+            };
+            saveData({ ...loadData(), dayThree: { ...state } });
         }
     }
 })
 
-export const { updateField, calculateDailyScore, resetState } = dayThreeSlice.actions;
+export const { updateField, calculateDailyScore, resetState, updateMarchField } = dayThreeSlice.actions;
 export default dayThreeSlice.reducer;

@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    hammers: '',
+    copperSand: '',
+    silverSand: '',
+    fineGold: '',
+    meteorSteel: '',
+    universalSpeedup: '',
+    researchSpeedup: '',
+    buildingSpeedup: '',
     dailyScore: '',
     previousEventScore: {
         topOne: '',

@@ -16,7 +16,7 @@ const FormButtons = ({ onSubmit, onCancel, isDisabled = false }) => {
                 className='w-1/2 hover:bg-neutral-500 rounded border-2 text-blue-900 font-bold'
                 onClick={onCancel}
             >
-                Cancel
+                Clear
             </button>
         </div>
     )

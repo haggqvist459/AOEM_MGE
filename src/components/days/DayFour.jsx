@@ -26,21 +26,83 @@ const DayFour = () => {
   return (
     <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
       <div className='px-5'>
-        <div className=''>
-          <FormHeader title={'Day Four'} />
-          <form onSubmit={submitForm}>
-            <div className='flex flex-col md:flex-row md:pr-2'>
-              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-                {/* Input */}
-                <PreviousEventScore dayKey={DAY_KEYS.DAY_FOUR}/>
+        <FormHeader title={'Day Four'} />
+        <form onSubmit={submitForm}>
+          <div className='flex flex-col md:flex-row md:pr-2'>
+            <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+              {/* Input */}
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Planishing hammers: '}
+                  placeholder={'0'}
+                  value={dayFourData.hammers}
+                  id={'hammers'}
+                  onChange={(value) => handleInput('hammers', value)}
+                />
+                <FormField
+                  labelValue={'Fine gold: '}
+                  placeholder={'0'}
+                  value={dayFourData.fineGold}
+                  id={'fineGold'}
+                  onChange={(value) => handleInput('fineGold', value)}
+                />
               </div>
-              <div className='w-full md:w-1/2 relative'>
-                {/* Output */}
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Silver sand: '}
+                  placeholder={'0'}
+                  value={dayFourData.silverSand}
+                  id={'silverSand'}
+                  onChange={(value) => handleInput('silverSand', value)}
+                />
+                <FormField
+                  labelValue={'Copper sand: '}
+                  placeholder={'0'}
+                  value={dayFourData.copperSand}
+                  id={'copperSand'}
+                  onChange={(value) => handleInput('copperSand', value)}
+                />
               </div>
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Meteor steel: '}
+                  placeholder={'0'}
+                  value={dayFourData.meteorSteel}
+                  id={'meteorSteel'}
+                  onChange={(value) => handleInput('meteorSteel', value)}
+                />
+                <FormField
+                  labelValue={'Universal speed-up: '}
+                  placeholder={'Input in minutes'}
+                  value={dayFourData.universalSpeedup}
+                  id={'universalSpeedup'}
+                  onChange={(value) => handleInput('universalSpeedup', value)}
+                />
+              </div>
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <FormField
+                  labelValue={'Building speed-up: '}
+                  placeholder={'Input in minutes'}
+                  value={dayFourData.buildingSpeedup}
+                  id={'buildingSpeedup'}
+                  onChange={(value) => handleInput('buildingSpeedup', value)}
+                />
+                <FormField
+                  labelValue={'Research speed-up: '}
+                  placeholder={'Input in minutes'}
+                  value={dayFourData.researchSpeedup}
+                  id={'researchSpeedup'}
+                  onChange={(value) => handleInput('researchSpeedup', value)}
+                />
+              </div>
+              <PreviousEventScore dayKey={DAY_KEYS.DAY_FOUR} />
             </div>
-            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-          </form>
-        </div>
+            <div className='w-full md:w-1/2 relative'>
+              {/* Output */}
+            </div>
+          </div>
+          <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        </form>
       </div>
     </section>
   )
