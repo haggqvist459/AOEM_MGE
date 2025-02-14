@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDayThree, calculateDailyScoreDayThree, resetStateDayThree } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
+import { updateFieldDayThree, calculateDailyScoreDayThree, resetStateDayThree, updateMarchField } from '../../redux/slices'
+import { FormField, PreviousEventScore, FormButtons, FormHeader, GatherMarch } from '../form'
 import { DAY_KEYS } from '../../utils'
 
 const DayThree = () => {
@@ -13,6 +13,9 @@ const DayThree = () => {
     dispatch(updateFieldDayThree({ field, value }))
   }
 
+  const handleMarchInput = (index, field, value) => {
+    dispatch(updateMarchField(index, field, value))
+  }
   const cancelForm = () => {
     dispatch(resetStateDayThree())
   }
@@ -31,6 +34,15 @@ const DayThree = () => {
             <div className='flex flex-col md:flex-row md:pr-2'>
               <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
                 {/* Input */}
+                {dayThreeData.marches.map((march, index) => (
+                  <GatherMarch
+                    key={index}
+                    march={march}
+                    marchIndex={index}
+                    onChange={handleMarchInput}
+                    title={`March ${index + 1}`}
+                  />
+                ))}
                 <PreviousEventScore dayKey={DAY_KEYS.DAY_THREE} />
               </div>
               <div className='w-full md:w-1/2 relative'>
@@ -74,4 +86,4 @@ Top 1 score 1,8kk,
 Top 10 score 1,1kk
 
 
- */
+ */ 

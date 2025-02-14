@@ -2,7 +2,7 @@
 import { LOCALSTORAGE_KEY } from "./constants";
 
 export const loadData = () => {
-    console.log("loadData start")
+    // console.log("loadData start")
     try {
         const loadedData = localStorage.getItem(LOCALSTORAGE_KEY);
         return loadedData ? JSON.parse(loadedData) : undefined
@@ -16,8 +16,8 @@ export const loadData = () => {
 
 
 export const saveData = (data) => {
-    console.log("saveData start");
-    console.log("saveData data to save: ", data);
+    // console.log("saveData start");
+    // console.log("saveData data to save: ", data);
 
     try {
         const serializedData = JSON.stringify(data);

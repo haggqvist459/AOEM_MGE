@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData } from "../../utils";
+import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
 
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
 
@@ -10,7 +10,6 @@ const savedState = loadData();
 const initialState = savedState?.dayOne || {
     stamina: '',
     tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[dropdownOptions.length - 1]],
-    staminaCost: POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE,
     dailyScore: '',
     tribesHunted: '',
     previousEventScore: {
@@ -25,30 +24,26 @@ const dayOneSlice = createSlice({
     reducers: {
         updateField: (state, action) => {
             const { field, value } = action.payload;
-            // Numeric value validation
-            const cleanedValue = typeof value === 'string' ? value.replace(/[^0-9]/g, "") : value;
-            const numericValue = Number(cleanedValue);
 
             // Update previous event scores if the field belongs there
             if (field in state.previousEventScore) {
-                state.previousEventScore[field] = numericValue;
+                state.previousEventScore[field] = cleanNumericValue(value);
             } else {
-                state[field] = numericValue;
+                state[field] = cleanNumericValue(value);
             }
         },
-        calculateDailyScore: (state, action) => {
+        calculateDailyScore: (state) => {
             // validate stamina as a multiple of staminaCost 
-            const validStamina = state.stamina - (state.stamina % state.staminaCost)
+            const validStamina = state.stamina - (state.stamina % POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE)
 
             // calculate number of tribes that can be hunted based on stamina 
-            state.tribesHunted = validStamina / state.staminaCost
+            state.tribesHunted = validStamina / POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE
             // multiply that number with the tribe level multiplier
             state.dailyScore = state.tribesHunted * state.tribeLevelMultiplier
         },
         resetState: (state) => {
             state.stamina = '',
             state.tribeLevelMultiplier = TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[dropdownOptions.length - 1]],
-            state.staminaCost = POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE, 
             state.dailyScore = '',
             state.tribesHunted = '',
             state.previousEventScore = {

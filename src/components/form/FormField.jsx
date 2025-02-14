@@ -1,10 +1,10 @@
 import React from 'react'
 
-const FormField = ({ labelValue, placeholder, id, value, onChange, required=true}) => {
+const FormField = ({ labelValue, placeholder, id, value, onChange, required=false}) => {
     
     return (
         <div className="flex flex-col w-full mb-2">
-            <label htmlFor={id} className="w-full font-bold text-blue-900 my-1">{labelValue}</label>
+            <label htmlFor={id} className="w-full font-semibold text-blue-900 my-1">{labelValue}</label>
             <input
                 type="text"
                 className="border rounded w-full px-1"
