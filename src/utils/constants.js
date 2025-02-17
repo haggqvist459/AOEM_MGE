@@ -5,6 +5,15 @@ export const ROUTES = {
     ADMIN: '/admin',
     ERROR: '/*'
 }
+export const DAY_KEYS = {
+    DAY_ONE: 'dayOne',
+    DAY_TWO: 'dayTwo', 
+    DAY_THREE: 'dayThree',
+    DAY_FOUR:  'dayFour',
+    DAY_FIVE: 'dayFive',
+    DAY_SIX: 'daySix',
+    DAY_SEVEN: 'daySeven'
+}
 
 export const TRIBE_LEVEL_MULTIPLIERS = {
     'Level 1-4': 50,
@@ -17,15 +26,16 @@ export const TRIBE_LEVEL_MULTIPLIERS = {
     'Level 29-30': 300,
 }
 
-export const DAY_KEYS = {
-    DAY_ONE: 'dayOne',
-    DAY_TWO: 'dayTwo', 
-    DAY_THREE: 'dayThree',
-    DAY_FOUR:  'dayFour',
-    DAY_FIVE: 'dayFive',
-    DAY_SIX: 'daySix',
-    DAY_SEVEN: 'daySeven'
+export const TROOP_TIER_MULTIPLIERS = {
+    'Tier 1': 2, 
+    'Tier 2': 3,
+    'Tier 3': 5,
+    'Tier 4': 10,
+    'Tier 5': 20,
+    'Tier 6': 50,
+    'Tier 7': 100,
 }
+
 
 export const POINTS_AND_MULTIPLIERS = {
     STAMINA_PER_TRIBE: 5,

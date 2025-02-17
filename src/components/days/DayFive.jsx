@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFieldDayFive, calculateDailyScoreDayFive, resetStateDayFive } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
-import { DAY_KEYS } from '../../utils'
+import { DAY_KEYS, TROOP_TIER_MULTIPLIERS } from '../../utils'
 
 const DayFive = () => {
 
@@ -31,6 +31,56 @@ const DayFive = () => {
             <div className='flex flex-col md:flex-row md:pr-2'>
               <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
                 {/* Input */}
+                <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                  {/* Base troop tier */}
+                  <div className='w-full'>
+                    <label htmlFor='tribeLevel' className='block font-bold text-blue-900 mt-2'>Base Troop Tier:</label>
+                    <div className='relative w-full'>
+                      <select
+                        id="baseTier"
+                        className='w-full mt-1 px-1 border border-neutral-300 rounded-md shadow-sm appearance-none'
+                        value={dayFiveData.troopBaseTier}
+                        // onChange={(e) => setSelectedDropdownOption(Number(e.target.value))} // ensure selected value remains a number 
+                        onChange={(e) => handleInput('baseTroopTier', e.target.value)}
+                      >
+                        {Object.keys(TROOP_TIER_MULTIPLIERS).map((level, index) => (
+                          <option key={index} value={TROOP_TIER_MULTIPLIERS[level]}>
+                            {level}
+                          </option>
+                        ))}
+                      </select>
+                      <div className='absolute inset-y-0 right-2 flex items-center pointer-events-none'>
+                        <svg className='w-5 h-5 text-black' fill='none' stroke='black' strokeWidth='2' viewBox='0 0 24 24' >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Target troop tier */}
+                  <div className='w-full'>
+                    <label htmlFor='tribeLevel' className='block font-bold text-blue-900 mt-2'>Target Troop Tier:</label>
+                    <div className='relative w-full'>
+                      <select
+                        id="tribeLevel"
+                        className='w-full mt-1 px-1 border border-neutral-300 rounded-md shadow-sm appearance-none'
+                        value={dayFiveData.troopTargetTier}
+                        // onChange={(e) => setSelectedDropdownOption(Number(e.target.value))} // ensure selected value remains a number 
+                        onChange={(e) => handleInput('targetTroopTier', e.target.value)}
+                      >
+                        {Object.keys(TROOP_TIER_MULTIPLIERS).map((level, index) => (
+                          <option key={index} value={TROOP_TIER_MULTIPLIERS[level]}>
+                            {level}
+                          </option>
+                        ))}
+                      </select>
+                      <div className='absolute inset-y-0 right-2 flex items-center pointer-events-none'>
+                        <svg className='w-5 h-5 text-black' fill='none' stroke='black' strokeWidth='2' viewBox='0 0 24 24' >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <PreviousEventScore dayKey={DAY_KEYS.DAY_FIVE} />
               </div>
               <div className='w-full md:w-1/2 relative'>
