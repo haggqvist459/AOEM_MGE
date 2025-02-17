@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
 
 const initialState = {
     hammers: '',
