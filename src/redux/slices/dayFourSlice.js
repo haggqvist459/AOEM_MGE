@@ -23,18 +23,15 @@ const dayFourSlice = createSlice({
     reducers: {
         updateField: (state, action) => {
             const { field, value } = action.payload;
-            // Numeric value validation
-            const cleanedValue = typeof value === 'string' ? value.replace(/[^0-9]/g, "") : value;
-            const numericValue = Number(cleanedValue);
 
             // Update previous event scores if the field belongs there
             if (field in state.previousEventScore) {
-                state.previousEventScore[field] = numericValue;
+                state.previousEventScore[field] = cleanNumericValue(value);
             } else {
-                state[field] = numericValue;
+                state[field] = cleanNumericValue(value);
             }
         },
-        calculateDailyScore: (state, action) => {
+        calculateDailyScore: (state) => {
 
         },
         resetState: (state) => {

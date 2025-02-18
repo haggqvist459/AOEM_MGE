@@ -4,9 +4,9 @@ import { FormField } from '../form'
 const GatherMarch = ({ march, marchIndex, title, onChange }) => {
 
     return (
-        <div>
-            <h5 className='font-bold text-blue-900 px-1'>{title}</h5>
-            <div className='flex flex-col sm:flex-row space-x-1 px-1'>
+        <div className='px-1 border-b border-neutral-400 pb-1 mb-2'>
+            <h5 className='font-bold text-xl text-blue-900'>{title}</h5>
+            <div className='flex flex-col sm:flex-row space-x-1'>
                 {/* Gather march */}
                 <FormField
                     labelValue={'Speed bonus'}
