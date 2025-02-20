@@ -6,7 +6,7 @@ const GatherMarch = ({ march, marchIndex, title, onChange }) => {
     return (
         <div className='px-1 border-b border-neutral-400 pb-1 mb-2'>
             <h5 className='font-bold text-xl text-blue-900'>{title}</h5>
-            <div className='flex flex-col sm:flex-row space-x-1'>
+            <div className='flex flex-col sm:flex-row space-x-1 text-sm'>
                 {/* Gather march */}
                 <FormField
                     labelValue={'Speed bonus'}

@@ -3,6 +3,7 @@ import { TROOP_TIER_MULTIPLIERS } from '../../utils'
 import { FormField } from '../form'
 
 const TroopsPromotion = ({ troopType, troopData, onChange }) => {
+
     return (
         <div className='px-1 border-b border-neutral-400 pb-1 mb-2'>
             <h5 className='font-bold text-xl my-1 text-blue-900'>{troopType}</h5>
@@ -55,7 +56,7 @@ const TroopsPromotion = ({ troopType, troopData, onChange }) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col sm:flex-row mt-2 space-x-1'>
+            <div className='flex flex-col sm:flex-row mt-2 space-x-1 text-sm'>
                     {/* Troops per batch: */}
                     {/* Troop training time:  */}
                     {/* Training speed-up:  */}
@@ -69,14 +70,14 @@ const TroopsPromotion = ({ troopType, troopData, onChange }) => {
                     <FormField
                         labelValue={'Training time:'}
                         placeholder={'Input in minutes'}
-                        value={troopType.trainingTime}
+                        value={troopData.trainingTime}
                         id={`${troopType}-trainingTimePerBatch`}
                         onChange={(value) => onChange(troopType, 'trainingTime', value)}
                     />
                     <FormField
                         labelValue={'Available troops:'}
                         placeholder={'0'}
-                        value={troopType.availableTroops}
+                        value={troopData.availableTroops}
                         id={`${troopType}-availableTroops`}
                         onChange={(value) => onChange(troopType, 'availableTroops', value)}
                     />

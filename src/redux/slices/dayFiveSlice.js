@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TROOP_TIER_MULTIPLIERS, loadData, saveData, cleanNumericValue, calculateHighTierPromotableBatches } from "../../utils";
+import { TROOP_TIER_MULTIPLIERS, loadData, saveData, cleanNumericValue, calculatePromotableBatches, calculateTroopPromotionScore } from "../../utils";
 
 
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
@@ -51,8 +51,11 @@ const initialState = savedState?.dayFive || {
     },
     trainedTroopTier: '',
     trainedTroopsPerBatch: '',
-    trainingSpeedup: '',
-    dailyScore: '',
+    initialTrainingSpeedup: '',
+    remainingTrainingSpeedup: '',
+    promotionScore: 0,
+    trainingScore: 0,
+    totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',
@@ -80,57 +83,47 @@ const dayFiveSlice = createSlice({
         calculateDailyScore: (state) => {
             // find the highest target tier amongst the troops to promote
             const highestTargetTier = Math.max(...Object.values(state.troops).map(troop => troop.targetTier));
-            console.log("highestTargetTier:", highestTargetTier);
+            // console.log("highestTargetTier:", highestTargetTier);
             // split the troop types into groups based on target tier
-            let highestTierTroops = [];
-            let lowerTierTroops = [];
+            let highestTierTroops = {};
+            let lowerTierTroops = {};
 
             // group the troop types based on promotion tier 
             Object.keys(state.troops).forEach((troopType) => {
                 const troop = state.troops[troopType];
-                console.log("Processing troopType:", troopType, "Data:", state.troops[troopType]);
-                console.log("troop data ", troop.trainingTime);
-                console.log("troop data ", troop.availableTroops);
-                console.log("troop data ", troop.promotedTroopPerBatch);
-
                 // Check if any of the required values are missing or invalid
                 if (
                     troop.trainingTime === '' || troop.promotedTroopPerBatch === '' || troop.availableTroops === ''
                 ) return;
-            
+
                 if (
-                    troop.targetTier === highestTargetTier && 
-                    !highestTierTroops.some(t => t === troop) // Ensures no duplicates
+                    troop.targetTier === highestTargetTier &&
+                    !(troopType in highestTierTroops) // Ensures no duplicates
                 ) {
-                    highestTierTroops.push(troop);
-                    console.log("highestTierTroops.push(troop);");
-                    console.log("highestTierTroops.push(troop) troop.trainingTime;", troop.trainingTime);
-                    console.log("highestTierTroops.push(troop) troop.availableTroops;", troop.availableTroops);
-                    console.log("highestTierTroops.push(troop) troop.promotedTroopPerBatch;", troop.promotedTroopPerBatch);
+                    highestTierTroops[troopType] = troop;
                 } else {
-                    lowerTierTroops.push(troop);
-                    console.log("lowerTierTroops.push(troop);");
-                    console.log("lowerTierTroops.push(troop) troop.trainingTime;", troop.trainingTime);
-                    console.log("lowerTierTroops.push(troop) troop.availableTroops;", troop.availableTroops);
-                    console.log("lowerTierTroops.push(troop) troop.promotedTroopPerBatch;", troop.promotedTroopPerBatch);
+                    lowerTierTroops[troopType] = troop;
                 }
             });
 
-            console.log("lowerTierTroops length: ", lowerTierTroops.length);
-            // Step 1: Calculate promotions for the highest-tier troops
-            const { troopUpdates, remainingSpeedup } = calculateHighTierPromotableBatches(highestTierTroops, state.trainingSpeedup);
+            const { updatedHighestTierTroops, updatedLowerTierTroops, remainingSpeedup } = calculatePromotableBatches(highestTierTroops, lowerTierTroops, state.initialTrainingSpeedup)
 
-            console.log("troopUpdates content:", troopUpdates);
-            console.log("state.troops content:", state.troops);
-            // Apply the troop updates to state
-            // Object.keys(troopUpdates).forEach((troopType) => {
-            //     state.troops[troopType].maxPromotableBatches = troopUpdates[troopType].maxPromotableBatches;
-            //     state.troops[troopType].promotableBatches = troopUpdates[troopType].promotableBatches;
-            // });
+            // update state with the new values for promotable batches 
+            Object.keys(updatedHighestTierTroops).forEach(troopType => {
+                state.troops[troopType] = updatedHighestTierTroops[troopType];
+            });
 
-            // Store remaining speed-ups for promoting lower-tier troops in the next step
-            state.remainingSpeedup = remainingSpeedup
-            // move on to assign speed ups to lower tier batches if speedups remain. 
+            Object.keys(updatedLowerTierTroops).forEach(troopType => {
+                state.troops[troopType] = updatedLowerTierTroops[troopType];
+            });
+
+            // Update remaining speedup in state
+            state.remainingTrainingSpeedup = remainingSpeedup;
+
+            // calculate the score 
+            const { updatedTroops, promotionScore } = calculateTroopPromotionScore(state.troops);
+            state.troops = updatedTroops;
+            state.promotionScore = promotionScore;
 
         },
         resetState: (state) => {
@@ -153,3 +146,4 @@ const dayFiveSlice = createSlice({
 
 export const { updateField, updatePromotionField, calculateDailyScore, resetState } = dayFiveSlice.actions;
 export default dayFiveSlice.reducer;
+

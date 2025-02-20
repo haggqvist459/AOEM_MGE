@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
-import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
+import { FormField, PreviousEventScore, PreviousEventScoreBoard, FormButtons, FormHeader, FormSubHeader } from '../form'
 
 
 const DayOne = () => {
@@ -32,7 +32,7 @@ const DayOne = () => {
   return (
     <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
       <div className='px-5'>
-        <FormHeader title={'Day One'}/>
+        <FormHeader title={'Day One'} />
         <form onSubmit={submitForm}>
           {/* Split section in half vertically, input on left and output on the right. */}
           {/* , display everything in one column. */}
@@ -73,19 +73,20 @@ const DayOne = () => {
             <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
               {/* Output */}
               {/* TODO: place each headline and value in rows */}
-              <h5 className='block font-bold text-blue-900'>Total number of tribes hunted:</h5>
-              <p className='font-semibold mt-1 text-neutral-600'>{dayOneData.tribesHunted.toLocaleString()}</p>
-              <h5 className='font-bold my-1 text-blue-900'>Score potential day 1:</h5>
-              <p className='font-semibold my-2 text-neutral-600'>{dayOneData.dailyScore.toLocaleString()}</p>
-              <h5 className='font-bold text-xl mt-4 mb-2 text-blue-900'>Previous event scores: </h5>
-              <h5 className='block font-bold text-blue-900 my-2'>Previous event 1st place score:</h5>
-              <p className='font-semibold mt-2 mb-4 text-neutral-600'>{dayOneData.previousEventScore.topOne.toLocaleString()}</p>
-              <h5 className='font-bold mt-2 mb-1 text-blue-900'>Previous event 10th place score:</h5>
-              <p className='font-semibold mb-2 text-neutral-600'>{dayOneData.previousEventScore.topTen.toLocaleString()}</p>
+              <FormSubHeader title={'Day One Score: '} />
+              <div className='flex flex-row mt-1 mb-1 space-x-1'>
+                <h3 className='block font-semibold text-blue-900'>Hunted tribes total: </h3>
+                <p className='font-semibold text-neutral-600'>{dayOneData.tribesHunted.toLocaleString()}</p>
+              </div>
+              <div className='flex flex-row mt-1 mb-1 space-x-1'>
+                <h3 className='block font-semibold text-blue-900'>Score potential: </h3>
+                <p className='font-semibold text-neutral-600'>{dayOneData.totalDailyScore.toLocaleString()}</p>
+              </div>
+              <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_ONE} />
             </div>
           </div>
           {/* buttons */}
-          <FormButtons onSubmit={submitForm} onCancel={cancelForm}/>
+          <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
         </form>
       </div>
     </section>
@@ -114,37 +115,13 @@ Calculate score outcome based on tribes hunted
 Display score
 
 
+Feb 17 start:
+Top 1 score: 323400
+Top 10 score: 61500
+
+Feb 10 start:
 Top 1 score 144k
 Top 10 score 84,3k
 
 
 */
-
-// // Get the text labels from the tribe level object literal
-// const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS);
-
-// const [dayOneData, setDayOneData] = useState({
-//   'stamina': '',
-// })
-
-// const [dayOneScore, setDayOneScore] = useState({
-//   'totalScore': 0,
-//   'tribesHunted': 0
-// })
-// const [previousEventScore, setPreviousEventScore] = useState({
-//   'topOne': '',
-//   'topTen': '',
-// })
-
-// const handleDayOneFieldChanges = (field, value) => {
-//   // If the value is a string, clean non-numeric characters
-//   const cleanedValue = typeof value === "string" ? value.replace(/[^0-9]/g, "") : value;
-//   console.log(`Updating ${field} with:`, cleanedValue); // Debug log
-//   setDayOneData((prev) => ({ ...prev, [field]: Number(cleanedValue) }))
-// }
-
-// const handlePreviousEventScoreChanges = (field, value) => {
-//   // If the value is a string, clean non-numeric characters
-//   const cleanedValue = typeof value === "string" ? value.replace(/[^0-9]/g, "") : value;
-//   setPreviousEventScore((prev) => ({ ...prev, [field]: Number(cleanedValue) }))
-// }
