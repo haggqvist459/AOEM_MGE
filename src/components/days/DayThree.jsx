@@ -82,6 +82,11 @@ Display max available score based on gathering
     Include rich resources, and alliance resource center 
     Include full marches waiting to be deposited at reset
 
+Feb 17 start:
+1st: 1595000
+10th: 1299220
+
+Feb 10 start:
 Top 1 score 1,8kk, 
 Top 10 score 1,1kk
 

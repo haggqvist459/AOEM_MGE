@@ -10,7 +10,7 @@ const initialState = {
     universalSpeedup: '',
     researchSpeedup: '',
     buildingSpeedup: '',
-    dailyScore: '',
+    totalDailyScore: '',
     previousEventScore: {
         topOne: '',
         topTen: '',

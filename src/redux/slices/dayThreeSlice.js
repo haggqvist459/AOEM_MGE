@@ -9,7 +9,7 @@ const initialState = savedState?.dayThree || {
         loadBonus: '',
     })),
     empireCoins: '',
-    dailyScore: '',
+    totalDailyScore: '',
     previousEventScore: {
         topOne: '',
         topTen: '',

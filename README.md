@@ -5,7 +5,7 @@
 ### Main Page: 
 
 - [ ] Initial setup 
-    - [ ] Display each component individually on screen for mobile users 
+    - [ ] Display components one by one
 
 
 - [ ] Day One Component 
@@ -15,14 +15,14 @@
     - [x] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Two
-    - [ ] Input available epic and legendary medals 
+    - [x] Input available epic and legendary medals 
         - [ ] Add rank levels for each medal for more accurate score calculation
-    - [ ] Input available epic and legendary skill scrolls 
+    - [x] Input available epic and legendary skill scrolls 
         - [ ] Add rank levels for each skill for more accurate score calculation
-    - [ ] Input legendary gear blueprints 
-    - [ ] Input available forge speed up
-    - [ ] Input available skill points 
-    - [ ] Input previous event scores 
+    - [x] Input legendary gear blueprints 
+    - [x] Input available forge speed up
+    - [x] Input available skill points 
+    - [x] Input previous event scores 
     - [ ] Calculate available score based on gear blueprints or speed ups 
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
@@ -35,18 +35,18 @@
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Four
-    - [ ] Input number of available planishing hammers 
-    - [ ] Input amount of copper & silver sand, and fine gold
+    - [x] Input number of available planishing hammers 
+    - [x] Input amount of copper & silver sand, and fine gold
         - [ ] Input ring levels for more accurate score calculations
-    - [ ] Input available speed up minutes for building, research and universal 
-    - [ ] Input previous event scores 
+    - [x] Input available speed up minutes for building, research and universal 
+    - [x] Input previous event scores 
     - [ ] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Five 
-    - [ ] Input number of T1 troops available for promotion and to which level they can be promoted
-    - [ ] Input amount of training speed ups available 
-    - [ ] Input previous event scores 
+    - [x] Input number of T1 troops available for promotion and to which level they can be promoted
+    - [x] Input amount of training speed ups available 
+    - [x] Input previous event scores 
     - [ ] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
@@ -82,10 +82,10 @@
 - [x] Redux state management 
 - [x] localStorage for data permanence 
 - [ ] Header component
-    - [ ] Hamburger button with nav links to each day 
+    - [ ] Hamburger button with nav links to each day, admi and about page 
 - [ ] Footer 
     - [ ] About page link
-    - [ ] GitHub source code link 
+    - [x] GitHub source code link 
 
 ### About page: 
 - [ ] Explain how data is gathered and kept 

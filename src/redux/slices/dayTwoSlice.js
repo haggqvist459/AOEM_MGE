@@ -8,9 +8,14 @@ const initialState = savedState?.dayTwo || {
     epicScrolls: '',
     legendaryScrolls: '',
     legendaryBlueprints: '',
-    speedUpForge: '',
+    forgingSpeedup: '',
     forgingTime: '',
-    dailyScore: '',
+    score: {
+        medals: 0,
+        scrolls: 0,
+        forging: 0,
+    },
+    totalDailyScore: '',
     previousEventScore: {
         topOne: '',
         topTen: '',
@@ -33,11 +38,11 @@ const dayTwoSlice = createSlice({
         },
         calculateDailyScore: (state) => {
 
-            const medalScore = (state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL) + (state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL)
-            console.log('dayTwoSlice calculateDailyScore medalScore: ', medalScore)
-            const scrollScore = (state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL) + (state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL)
-            console.log('dayTwoSlice calculateDailyScore scrollScore', scrollScore)
-            // first calculate the potential number 
+            state.score.medals = (state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL) + (state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL)
+            console.log('dayTwoSlice calculateDailyScore medalScore: ', state.score.medals)
+            state.score.scrolls = (state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL) + (state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL)
+            console.log('dayTwoSlice calculateDailyScore scrollScore', state.score.scrolls)
+            
         },
         resetState: (state) => {
             state.epicMedals = '',
