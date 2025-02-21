@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
+import { updateField, updatePreviousEventScore } from '../slices'
 
 const savedState = loadData();
 const initialState = savedState?.dayThree || {
@@ -20,16 +21,18 @@ const dayThreeSlice = createSlice({
     name: 'dayThreeSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => {
-            const { field, value } = action.payload;
+        updateField: (state, action) => updateField(state, action), 
+        updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
+        // updateField: (state, action) => {
+        //     const { field, value } = action.payload;
 
-            // Update previous event scores if the field belongs there
-            if (field in state.previousEventScore) {
-                state.previousEventScore[field] = cleanNumericValue(value);
-            } else {
-                state[field] = cleanNumericValue(value);
-            }
-        },
+        //     // Update previous event scores if the field belongs there
+        //     if (field in state.previousEventScore) {
+        //         state.previousEventScore[field] = cleanNumericValue(value);
+        //     } else {
+        //         state[field] = cleanNumericValue(value);
+        //     }
+        // },
         updateMarchField: (state, action) => {
             const {index, field, value} = action.payload;
             state.marches[index][field] = cleanNumericValue(value);
@@ -54,5 +57,5 @@ const dayThreeSlice = createSlice({
     }
 })
 
-export const { updateField, calculateDailyScore, resetState, updateMarchField } = dayThreeSlice.actions;
+export const { calculateDailyScore, resetState, updateMarchField } = dayThreeSlice.actions;
 export default dayThreeSlice.reducer;

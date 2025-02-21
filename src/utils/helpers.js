@@ -123,7 +123,7 @@ export const calculateTroopPromotionScore = (troopGroup) => {
     Object.entries(updatedTroopGroup).forEach(([troopType, troop]) => {
         if (troop.promotableBatches > 0) {
             // Calculate the score per troop
-            const scorePerTroop = (1 + (troop.targetTier - troop.baseTier)) * troop.promotedTroopPerBatch;
+            const scorePerTroop = (troop.targetTier - troop.baseTier) * troop.promotedTroopPerBatch;
             // Calculate total score for this troop type
             updatedTroopGroup[troopType] = {
                 ...troop,

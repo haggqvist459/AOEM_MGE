@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDaySeven, calculateDailyScoreDaySeven, resetStateDaySeven } from '../../redux/slices'
+import { updateField, calculateDailyScoreDaySeven, resetStateDaySeven } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
 import { DAY_KEYS } from '../../utils'
 
@@ -10,7 +10,7 @@ const DaySeven = () => {
   const daySevenData = useSelector((state) => state.daySeven);
 
   const handleInput = (field, value) => {
-    dispatch(updateFieldDaySeven({ field, value }))
+    dispatch(updateField({day: DAY_KEYS.DAY_SEVEN, field, value }))
   }
 
   const cancelForm = () => {

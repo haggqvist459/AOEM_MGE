@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDayFour, calculateDailyScoreDayFour, resetStateDayFour } from '../../redux/slices'
+import { updateField, calculateDailyScoreDayFour, resetStateDayFour } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
 import { DAY_KEYS } from '../../utils'
 
@@ -10,7 +10,7 @@ const DayFour = () => {
   const dayFourData = useSelector((state) => state.dayFour)
 
   const handleInput = (field, value) => {
-    dispatch(updateFieldDayFour({ field, value }))
+    dispatch(updateField({day: DAY_KEYS.DAY_FOUR, field, value }))
   }
 
   const cancelForm = () => {
@@ -132,7 +132,12 @@ Amount of sand and gold available
     For more in-depth calculation, levels on rings to be upgraded 
 
 
-Top 1 score 19,9kk 
-Top 10 score 5,8kk
+Feb 17 start:
+1st: 14740460
+10th: 5250520
+
+Feb 10 start: 
+1st: 19,9kk 
+10th: 5,8kk
 
  */

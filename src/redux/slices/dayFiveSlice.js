@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TROOP_TIER_MULTIPLIERS, loadData, saveData, cleanNumericValue, calculatePromotableBatches, calculateTroopPromotionScore } from "../../utils";
-
+import { updateField, updatePreviousEventScore } from '../slices'
 
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
 
@@ -66,16 +66,16 @@ const dayFiveSlice = createSlice({
     name: 'dayFiveSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => {
-            const { field, value } = action.payload;
+        // updateField: (state, action) => {
+        //     const { field, value } = action.payload;
 
-            // Update previous event scores if the field belongs there
-            if (field in state.previousEventScore) {
-                state.previousEventScore[field] = cleanNumericValue(value);
-            } else {
-                state[field] = cleanNumericValue(value);
-            }
-        },
+        //     // Update previous event scores if the field belongs there
+        //     if (field in state.previousEventScore) {
+        //         state.previousEventScore[field] = cleanNumericValue(value);
+        //     } else {
+        //         state[field] = cleanNumericValue(value);
+        //     }
+        // },
         updatePromotionField: (state, action) => {
             const { troopType, field, value } = action.payload;
             state.troops[troopType][field] = cleanNumericValue(value);
@@ -144,6 +144,6 @@ const dayFiveSlice = createSlice({
     }
 })
 
-export const { updateField, updatePromotionField, calculateDailyScore, resetState } = dayFiveSlice.actions;
+export const { updatePromotionField, calculateDailyScore, resetState } = dayFiveSlice.actions;
 export default dayFiveSlice.reducer;
 
