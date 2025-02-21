@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDayFive, calculateDailyScoreDayFive, resetStateDayFive, updatePromotionField } from '../../redux/slices'
+import { updateField, calculateDailyScoreDayFive, resetStateDayFive, updatePromotionField } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader, TroopsPromotion } from '../form'
 import { DAY_KEYS } from '../../utils'
 
@@ -10,7 +10,7 @@ const DayFive = () => {
   const dayFiveData = useSelector((state) => state.dayFive)
 
   const handleInput = (field, value) => {
-    dispatch(updateFieldDayFive({ field, value }))
+    dispatch(updateField({day: DAY_KEYS.DAY_FIVE, field, value }))
   }
 
   const handleTroopInput = (troopType, field, value) => {

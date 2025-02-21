@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
+import { updateField, updatePreviousEventScore } from '../slices'
 
 const initialState = {
     hammers: '',
@@ -21,6 +22,8 @@ const dayFourSlice = createSlice({
     name: 'dayFourSlice',
     initialState,
     reducers: {
+        updateField: (state, action) => updateField(state, action),
+        updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
         updateField: (state, action) => {
             const { field, value } = action.payload;
 
@@ -40,5 +43,5 @@ const dayFourSlice = createSlice({
     }
 })
 
-export const { updateField, calculateDailyScore, resetState } = dayFourSlice.actions;
+export const { calculateDailyScore, resetState } = dayFourSlice.actions;
 export default dayFourSlice.reducer;

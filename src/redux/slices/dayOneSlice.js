@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
+import { updateField, updatePreviousEventScore } from '../slices'
 
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
 
@@ -22,16 +23,6 @@ const dayOneSlice = createSlice({
     name: 'dayOneSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => {
-            const { field, value } = action.payload;
-
-            // Update previous event scores if the field belongs there
-            if (field in state.previousEventScore) {
-                state.previousEventScore[field] = cleanNumericValue(value);
-            } else {
-                state[field] = cleanNumericValue(value);
-            }
-        },
         calculateDailyScore: (state) => {
             // validate stamina as a multiple of staminaCost 
             const validStamina = state.stamina - (state.stamina % POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE)
@@ -56,5 +47,8 @@ const dayOneSlice = createSlice({
     }
 })
 
-export const { updateField, calculateDailyScore, resetState } = dayOneSlice.actions;
+export const { calculateDailyScore, resetState } = dayOneSlice.actions;
 export default dayOneSlice.reducer;
+
+
+

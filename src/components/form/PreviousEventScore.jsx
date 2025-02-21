@@ -1,17 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../../redux/slices'
+import { updatePreviousEventScore } from '../../redux/slices'
 import { FormField, FormSubHeader } from '../form'
 
-const updateActions = {
-  dayOne: updateFieldDayOne,
-  dayTwo: updateFieldDayTwo,
-  dayThree: updateFieldDayThree,
-  dayFour: updateFieldDayFour,
-  dayFive: updateFieldDayFive,
-  daySix: updateFieldDaySix,
-  daySeven: updateFieldDaySeven
-}
 
 const PreviousEventScore = ({ dayKey }) => {
 
@@ -19,9 +10,7 @@ const PreviousEventScore = ({ dayKey }) => {
   const previousEventScore = useSelector((state) => state[dayKey].previousEventScore);
 
   const handleInput = (field, value) => {
-    if (updateActions[dayKey]) {
-      dispatch(updateActions[dayKey]({ field, value }))
-    }
+    dispatch(updatePreviousEventScore({day: dayKey, field, value}));
   }
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDayTwo, calculateDailyScoreDayTwo, resetStateDayTwo } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader, FormSubHeader } from '../form'
+import { calculateDailyScoreDayTwo, resetStateDayTwo, updateField } from '../../redux/slices'
+import { FormField, PreviousEventScore, FormButtons, FormHeader, FormSubHeader, SpeedupSelector } from '../form'
 import { DAY_KEYS } from '../../utils'
 
 
@@ -11,7 +11,7 @@ const DayTwo = () => {
   const dayTwoData = useSelector((state) => state.dayTwo);
 
   const handleInput = (field, value) => {
-    dispatch(updateFieldDayTwo({ field, value }))
+    dispatch(updateField({day: DAY_KEYS.DAY_TWO, field, value }))
   }
 
   const submitForm = (e) => {
@@ -65,20 +65,19 @@ const DayTwo = () => {
                 />
               </div>
               <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <FormField
-                  labelValue={'Legendary blueprints: '}
-                  placeholder={'0'}
-                  value={dayTwoData.legendaryBlueprints}
-                  id={'legendaryBlueprints'}
-                  onChange={(value) => handleInput('legendaryBlueprints', value)}
-                />
-                <FormField
-                  labelValue={'Forging speed-ups: '}
-                  placeholder={'Enter amount in minutes'}
-                  value={dayTwoData.speedUpForge}
-                  id={'speedUpForge'}
-                  onChange={(value) => handleInput('speedUpForge', value)}
-                />
+                <div className='w-1/2'>
+                  <FormField
+                    labelValue={'Legendary blueprints: '}
+                    placeholder={'0'}
+                    value={dayTwoData.legendaryBlueprints}
+                    id={'legendaryBlueprints'}
+                    onChange={(value) => handleInput('legendaryBlueprints', value)}
+                  />
+                </div>
+                <div className='w-1/2'>
+                  <SpeedupSelector title={'Forging speed-up'} onChange={handleInput} value={dayTwoData.forgingSpeedup ? Number(dayTwoData.forgingSpeedup) : 0} />
+                </div>
+
               </div>
               <div className='px-1 sm:w-1/2'>
                 <FormField

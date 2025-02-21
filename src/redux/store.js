@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { dayOneReducer, dayTwoReducer, dayThreeReducer, dayFourReducer, dayFiveReducer, daySixReducer, daySevenReducer } from "./slices";
+import { dayOneReducer, dayTwoReducer, dayThreeReducer, dayFourReducer, dayFiveReducer, daySixReducer, daySevenReducer, sharedReducer } from "./slices";
 import { saveData } from "../utils";
 
 const store = configureStore({
@@ -10,7 +10,8 @@ const store = configureStore({
     dayFour: dayFourReducer,
     dayFive: dayFiveReducer,
     daySix: daySixReducer,
-    daySeven: daySevenReducer
+    daySeven: daySevenReducer,
+    shared: sharedReducer,
   },
 });
 
