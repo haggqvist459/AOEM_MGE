@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateField, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
+import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
 import { FormField, PreviousEventScore, PreviousEventScoreBoard, FormButtons, FormHeader, FormSubHeader } from '../form'
 
@@ -11,7 +11,8 @@ const DayOne = () => {
   const dayOneData = useSelector((state) => state.dayOne);
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_ONE, field, value }))
+    // console.log('DayOne.jsx handleInput triggered, field: ', field, ' value: ', value );
+    dispatch(updateFieldDayOne({field, value }))
   }
 
   const cancelForm = () => {

@@ -1,11 +1,4 @@
-
-
-export const cleanNumericValue = (value) => {
-    const cleanedValue = typeof value === 'string' ? value.replace(/[^0-9]/g, "") : value;
-    return Number(cleanedValue);
-
-}
-
+//distribute the available speed ups in batches across the troop groups
 const distributeBatches = (troopGroup, totalBatchesAvailable) => {
     let troopKeys = Object.keys(troopGroup);
 
@@ -41,6 +34,7 @@ const distributeBatches = (troopGroup, totalBatchesAvailable) => {
     return totalBatchesAvailable; // Return remaining batches for lower tier troops
 };
 
+// calculate the number of available batches of troops ready to promote 
 const calculateAvailableBatches = (trainingSpeedup, trainingTime) => {
 
     const totalBatchesAvailable = trainingSpeedup / trainingTime;
@@ -52,6 +46,7 @@ const calculateAvailableBatches = (trainingSpeedup, trainingTime) => {
 
 }
 
+// convert  the training time back into minutes
 const reverseBatchCalculation = (remainingBatches, trainingTime, decimalCarryOver) => {
     return (remainingBatches * trainingTime) + (decimalCarryOver * trainingTime);
 }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
-import { updateField, updatePreviousEventScore } from '../slices'
+// import { sharedReducers } from '../slices'
 
 const initialState = {
     hammers: '',
@@ -40,7 +40,10 @@ const dayFourSlice = createSlice({
         resetState: (state) => {
 
         }
-    }
+    },
+    // extraReducers: (builder) => {
+    //     sharedReducers(builder);    
+    // }
 })
 
 export const { calculateDailyScore, resetState } = dayFourSlice.actions;

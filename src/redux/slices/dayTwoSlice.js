@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loadData, saveData, POINTS_AND_MULTIPLIERS, cleanNumericValue } from "../../utils";
-import { updateField, updatePreviousEventScore } from '../slices'
+import { loadData, saveData, POINTS_AND_MULTIPLIERS } from "../../utils";
+// import { sharedReducers } from '../slices'
 
 const savedState = loadData();
 const initialState = savedState?.dayTwo || {
@@ -31,18 +31,16 @@ const dayTwoSlice = createSlice({
     name: 'dayTwoSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => updateField(state, action),
-        updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
-        // updateField: (state, action) => {
-        //     const { field, value } = action.payload;
+        updateField: (state, action) => {
+            const { field, value } = action.payload;
 
-        //     // Update previous event scores if the field belongs there
-        //     if (field in state.previousEventScore) {
-        //         state.previousEventScore[field] = cleanNumericValue(value);
-        //     } else {
-        //         state[field] = cleanNumericValue(value);
-        //     }
-        // },
+            // Update previous event scores if the field belongs there
+            if (field in state.previousEventScore) {
+                state.previousEventScore[field] = cleanNumericValue(value);
+            } else {
+                state[field] = cleanNumericValue(value);
+            }
+        },
         calculateDailyScore: (state) => {
 
             state.score.medals = (state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL) + (state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL)
@@ -67,7 +65,10 @@ const dayTwoSlice = createSlice({
 
             saveData({ ...loadData(), dayTwo: { ...state } });
         }
-    }
+    },
+    // extraReducers: (builder) => {
+    //     sharedReducers(builder);    
+    // }
 })
 
 export const { calculateDailyScore, resetState } = dayTwoSlice.actions;

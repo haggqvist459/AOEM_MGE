@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDayTwo, resetStateDayTwo, updateField } from '../../redux/slices'
+import { calculateDailyScoreDayTwo, resetStateDayTwo } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader, FormSubHeader, SpeedupSelector } from '../form'
 import { DAY_KEYS } from '../../utils'
 
@@ -12,6 +12,10 @@ const DayTwo = () => {
 
   const handleInput = (field, value) => {
     dispatch(updateField({day: DAY_KEYS.DAY_TWO, field, value }))
+  }
+
+  const handleSpeedupInput = ( field, value ) => {
+    dispatch(updateSpeedup({day:  DAY_KEYS.DAY_TWO, field, value}))
   }
 
   const submitForm = (e) => {
@@ -75,7 +79,7 @@ const DayTwo = () => {
                   />
                 </div>
                 <div className='w-1/2'>
-                  <SpeedupSelector title={'Forging speed-up'} onChange={handleInput} value={dayTwoData.forgingSpeedup ? Number(dayTwoData.forgingSpeedup) : 0} />
+                  <SpeedupSelector title={'Forging speed-up'} onChange={handleSpeedupInput} value={dayTwoData.forgingSpeedup ? Number(dayTwoData.forgingSpeedup) : 0} />
                 </div>
 
               </div>

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { dayOneReducer, dayTwoReducer, dayThreeReducer, dayFourReducer, dayFiveReducer, daySixReducer, daySevenReducer, sharedReducer } from "./slices";
+import { dayOneReducer, dayTwoReducer, dayThreeReducer, dayFourReducer, dayFiveReducer, daySixReducer, daySevenReducer } from "./slices";
 import { saveData } from "../utils";
 
 const store = configureStore({
@@ -11,9 +11,24 @@ const store = configureStore({
     dayFive: dayFiveReducer,
     daySix: daySixReducer,
     daySeven: daySevenReducer,
-    shared: sharedReducer,
+    // shared: sharedReducer
   },
 });
+
+
+
+
+// store.subscribe(() => {
+//   console.log("Entire state structure: ", store.getState())
+//   const dayKey = "dayOne"; // Example key
+//   const stateTest = store.getState();
+
+//   if (stateTest[dayKey]) {
+//     console.log(`State for ${dayKey}:`, stateTest[dayKey]);
+//   } else {
+//     console.error(`Invalid dayKey: ${dayKey}`);
+//   }
+// })
 
 
 // save to localstorage only if state has changed, 
@@ -21,12 +36,12 @@ const store = configureStore({
 
 let lastSavedState = store.getState();
 setInterval(() => {
-    const currentState = store.getState();
+  const currentState = store.getState();
 
-    if (JSON.stringify(currentState) !== JSON.stringify(lastSavedState)) {
-        saveData(currentState);
-        lastSavedState = currentState;
-    }
+  if (JSON.stringify(currentState) !== JSON.stringify(lastSavedState)) {
+    saveData(currentState);
+    lastSavedState = currentState;
+  }
 }, 2000)
 
 
