@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateField, calculateDailyScoreDaySix, resetStateDaySix } from '../../redux/slices'
+import { calculateDailyScoreDaySix, resetStateDaySix } from '../../redux/slices'
 import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
 import { DAY_KEYS } from '../../utils'
 

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
-import { updateField, updatePreviousEventScore } from '../slices'
+
+// import { sharedReducers } from '../slices'
 
 const savedState = loadData();
 const initialState = savedState?.dayThree || {
@@ -21,7 +22,7 @@ const dayThreeSlice = createSlice({
     name: 'dayThreeSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => updateField(state, action), 
+        updateField: (state, action) => updateField(state, action),
         updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
         // updateField: (state, action) => {
         //     const { field, value } = action.payload;
@@ -34,7 +35,7 @@ const dayThreeSlice = createSlice({
         //     }
         // },
         updateMarchField: (state, action) => {
-            const {index, field, value} = action.payload;
+            const { index, field, value } = action.payload;
             state.marches[index][field] = cleanNumericValue(value);
         },
         calculateDailyScore: (state) => {
@@ -46,15 +47,18 @@ const dayThreeSlice = createSlice({
                 loadCapacity: '',
                 loadBonus: '',
             })),
-            state.empireCoins = '',
-            state.dailyScore = '',
-            state.previousEventScore = {
-                topOne: '',
-                topTen: '',
-            };
+                state.empireCoins = '',
+                state.dailyScore = '',
+                state.previousEventScore = {
+                    topOne: '',
+                    topTen: '',
+                };
             saveData({ ...loadData(), dayThree: { ...state } });
         }
-    }
+    },
+    // extraReducers: (builder) => {
+    //     sharedReducers(builder);
+    // }
 })
 
 export const { calculateDailyScore, resetState, updateMarchField } = dayThreeSlice.actions;

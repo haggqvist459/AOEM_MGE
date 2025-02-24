@@ -1,5 +1,5 @@
 export { default as dayOneReducer, 
-    // updateField as updateFieldDayOne, 
+    updateField as updateFieldDayOne,
     calculateDailyScore as calculateDailyScoreDayOne, 
     resetState as resetStateDayOne } from './dayOneSlice';
 
@@ -35,5 +35,5 @@ export { default as daySevenReducer,
     calculateDailyScore as calculateDailyScoreDaySeven, 
     resetState as resetStateDaySeven } from './daySevenSlice';
 
-export { default as sharedReducer,
-    updateField, updatePreviousEventScore } from './sharedReducers'
+// export { default as sharedReducer,
+//     updateField, updatePreviousEventScore } from './sharedReducers'

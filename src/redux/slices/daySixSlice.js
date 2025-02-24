@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateField, updatePreviousEventScore } from '../slices'
+// import { sharedReducers } from '../slices'
 
 const initialState = {
     dailyScore: '',
@@ -7,14 +7,14 @@ const initialState = {
         topOne: '',
         topTen: '',
     }
-}   
+}
 
 
 const daySixSlice = createSlice({
     name: 'daySixSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => updateField(state, action), 
+        updateField: (state, action) => updateField(state, action),
         updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
         calculateDailyScore: (state, action) => {
 
@@ -22,7 +22,11 @@ const daySixSlice = createSlice({
         resetState: (state) => {
 
         }
-    }
+    },
+    // extraReducers: (builder) => {
+    //     sharedReducers(builder);
+    // }
+
 })
 
 export const { calculateDailyScore, resetState } = daySixSlice.actions;
