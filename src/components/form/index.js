@@ -6,4 +6,5 @@ export { default as FormHeader } from './FormHeader';
 export { default as GatherMarch } from './GatherMarch';
 export { default as TroopsPromotion } from './TroopsPromotion';
 export { default as FormSubHeader } from './FormSubHeader';
-export { default as SpeedupSelector } from './SpeedupSelector';
+export { default as TimeSelector } from './TimeSelector';
+export { default as ScoreBoardSection } from './ScoreBoardSection';

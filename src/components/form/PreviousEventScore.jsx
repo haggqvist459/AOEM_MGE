@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne } from '../../redux/slices'
+import { updateFieldDayOne, updateFieldDayTwo } from '../../redux/slices'
 import { FormField, FormSubHeader } from '../form'
 
 const updateActions = {
   dayOne: updateFieldDayOne,
-  // dayTwo: updateFieldDayTwo,
+  dayTwo: updateFieldDayTwo,
   // dayThree: updateFieldDayThree,
   // dayFour: updateFieldDayFour,
   // dayFive: updateFieldDayFive,

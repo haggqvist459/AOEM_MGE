@@ -4,7 +4,7 @@ export { default as dayOneReducer,
     resetState as resetStateDayOne } from './dayOneSlice';
 
 export { default as dayTwoReducer, 
-    // updateField as updateFieldDayTwo, 
+    updateField as updateFieldDayTwo, 
     calculateDailyScore as calculateDailyScoreDayTwo, 
     resetState as resetStateDayTwo } from './dayTwoSlice';
 
