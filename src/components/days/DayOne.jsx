@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
-import { FormField, PreviousEventScore, PreviousEventScoreBoard, FormButtons, FormHeader, FormSubHeader } from '../form'
+import { FormField, PreviousEventScore, PreviousEventScoreBoard, FormButtons, FormHeader, FormSubHeader, ScoreBoardSection } from '../form'
 
 
 const DayOne = () => {
@@ -12,13 +12,13 @@ const DayOne = () => {
 
   const handleInput = (field, value) => {
     // console.log('DayOne.jsx handleInput triggered, field: ', field, ' value: ', value );
-    dispatch(updateFieldDayOne({field, value }))
+    dispatch(updateFieldDayOne({ field, value }))
   }
 
   const cancelForm = () => {
     // clear the form
     // reroute to home page or restart the input process? 
-    dispatch(resetStateDayOne()) 
+    dispatch(resetStateDayOne())
   }
 
   const submitForm = (e) => {
@@ -73,15 +73,10 @@ const DayOne = () => {
             </div>
             <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
               {/* Output */}
-              {/* TODO: place each headline and value in rows */}
               <FormSubHeader title={'Day One Score: '} />
-              <div className='flex flex-row mt-1 mb-1 space-x-1'>
-                <h3 className='block font-semibold text-blue-900'>Hunted tribes total: </h3>
-                <p className='font-semibold text-neutral-600'>{dayOneData.tribesHunted.toLocaleString()}</p>
-              </div>
-              <div className='flex flex-row mt-1 mb-1 space-x-1'>
-                <h3 className='block font-semibold text-blue-900'>Score potential: </h3>
-                <p className='font-semibold text-neutral-600'>{dayOneData.totalDailyScore.toLocaleString()}</p>
+              <div className='grid grid-cols-2 gap-2'>
+                <ScoreBoardSection title={'Hunted tribes: '} value={dayOneData.tribesHunted.toLocaleString()} />
+                <ScoreBoardSection title={'Daily score: '} value={dayOneData.totalDailyScore.toLocaleString()} />
               </div>
               <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_ONE} />
             </div>

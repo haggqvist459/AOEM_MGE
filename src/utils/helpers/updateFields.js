@@ -1,16 +1,19 @@
-import { cleanNumericValue } from "./helpers";
+import { cleanNumericValue } from '../helpers'
 
 export const updateFieldDelegated = (state, action) => {
     const { field, value } = action.payload;
-    console.log("updateFieldTest state: ", JSON.parse(JSON.stringify(state)));
+    console.log("updateFieldDelegated state: ", JSON.parse(JSON.stringify(state)));
 
-    if (field in state) {
+    if (state[field] && typeof state[field] === "object") {
+        console.log("updateTimeField condition met");
+        updateTimeField(state, field, value);
+    }  else if (field in state) {
+        console.log("updatePrimitiveField condition met");
         updatePrimitiveField(state, field, value);
     } else if (state.previousEventScore && field in state.previousEventScore) {
+        console.log("updatePreviousEventScore condition met");
         updatePreviousEventScore(state, field, value);
-    } else if (state.speedUps && field in state.speedUps) {
-        updateSpeedup(state, field, value);
-    } else {
+    }  else {
         console.error(`Invalid field: ${field} does not exist in slice state.`);
     }
 };
@@ -25,44 +28,15 @@ const updatePreviousEventScore = (state, field, value) => {
     state.previousEventScore[field] = cleanNumericValue(value);
 };
 
-// Internal function for speedup updates
-const updateSpeedup = (state, field, value) => {
-    state.speedUps[field] = cleanNumericValue(value);
+// Internal function for time-based updates
+const updateTimeField = (state, field, value) => {
+    console.log(`Before update: state[${field}]`, JSON.parse(JSON.stringify(state[field])))
+    if (!state[field]) {
+        state[field] = { days: '', hours: '', minutes: '' }; // Reset to an empty object instead of null
+        console.error(`Invalid time-based field: ${field} does not exist.`);
+        return;
+    }
+
+    state[field] = { ...state[field], ...value }; // Only update changed keys (day, hour, min)
+    console.log(`After update: state[${field}]`, JSON.parse(JSON.stringify(state[field])))
 };
-
-
-// export const updateNestedField = (state, action) => {
-//     const { field, key, value } = action.payload;
-//     // console.log("updateNestedField state: ", JSON.parse(JSON.stringify(state)));
-
-//     if (!state[field] || typeof state[field] !== "object") {
-//         console.log(`Invalid nested field: ${field} does not exist or is not an object.`);
-//         return;
-//     }
-
-//     if (!(key in state[field])) {
-//         console.log(`Invalid key: ${key} does not exist in ${field}.`);
-//         return;
-//     }
-
-//     state[field][key] = cleanNumericValue(value);
-// };
-
-// export const updatePreviousEventScore = (state, action) => {
-//     const { day, field, value } = action.payload;
-
-//     // Ensure the day exists before updating
-//     if (!state[day]) {
-//         console.error(`Invalid day: ${day}`);
-//         return;
-//     }
-
-//     // Ensure previousEventScore exists before updating
-//     if (!state[day].previousEventScore) {
-//         console.error(`previousEventScore object not found in ${day}`);
-//         return;
-//     }
-
-//     // Update the specific field inside previousEventScore
-//     state[day].previousEventScore[field] = value;
-// };

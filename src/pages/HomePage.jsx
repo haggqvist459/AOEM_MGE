@@ -5,12 +5,12 @@ const HomePage = () => {
   return (
     <>
       <DayOne />
-      {/* <DayTwo />
-      <DayThree />
-      <DayFour />
-      <DayFive />
-      <DaySix />
-      <DaySeven /> */}
+      <DayTwo />
+      {/* <DayThree /> */}
+      {/* <DayFour /> */}
+      {/* <DayFive /> */}
+      {/* <DaySix /> */}
+      {/* <DaySeven /> */}
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, DAY_KEYS } from "../../utils";
-import { updateFieldDelegated } from '../../utils/helpers'
+import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, updateFieldDelegated } from "../../utils";
+
 
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
 

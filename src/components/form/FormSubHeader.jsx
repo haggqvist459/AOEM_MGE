@@ -1,8 +1,8 @@
 import React from 'react'
 
-const FormSubHeader = ({ title }) => {
+const FormSubHeader = ({ title, size='text-lg'}) => {
   return (
-    <h5 className='font-bold text-lg text-blue-900'>{title}</h5>
+    <h5 className={`font-bold ${size} text-blue-900 mt-1`}>{title}</h5>
   )
 }
 

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loadData, saveData, POINTS_AND_MULTIPLIERS } from "../../utils";
-// import { sharedReducers } from '../slices'
+import { loadData, saveData, POINTS_AND_MULTIPLIERS, updateFieldDelegated, calculateForgingScore } from "../../utils";
 
 const savedState = loadData();
 const initialState = savedState?.dayTwo || {
@@ -9,18 +8,33 @@ const initialState = savedState?.dayTwo || {
     epicScrolls: '',
     legendaryScrolls: '',
     legendaryBlueprints: '',
-    forgingTime: '',
+    preforgedBlueprints: '',
+    remainingBlueprints: 0,
+    completedBlueprints: 0,
+    forgingTime: {
+        days: '',
+        hours: '',
+        minutes: '',
+        seconds: '',
+    },
     forgingSpeedup: {
         days: '',
         hours: '',
-        minutes: ''
+        minutes: '',
+        seconds: '',
+    },
+    remainingForgingSpeedup: {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
     },
     score: {
         medals: 0,
         scrolls: 0,
         forging: 0,
     },
-    totalDailyScore: '',
+    totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',
@@ -31,45 +45,67 @@ const dayTwoSlice = createSlice({
     name: 'dayTwoSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => {
-            const { field, value } = action.payload;
-
-            // Update previous event scores if the field belongs there
-            if (field in state.previousEventScore) {
-                state.previousEventScore[field] = cleanNumericValue(value);
-            } else {
-                state[field] = cleanNumericValue(value);
-            }
-        },
+        updateField: (state, action) => updateFieldDelegated(state, action),
         calculateDailyScore: (state) => {
 
-            state.score.medals = (state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL) + (state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL)
-            console.log('dayTwoSlice calculateDailyScore medalScore: ', state.score.medals)
-            state.score.scrolls = (state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL) + (state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL)
-            console.log('dayTwoSlice calculateDailyScore scrollScore', state.score.scrolls)
+            // calculate the medal and scroll scores, assign to state
+            state.score.medals = (state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL) + (state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL);
+            console.log('dayTwoSlice calculateDailyScore medalScore: ', state.score.medals);
+            state.score.scrolls = (state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL) + (state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL);
+            console.log('dayTwoSlice calculateDailyScore scrollScore', state.score.scrolls);
 
+            // calculate the forging score
+            const forgingResult = calculateForgingScore(state.legendaryBlueprints, POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT, state.forgingTime, state.forgingSpeedup);
+            state.score.forging = forgingResult.score + (state.preforgedBlueprints * POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT);
+            state.remainingBlueprints = forgingResult.remainingBlueprints;
+            state.completedBlueprints = forgingResult.completedBlueprints;
+            state.remainingForgingSpeedup = forgingResult.remainingSpeedup;
+
+            //then calculate the total daily score
+            state.totalDailyScore = state.score.medals + state.score.scrolls + state.score.forging
         },
         resetState: (state) => {
-            state.epicMedals = '',
-                state.legendaryMedals = '',
-                state.epicScrolls = '',
-                state.legendaryScrolls = '',
-                state.legendaryBlueprints = '',
-                state.speedUpForge = '',
-                state.forgingTime = '',
-                state.dailyScore = '',
-                state.previousEventScore = {
-                    topOne: '',
-                    topTen: '',
-                }
+            state.epicMedals = '';
+            state.legendaryMedals = '';
+            state.epicScrolls = '';
+            state.legendaryScrolls = '';
+            state.legendaryBlueprints = '';
+            state.remainingBlueprints = '';
+            state.completedBlueprints = '';
+            state.preforgedBlueprints = '';
+            state.forgingTime = {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            };
+            state.forgingSpeedup = {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            };
+            state.remainingForgingSpeedup = {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            };
+            state.score = {
+                medals: 0,
+                scrolls: 0,
+                forging: 0,
+            };
+            state.totalDailyScore = 0;
+            state.previousEventScore = {
+                topOne: '',
+                topTen: '',
+            };
 
             saveData({ ...loadData(), dayTwo: { ...state } });
         }
     },
-    // extraReducers: (builder) => {
-    //     sharedReducers(builder);    
-    // }
 })
 
-export const { calculateDailyScore, resetState } = dayTwoSlice.actions;
+export const { calculateDailyScore, resetState, updateField } = dayTwoSlice.actions;
 export default dayTwoSlice.reducer;

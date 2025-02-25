@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDayTwo, resetStateDayTwo } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader, FormSubHeader, SpeedupSelector } from '../form'
+import { calculateDailyScoreDayTwo, resetStateDayTwo, updateFieldDayTwo } from '../../redux/slices'
+import { FormField, PreviousEventScore, FormButtons, FormHeader, FormSubHeader, TimeSelector, PreviousEventScoreBoard, ScoreBoardSection } from '../form'
 import { DAY_KEYS } from '../../utils'
 
 
@@ -11,12 +11,9 @@ const DayTwo = () => {
   const dayTwoData = useSelector((state) => state.dayTwo);
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_TWO, field, value }))
+    dispatch(updateFieldDayTwo({ field, value }))
   }
 
-  const handleSpeedupInput = ( field, value ) => {
-    dispatch(updateSpeedup({day:  DAY_KEYS.DAY_TWO, field, value}))
-  }
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -69,34 +66,58 @@ const DayTwo = () => {
                 />
               </div>
               <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <div className='w-1/2'>
-                  <FormField
-                    labelValue={'Legendary blueprints: '}
-                    placeholder={'0'}
-                    value={dayTwoData.legendaryBlueprints}
-                    id={'legendaryBlueprints'}
-                    onChange={(value) => handleInput('legendaryBlueprints', value)}
-                  />
-                </div>
-                <div className='w-1/2'>
-                  <SpeedupSelector title={'Forging speed-up'} onChange={handleSpeedupInput} value={dayTwoData.forgingSpeedup ? Number(dayTwoData.forgingSpeedup) : 0} />
-                </div>
-
-              </div>
-              <div className='px-1 sm:w-1/2'>
                 <FormField
-                  labelValue={'Time required to forge: '}
-                  placeholder={'Enter amount in minutes'}
-                  value={dayTwoData.forgingTime}
-                  id={'forgingTime'}
-                  onChange={(value) => handleInput('forgingTime', value)}
+                  labelValue={'Legendary blueprints: '}
+                  placeholder={'0'}
+                  value={dayTwoData.legendaryBlueprints}
+                  id={'legendaryBlueprints'}
+                  onChange={(value) => handleInput('legendaryBlueprints', value)}
                 />
+                <FormField
+                  labelValue={'Pre-forged blueprints: '}
+                  placeholder={'0'}
+                  value={dayTwoData.preforgedBlueprints}
+                  id={'preforgedBlueprints'}
+                  onChange={(value) => handleInput('preforgedBlueprints', value)}
+                />
+              </div>
+              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
+                <div className='sm:w-1/2'>
+                  <TimeSelector
+                    title={'Time to forge'}
+                    onChange={(newValue) => handleInput('forgingTime', newValue)}
+                    value={dayTwoData.forgingTime || { days: '', hours: '', minutes: '' }} />
+                </div>
+                <div className='sm:w-1/2'>
+                  <TimeSelector
+                    title={'Forging speed-up'}
+                    onChange={(newValue) => handleInput('forgingSpeedup', newValue)}
+                    value={dayTwoData.forgingSpeedup || { days: '', hours: '', minutes: '' }}
+                    showSeconds={false} />
+                </div>
               </div>
               <PreviousEventScore dayKey={DAY_KEYS.DAY_TWO} />
             </div>
             <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
               {/* Output */}
               <FormSubHeader title={'Day Two Score: '} />
+              <div className='grid grid-cols-2 gap-2 mt-1'>
+                <ScoreBoardSection title={'Daily score total: '} value={dayTwoData.totalDailyScore.toLocaleString()} />
+                <ScoreBoardSection title={'Forging score: '} value={dayTwoData.score.forging.toLocaleString()} />
+                <ScoreBoardSection title={'Scroll score: '} value={dayTwoData.score.scrolls.toLocaleString()} />
+                <ScoreBoardSection title={'Medal score: '} value={dayTwoData.score.medals.toLocaleString()} />
+              </div>
+              <FormSubHeader title={'Forging details: '} size='text-md' />
+              <div className='grid grid-cols-2 gap-2 mt-1'>
+                <ScoreBoardSection title={'Used blueprints: '} value={dayTwoData.completedBlueprints} />
+                <ScoreBoardSection title={'Remaining blueprints: '} value={dayTwoData.remainingBlueprints} />
+              </div>
+              <ScoreBoardSection title={'Remaining speed-up: '}>
+                <p>{dayTwoData.remainingForgingSpeedup.days} days,</p>
+                <p>{dayTwoData.remainingForgingSpeedup.hours} hours, </p>
+                <p>{dayTwoData.remainingForgingSpeedup.minutes} minutes</p>
+              </ScoreBoardSection>
+              <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_TWO} />
             </div>
           </div>
           <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
