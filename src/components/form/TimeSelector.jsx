@@ -8,21 +8,21 @@ const TimeSelector = ({ title, value, onChange, showSeconds = true }) => {
 
   return (
     <div className="flex flex-col mb-2">
-      <label className="w-full font-semibold text-blue-900 my-1">{title}</label>
+      <label className="w-full text-sm font-semibold text-blue-900 my-1">{title}</label>
       <div className='flex flex-row space-x-1'>
         <input
           type='number'
           value={value.days}
           onChange={(e) => handleChange('days', e.target.value)}
           className='w-full border rounded pl-1'
-          placeholder='days'
+          placeholder='day'
         />
         <input
           type='number'
           value={value.hours}
           onChange={(e) => handleChange('hours', e.target.value)}
           className='w-full border rounded pl-1'
-          placeholder='hours'
+          placeholder='hour'
         />
         <input
           type='number'

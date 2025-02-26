@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
-// import { sharedReducers } from '../slices'
+import { POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIER_MAP, loadData, saveData, updateFieldDelegated, convertToMinutes } from "../../utils";
 
-const initialState = {
+
+const savedState = loadData();
+const initialState = savedState?.dayFour || {
     hammers: '',
     copperSand: '',
     silverSand: '',
@@ -11,6 +12,12 @@ const initialState = {
     universalSpeedup: '',
     researchSpeedup: '',
     buildingSpeedup: '',
+    score: {
+        building: 0,
+        research: 0,
+        universal: 0,
+        ring: 0,
+    },
     totalDailyScore: '',
     previousEventScore: {
         topOne: '',
@@ -22,29 +29,50 @@ const dayFourSlice = createSlice({
     name: 'dayFourSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => updateField(state, action),
-        updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
-        updateField: (state, action) => {
-            const { field, value } = action.payload;
-
-            // Update previous event scores if the field belongs there
-            if (field in state.previousEventScore) {
-                state.previousEventScore[field] = cleanNumericValue(value);
-            } else {
-                state[field] = cleanNumericValue(value);
-            }
-        },
+        updateField: (state, action) => updateFieldDelegated(state, action),
         calculateDailyScore: (state) => {
+
+            // calculate score potential for the various minor resources
+            state.score.ring = Object.entries(RESOURCE_MULTIPLIER_MAP).reduce((total, [resource, multiplierKey]) => {
+                return total + state[resource] * POINTS_AND_MULTIPLIERS[multiplierKey];
+            }, 0);
+
+            const buildingMinutes = convertToMinutes(state.buildingSpeedup);
+            const researchMinutes = convertToMinutes(state.researchSpeedup);
+            const universalMinutes = convertToMinutes(state.universalSpeedup);
+
+            state.score.building = buildingMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_BUILDING;
+            state.score.research = researchMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_RESEARCH;
+            state.score.universal = universalMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_UNIVERSAL;
+
+            state.totalDailyScore = state.score.building + state.score.research + state.score.universal + state.score.ring
+
 
         },
         resetState: (state) => {
-
+            state.hammers = '';
+            state.copperSand = '';
+            state.silverSand = '';
+            state.fineGold = '';
+            state.meteorSteel = '';
+            state.universalSpeedup = '';
+            state.buildingSpeedup = '';
+            state.researchSpeedup = '';
+            state.score = {
+                building: 0,
+                research: 0,
+                universal: 0,
+                ring: 0,
+            };
+            state.totalDailyScore = '';
+            state.previousEventScore = {
+                topOne: '',
+                topTen: ''
+            };
+            saveData({ ...loadData(), dayFour: { ...state } });
         }
     },
-    // extraReducers: (builder) => {
-    //     sharedReducers(builder);    
-    // }
 })
 
-export const { calculateDailyScore, resetState } = dayFourSlice.actions;
+export const { calculateDailyScore, resetState, updateField } = dayFourSlice.actions;
 export default dayFourSlice.reducer;

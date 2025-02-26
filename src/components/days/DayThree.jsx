@@ -14,8 +14,10 @@ const DayThree = () => {
   }
 
   const handleMarchInput = (index, field, value) => {
-    dispatch(updateMarchField(index, field, value))
+    console.log("handleMarchInput values, index: ", index, ', field: ', field, ', value: ', value)
+    dispatch(updateMarchField({index, field, value}))
   }
+  
   const cancelForm = () => {
     dispatch(resetStateDayThree())
   }
@@ -26,7 +28,7 @@ const DayThree = () => {
   }
 
   return (
-    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
+    <section className='@container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
       <div className='px-5'>
         <div className=''>
           <FormHeader title={'Day Three'} />

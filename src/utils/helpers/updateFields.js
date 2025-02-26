@@ -1,4 +1,4 @@
-import { cleanNumericValue } from '../helpers'
+import { validateInputForState, validateInputForCalculation } from '../helpers'
 
 export const updateFieldDelegated = (state, action) => {
     const { field, value } = action.payload;
@@ -20,12 +20,18 @@ export const updateFieldDelegated = (state, action) => {
 
 // Internal function for top-level field updates
 const updatePrimitiveField = (state, field, value) => {
-    state[field] = cleanNumericValue(value);
+    state[field] = validateInputForState(value);
 };
 
 // Internal function for previous event score updates
+const updatePreviousEventScoreASD = (state, field, value) => {
+    state.previousEventScore[field] = validateInputForState(value);
+};
 const updatePreviousEventScore = (state, field, value) => {
-    state.previousEventScore[field] = cleanNumericValue(value);
+    const cleanedValue = validateInputForState(value);
+
+    // Store as number if valid, otherwise keep as empty string
+    state.previousEventScore[field] = cleanedValue === "" ? "" : Number(cleanedValue);
 };
 
 // Internal function for time-based updates

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { POINTS_AND_MULTIPLIERS, loadData, saveData, cleanNumericValue } from "../../utils";
+import { POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIERS, loadData, saveData, validateInputForState, updateFieldDelegated } from "../../utils";
 
 // import { sharedReducers } from '../slices'
 
 const savedState = loadData();
 const initialState = savedState?.dayThree || {
     marches: Array.from({ length: 5 }, () => ({
-        gatherSpeed: '',
+        gatherSpeedBonus: '',
         loadCapacity: '',
         loadBonus: '',
     })),
@@ -22,37 +22,40 @@ const dayThreeSlice = createSlice({
     name: 'dayThreeSlice',
     initialState,
     reducers: {
-        updateField: (state, action) => updateField(state, action),
-        updatePreviousEventScore: (state, action) => updatePreviousEventScore(state, action),
-        // updateField: (state, action) => {
-        //     const { field, value } = action.payload;
-
-        //     // Update previous event scores if the field belongs there
-        //     if (field in state.previousEventScore) {
-        //         state.previousEventScore[field] = cleanNumericValue(value);
-        //     } else {
-        //         state[field] = cleanNumericValue(value);
-        //     }
-        // },
+        updateField: (state, action) => updateFieldDelegated(state, action),
         updateMarchField: (state, action) => {
             const { index, field, value } = action.payload;
-            state.marches[index][field] = cleanNumericValue(value);
+        
+            console.log("updateMarchField action received:", action.payload);
+        
+            if (!state.marches[index]) {
+                console.error(`Invalid march index: ${index}`);
+                return;
+            }
+        
+            if (!(field in state.marches[index])) {
+                console.error(`Invalid field: ${field} for march at index ${index}`);
+                return;
+            }
+        
+            state.marches[index][field] = validateInputForState(value); 
         },
         calculateDailyScore: (state) => {
 
         },
         resetState: (state) => {
             state.marches = Array.from({ length: 5 }, () => ({
-                gatherSpeed: '',
+                gatherSpeedBonus: '',
                 loadCapacity: '',
                 loadBonus: '',
-            })),
-                state.empireCoins = '',
-                state.dailyScore = '',
-                state.previousEventScore = {
-                    topOne: '',
-                    topTen: '',
-                };
+            }));
+            state.empireCoins = '';
+            state.dailyScore = '';
+            state.previousEventScore = {
+                topOne: '',
+                topTen: '',
+            };
+
             saveData({ ...loadData(), dayThree: { ...state } });
         }
     },
@@ -61,5 +64,5 @@ const dayThreeSlice = createSlice({
     // }
 })
 
-export const { calculateDailyScore, resetState, updateMarchField } = dayThreeSlice.actions;
+export const { calculateDailyScore, resetState, updateMarchField, updateField } = dayThreeSlice.actions;
 export default dayThreeSlice.reducer;

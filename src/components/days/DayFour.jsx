@@ -1,16 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDayFour, resetStateDayFour } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
+import { calculateDailyScoreDayFour, resetStateDayFour, updateFieldDayFour } from '../../redux/slices'
+import { FormInput, FormWrapper, FormButtons, FormHeader, FormField, TimeSelector, PreviousEventScore, PreviousEventScoreBoard, FormSubHeader } from '../form'
 import { DAY_KEYS } from '../../utils'
 
 const DayFour = () => {
 
   const dispatch = useDispatch()
-  const dayFourData = useSelector((state) => state.dayFour)
+  const dailyData = useSelector((state) => state.dayFour)
+  const [localState, setLocalState] = useState(dailyData);
+
+  useEffect(() => {
+    setLocalState(dailyData);
+  }, [dailyData]);
+
+
+  const handleLocalChange = (field, value) => {
+    setLocalState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleTimeChange = (field, unit, value) => {
+    setLocalState((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], [unit]: value },
+    }));
+  };
+
+  const handleBlur = (field) => {
+    dispatch(updateFieldDayTwo({ field, value: localState[field] }));
+  };
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_FOUR, field, value }))
+    dispatch(updateFieldDayFour({ day: DAY_KEYS.DAY_FOUR, field, value }))
   }
 
   const cancelForm = () => {
@@ -20,7 +41,6 @@ const DayFour = () => {
   const submitForm = (e) => {
     e.preventDefault()
     dispatch(calculateDailyScoreDayFour())
-
   }
 
   return (
@@ -31,74 +51,150 @@ const DayFour = () => {
           <div className='flex flex-col md:flex-row md:pr-2'>
             <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
               {/* Input */}
-              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <FormField
-                  labelValue={'Planishing hammers: '}
-                  placeholder={'0'}
-                  value={dayFourData.hammers}
-                  id={'hammers'}
-                  onChange={(value) => handleInput('hammers', value)}
-                />
-                <FormField
-                  labelValue={'Fine gold: '}
-                  placeholder={'0'}
-                  value={dayFourData.fineGold}
-                  id={'fineGold'}
-                  onChange={(value) => handleInput('fineGold', value)}
-                />
-              </div>
-              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <FormField
-                  labelValue={'Silver sand: '}
-                  placeholder={'0'}
-                  value={dayFourData.silverSand}
-                  id={'silverSand'}
-                  onChange={(value) => handleInput('silverSand', value)}
-                />
-                <FormField
-                  labelValue={'Copper sand: '}
-                  placeholder={'0'}
-                  value={dayFourData.copperSand}
-                  id={'copperSand'}
-                  onChange={(value) => handleInput('copperSand', value)}
-                />
-              </div>
-              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <FormField
-                  labelValue={'Meteor steel: '}
-                  placeholder={'0'}
-                  value={dayFourData.meteorSteel}
-                  id={'meteorSteel'}
-                  onChange={(value) => handleInput('meteorSteel', value)}
-                />
-                <FormField
-                  labelValue={'Universal speed-up: '}
-                  placeholder={'Input in minutes'}
-                  value={dayFourData.universalSpeedup}
-                  id={'universalSpeedup'}
-                  onChange={(value) => handleInput('universalSpeedup', value)}
-                />
-              </div>
-              <div className='flex flex-col sm:flex-row space-x-2 px-1'>
-                <FormField
-                  labelValue={'Building speed-up: '}
-                  placeholder={'Input in minutes'}
-                  value={dayFourData.buildingSpeedup}
-                  id={'buildingSpeedup'}
-                  onChange={(value) => handleInput('buildingSpeedup', value)}
-                />
-                <FormField
-                  labelValue={'Research speed-up: '}
-                  placeholder={'Input in minutes'}
-                  value={dayFourData.researchSpeedup}
-                  id={'researchSpeedup'}
-                  onChange={(value) => handleInput('researchSpeedup', value)}
-                />
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 px-1'>
+                {/* Hammers */}
+                <FormWrapper>
+                  <FormSubHeader title={'Planishing hammers:'} />
+                  <FormInput
+                    id={'hammers'}
+                    placeholder={'0'}
+                    value={localState.hammers}
+                    onChange={(value) => handleLocalChange('hammers', value)}
+                    onBlur={() => handleBlur('hammers')}
+                  />
+                </FormWrapper>
+                {/* Fine gold */}
+                <FormWrapper>
+                  <FormSubHeader title={'Fine gold:'} />
+                  <FormInput
+                    id={'fineGold'}
+                    placeholder={'0'}
+                    value={localState.fineGold}
+                    onChange={(value) => handleLocalChange('fineGold', value)}
+                    onBlur={() => handleBlur('fineGold')}
+                  />
+                </FormWrapper>
+                {/* Silver sand */}
+                <FormWrapper>
+                  <FormSubHeader title={'Silver Sand:'} />
+                  <FormInput
+                    id={'silverSand'}
+                    placeholder={'0'}
+                    value={localState.silverSand}
+                    onChange={(value) => handleLocalChange('silverSand', value)}
+                    onBlur={() => handleBlur('silverSand')}
+                  />
+                </FormWrapper>
+                {/* Copper sand */}
+                <FormWrapper>
+                  <FormSubHeader title={'Copper sand:'} />
+                  <FormInput
+                    id={'copperSand'}
+                    placeholder={'0'}
+                    value={localState.copperSand}
+                    onChange={(value) => handleLocalChange('copperSand', value)}
+                    onBlur={() => handleBlur('copperSand')}
+                  />
+                </FormWrapper>
+                {/* Meteor steel */}
+                <FormWrapper>
+                  <FormSubHeader title={'Meteor steel:'} />
+                  <FormInput
+                    id={'meteorSteel'}
+                    placeholder={'0'}
+                    value={localState.meteorSteel}
+                    onChange={(value) => handleLocalChange('meteorSteel', value)}
+                    onBlur={() => handleBlur('meteorSteel')}
+                  />
+                </FormWrapper>
+                {/* Universal Speed-up */}
+                <FormWrapper>
+                  <FormSubHeader title={'Universal speed-up:'} />
+                  <FormWrapper flex={'row'} className='space-x-1'>
+                    <FormInput
+                      id={'universalSpeedupDay'}
+                      placeholder={'day'}
+                      value={localState.universalSpeedup.days}
+                      onChange={(value) => handleTimeChange('universalSpeedup', 'days', value)}
+                      onBlur={() => handleBlur('universalSpeedup')}
+                    />
+                    <FormInput
+                      id={'universalSpeedupHours'}
+                      placeholder={'hour'}
+                      value={localState.universalSpeedup.hours}
+                      onChange={(value) => handleTimeChange('universalSpeedup', 'hours', value)}
+                      onBlur={() => handleBlur('universalSpeedup')}
+                    />
+                    <FormInput
+                      id={'universalSpeedupMin'}
+                      placeholder={'min'}
+                      value={localState.universalSpeedup.minutes}
+                      onChange={(value) => handleTimeChange('universalSpeedup', 'minutes', value)}
+                      onBlur={() => handleBlur('universalSpeedup')}
+                    />
+                  </FormWrapper>
+                </FormWrapper>
+                {/* Building Speed-up */}
+                <FormWrapper>
+                  <FormSubHeader title={'Building speed-up:'} />
+                  <FormWrapper flex={'row'} className='space-x-1'>
+                    <FormInput
+                      id={'buildingSpeedupDay'}
+                      placeholder={'day'}
+                      value={localState.buildingSpeedup.days}
+                      onChange={(value) => handleTimeChange('buildingSpeedup', 'days', value)}
+                      onBlur={() => handleBlur('buildingSpeedup')}
+                    />
+                    <FormInput
+                      id={'buildingSpeedupHours'}
+                      placeholder={'hour'}
+                      value={localState.buildingSpeedup.hours}
+                      onChange={(value) => handleTimeChange('buildingSpeedup', 'hours', value)}
+                      onBlur={() => handleBlur('buildingSpeedup')}
+                    />
+                    <FormInput
+                      id={'buildingSpeedupMinutes'}
+                      placeholder={'min'}
+                      value={localState.buildingSpeedup.minutes}
+                      onChange={(value) => handleTimeChange('buildingSpeedup', 'minutes', value)}
+                      onBlur={() => handleBlur('buildingSpeedup')}
+                    />
+                  </FormWrapper>
+                </FormWrapper>
+                {/* Research Speed-up */}
+                <FormWrapper>
+                  <FormSubHeader title={'Research speed-up:'} />
+                  <FormWrapper flex={'row'} className='space-x-1'>
+                    <FormInput
+                      id={'researchSpeedupDay'}
+                      placeholder={'day'}
+                      value={localState.researchSpeedup.days}
+                      onChange={(value) => handleTimeChange('researchSpeedup', 'days', value)}
+                      onBlur={() => handleBlur('researchSpeedup')}
+                    />
+                    <FormInput
+                      id={'researchSpeedupHours'}
+                      placeholder={'hour'}
+                      value={localState.researchSpeedup.hours}
+                      onChange={(value) => handleTimeChange('researchSpeedup', 'hours', value)}
+                      onBlur={() => handleBlur('researchSpeedup')}
+                    />
+                    <FormInput
+                      id={'researchSpeedupMinutes'}
+                      placeholder={'min'}
+                      value={localState.researchSpeedup.minutes}
+                      onChange={(value) => handleTimeChange('researchSpeedup', 'minutes', value)}
+                      onBlur={() => handleBlur('researchSpeedup')}
+                    />
+                  </FormWrapper>
+                </FormWrapper>
               </div>
               <PreviousEventScore dayKey={DAY_KEYS.DAY_FOUR} />
             </div>
             <div className='w-full md:w-1/2 relative'>
               {/* Output */}
+              <FormSubHeader title={'Day Four Score: '} size={'text-md'}/>
+              <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_FOUR} />
             </div>
           </div>
           <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
