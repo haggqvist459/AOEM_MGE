@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TROOP_TIER_MULTIPLIERS, loadData, saveData, cleanNumericValue, calculatePromotableBatches, calculateTroopPromotionScore } from "../../utils";
+import { TROOP_TIER_MULTIPLIERS, loadData, saveData, validateInputForState, calculatePromotableBatches, calculateTroopPromotionScore } from "../../utils";
 // import { sharedReducers } from '../slices'
 
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
@@ -68,7 +68,7 @@ const dayFiveSlice = createSlice({
     reducers: {
         updatePromotionField: (state, action) => {
             const { troopType, field, value } = action.payload;
-            state.troops[troopType][field] = cleanNumericValue(value);
+            state.troops[troopType][field] = validateInputForState(value);
         },
         calculateDailyScore: (state) => {
             // find the highest target tier amongst the troops to promote

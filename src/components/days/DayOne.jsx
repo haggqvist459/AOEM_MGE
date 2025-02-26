@@ -1,19 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
-import { FormField, PreviousEventScore, PreviousEventScoreBoard, FormButtons, FormHeader, FormSubHeader, ScoreBoardSection } from '../form'
+import { FormButtons, FormHeader, FormSubHeader, FormInput, FormWrapper, PreviousEventScore, PreviousEventScoreBoard, ScoreBoardSection } from '../form'
 
 
 const DayOne = () => {
 
+
   const dispatch = useDispatch();
-  const dayOneData = useSelector((state) => state.dayOne);
+  const dailyData = useSelector((state) => state.dayOne);
+
+  const [localState, setLocalState] = useState(dailyData);
+
+  useEffect(() => {
+    setLocalState(dailyData);
+  }, [dailyData]);
 
   const handleInput = (field, value) => {
     // console.log('DayOne.jsx handleInput triggered, field: ', field, ' value: ', value );
     dispatch(updateFieldDayOne({ field, value }))
   }
+
+  const handleLocalChange = (field, value) => {
+    setLocalState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleBlur = (field) => {
+    dispatch(updateFieldDayOne({ field, value: localState[field] }));
+  };
 
   const cancelForm = () => {
     // clear the form
@@ -36,16 +51,16 @@ const DayOne = () => {
         <FormHeader title={'Day One'} />
         <form onSubmit={submitForm}>
           {/* Split section in half vertically, input on left and output on the right. */}
-          {/* , display everything in one column. */}
+          {/* On smaller breakpoints, display everything in one column. */}
           <div className='flex flex-col md:flex-row md:pr-2'>
             <div className='w-full md:w-1/2 relative  md:border-r border-neutral-400 md:pr-2'>
-              {/* Input needed: Available stamina, tribe level, previous event scores */}
+              {/* Dropdown */}
               <label htmlFor='tribeLevel' className='block font-bold text-blue-900 mt-2'>Select Tribe Level:</label>
               <div className='relative w-full'>
                 <select
                   id="tribeLevel"
                   className='w-full mt-1 px-1 border border-neutral-300 rounded-md shadow-sm appearance-none'
-                  value={dayOneData.tribeLevelMultiplier}
+                  value={dailyData.tribeLevelMultiplier}
                   // onChange={(e) => setSelectedDropdownOption(Number(e.target.value))} // ensure selected value remains a number 
                   onChange={(e) => handleInput('tribeLevelMultiplier', e.target.value)}
                 >
@@ -61,13 +76,14 @@ const DayOne = () => {
                   </svg>
                 </div>
               </div>
-              <FormField
-                labelValue={'Available stamina: '}
-                placeholder={"Include daily and villager boosts"}
-                value={dayOneData.stamina}
+              {/* Stamina  */}
+              <FormSubHeader title={'Available stamina:'} />
+              <FormInput
                 id={'stamina'}
-                onChange={(value) => handleInput('stamina', value)}
-                required
+                placeholder={'include daily and villager boosts'}
+                value={localState.stamina}
+                onChange={(value) => handleLocalChange('stamina', value)}
+                onBlur={() => handleBlur('stamina')}
               />
               <PreviousEventScore dayKey={DAY_KEYS.DAY_ONE} />
             </div>
@@ -75,8 +91,8 @@ const DayOne = () => {
               {/* Output */}
               <FormSubHeader title={'Day One Score: '} />
               <div className='grid grid-cols-2 gap-2'>
-                <ScoreBoardSection title={'Hunted tribes: '} value={dayOneData.tribesHunted.toLocaleString()} />
-                <ScoreBoardSection title={'Daily score: '} value={dayOneData.totalDailyScore.toLocaleString()} />
+                <ScoreBoardSection title={'Hunted tribes: '} value={dailyData.tribesHunted.toLocaleString()} />
+                <ScoreBoardSection title={'Daily score: '} value={dailyData.totalDailyScore.toLocaleString()} />
               </div>
               <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_ONE} />
             </div>

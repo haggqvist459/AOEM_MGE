@@ -9,13 +9,13 @@ export { default as dayTwoReducer,
     resetState as resetStateDayTwo } from './dayTwoSlice';
 
 export { default as dayThreeReducer, 
-    // updateField as updateFieldDayThree, 
+    updateField as updateFieldDayThree, 
     calculateDailyScore as calculateDailyScoreDayThree, 
     resetState as resetStateDayThree, 
     updateMarchField } from './dayThreeSlice';
 
 export { default as dayFourReducer, 
-    // updateField as updateFieldDayFour,
+    updateField as updateFieldDayFour,
     calculateDailyScore as calculateDailyScoreDayFour, 
     resetState as resetStateDayFour } from './dayFourSlice';
 

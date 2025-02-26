@@ -7,7 +7,7 @@ const HomePage = () => {
       <DayOne />
       <DayTwo />
       {/* <DayThree /> */}
-      {/* <DayFour /> */}
+      <DayFour />
       {/* <DayFive /> */}
       {/* <DaySix /> */}
       {/* <DaySeven /> */}

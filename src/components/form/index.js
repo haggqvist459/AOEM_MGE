@@ -8,3 +8,5 @@ export { default as TroopsPromotion } from './TroopsPromotion';
 export { default as FormSubHeader } from './FormSubHeader';
 export { default as TimeSelector } from './TimeSelector';
 export { default as ScoreBoardSection } from './ScoreBoardSection';
+export { default as FormInput } from './FormInput';
+export { default as FormWrapper } from './FormWrapper';
