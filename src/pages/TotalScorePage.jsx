@@ -1,8 +1,11 @@
 import React from 'react'
+import { DayContainer, FormHeader } from '../components'
 
 const TotalScorePage = () => {
   return (
-    <div>TotalScorePage</div>
+    <DayContainer>
+      <FormHeader title={'Total Score:'}/>
+    </DayContainer>
   )
 }
 
