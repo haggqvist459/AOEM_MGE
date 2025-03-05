@@ -2,7 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { sharedReducers } from '../slices'
 
 const initialState = {
-    dailyScore: '',
+    troopPower: {
+        completedBatches: ''
+    },
+    researchPower: '',
+    buildingPower: {
+        firstQueue: '',
+        secondQueue: '',
+        thirdQueue: '',
+    },
+    dailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',

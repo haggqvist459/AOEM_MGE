@@ -1,48 +1,52 @@
-import { validateInputForState, validateInputForCalculation } from '../helpers'
+import { validateInputForState } from '../helpers'
 
 export const updateFieldDelegated = (state, action) => {
-    const { field, value } = action.payload;
+    const { field, unit, value } = action.payload;
     console.log("updateFieldDelegated state: ", JSON.parse(JSON.stringify(state)));
+    console.log("updateFieldDelegated field: ", field)
+    console.log("updateFieldDelegated unit: ", unit)
+    console.log("updateFieldDelegated value: ", value)
+    
+    const validatedValue = validateInputForState(value)
 
-    if (state[field] && typeof state[field] === "object") {
-        console.log("updateTimeField condition met");
-        updateTimeField(state, field, value);
-    }  else if (field in state) {
-        console.log("updatePrimitiveField condition met");
-        updatePrimitiveField(state, field, value);
-    } else if (state.previousEventScore && field in state.previousEventScore) {
-        console.log("updatePreviousEventScore condition met");
-        updatePreviousEventScore(state, field, value);
-    }  else {
+    // Case 1: Top-level objects with primitive fields (e.g., previousEventScore, initialTrainingSpeedup)
+
+    if (state[field] && typeof state[field] === "object" && !Array.isArray(state[field])) {
+        // Update an object field with its primitive value
+        updateObjectField(state, field, unit, validatedValue);
+        return;
+    } else if (field in state) {
+        // Case 3: Primitive fields (e.g., stamina, score, etc.)
+        updatePrimitiveField(state, field, validatedValue);
+        return;
+    } else {
         console.error(`Invalid field: ${field} does not exist in slice state.`);
     }
-};
+
+}
+
 
 // Internal function for top-level field updates
 const updatePrimitiveField = (state, field, value) => {
-    state[field] = validateInputForState(value);
+    console.log(`updatePrimitiveField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
+    console.log(`updatePrimitiveField before update: value: `, value);
+    state[field] = value;
+    console.log(`updatePrimitiveField after update: state[field]`, state[field]);
 };
 
-// Internal function for previous event score updates
-const updatePreviousEventScoreASD = (state, field, value) => {
-    state.previousEventScore[field] = validateInputForState(value);
-};
-const updatePreviousEventScore = (state, field, value) => {
-    const cleanedValue = validateInputForState(value);
 
-    // Store as number if valid, otherwise keep as empty string
-    state.previousEventScore[field] = cleanedValue === "" ? "" : Number(cleanedValue);
+const updateObjectField = (state, field, unit, value) => {
+    console.log(`updateObjectField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
+    console.log(`updateObjectField before update: unit: `, unit);
+    console.log(`updateObjectField before update: value: `, value);
+
+
+    state[field] = {
+        ...state[field], // Keep the existing values
+        [unit]: value, // Update only the relevant field
+    };
+
+
+    console.log(`updateObjectField after update: state[field]`, state[field]);
 };
 
-// Internal function for time-based updates
-const updateTimeField = (state, field, value) => {
-    console.log(`Before update: state[${field}]`, JSON.parse(JSON.stringify(state[field])))
-    if (!state[field]) {
-        state[field] = { days: '', hours: '', minutes: '' }; // Reset to an empty object instead of null
-        console.error(`Invalid time-based field: ${field} does not exist.`);
-        return;
-    }
-
-    state[field] = { ...state[field], ...value }; // Only update changed keys (day, hour, min)
-    console.log(`After update: state[${field}]`, JSON.parse(JSON.stringify(state[field])))
-};

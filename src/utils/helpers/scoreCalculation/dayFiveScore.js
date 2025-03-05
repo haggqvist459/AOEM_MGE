@@ -1,146 +1,167 @@
+import { convertToSeconds, convertFromSeconds, TROOP_TIER_MULTIPLIERS } from '../../../utils';
 
-// Day Five Score calculation 
-//distribute the available speed ups in batches across the troop groups
-const distributeBatches = (troopGroup, totalBatchesAvailable) => {
-    let troopKeys = Object.keys(troopGroup);
+export const calculateTrainingScore = (troopTier, troopsPerBatch, trainingTime, remainingSpeedup) => {
 
-    troopKeys.forEach(troopType => {
-        const troop = troopGroup[troopType];
+    // calculate number of completed batches
+    const completedBatches = Math.floor(remainingSpeedup / trainingTime);
+    // calculate the score per batch
+    const scorePerBatch = troopTier * troopsPerBatch
+    // multiply with number of batches completed and return the value 
+    return scorePerBatch * completedBatches;
+}
 
-        // Reset values so they can be recalculated. 
-        troop.maxPromotableBatches = Math.floor(troop.availableTroops / troop.promotedTroopPerBatch);
-        troop.promotableBatches = 0; // Reset before assigning
+export const calculatePromotableBatches = (troops, initialTrainingSpeedup) => {
+    let remainingTrainingSpeedup = convertToSeconds(initialTrainingSpeedup);
 
-    });
+    // Reset batch values before calculations
+    resetTroopBatchValues(troops);
 
-    // Distribute batches evenly among all troop types
-    while (totalBatchesAvailable > 0) {
-        let distributed = false;
+    // Sort troops into higher and lower tier groups based on their promotion tier.
+    let higherTierTroops = sortTroopsByTier(troops);
+    console.log("troopGroup before batch calculation:", higherTierTroops);
+    console.log("Remaining training speedup:", remainingTrainingSpeedup);
+    // Allocate batches for higher-tier troops first.
+    remainingTrainingSpeedup = calculateAvailableBatches(higherTierTroops, remainingTrainingSpeedup);
 
-        troopKeys.forEach(troopType => {
-            const troop = troopGroup[troopType];
+    let convertedRemainingSpeedup = convertFromSeconds(remainingTrainingSpeedup)
+    console.log("remainingTrainingSpeedup after highTier distribution: ", convertedRemainingSpeedup)
 
-            if (totalBatchesAvailable > 0 && troop.promotableBatches < troop.maxPromotableBatches) {
-                troop.promotableBatches += 1;
-                totalBatchesAvailable -= 1;
-                distributed = true;
-
-            }
-        });
-
-        // Stop if no more batches can be distributed
-        if (!distributed) break;
-    }
-
-    // console.log("Troop group after distribution:", JSON.stringify(troopGroup, null, 2));
-    return totalBatchesAvailable; // Return remaining batches for lower tier troops
+    return remainingTrainingSpeedup;
 };
 
-// calculate the number of available batches of troops ready to promote 
-const calculateAvailableBatches = (trainingSpeedup, trainingTime) => {
+const calculateAvailableBatches = (troopGroup, trainingSpeedup) => {
+    let remainingSpeedup = trainingSpeedup;
 
-    const totalBatchesAvailable = trainingSpeedup / trainingTime;
-    const decimalCarryOver = totalBatchesAvailable % 1; // Extract decimal part
-    return {
-        totalBatchesAvailable: Math.floor(totalBatchesAvailable),
-        decimalCarryOver
+
+    if (!troopGroup || Object.keys(troopGroup).length === 0) {
+        console.warn("Warning: troopGroup is empty or undefined in calculateAvailableBatches");
+        return trainingSpeedup; // Return remaining speedup without doing anything
     }
-
-}
-
-// convert  the training time back into minutes
-const reverseBatchCalculation = (remainingBatches, trainingTime, decimalCarryOver) => {
-    return (remainingBatches * trainingTime) + (decimalCarryOver * trainingTime);
-}
-
-// reset the batch values
-const resetPromotableBatches = (troopGroup) => {
+    // Step 1: Compute the max promotable batches per troop
     Object.values(troopGroup).forEach(troop => {
-        troop.maxPromotableBatches = Math.floor(troop.availableTroops / troop.promotedTroopPerBatch);
+        if (!troop.availableTroops || !troop.promotedTroopsPerBatch || troop.promotedTroopsPerBatch <= 0) {
+            troop.maxPromotableBatches = 0;
+            return;
+        }
+
+        // Calculate max batches based on troop availability
+        troop.maxPromotableBatches = Math.floor(troop.availableTroops / troop.promotedTroopsPerBatch);
+
+    });
+
+    // Step 2: Distribute batches evenly across troops
+    let troopTypes = Object.keys(troopGroup);
+    let distributed = true; // Tracks if at least one troop received a batch in the last round
+
+    while (remainingSpeedup > 0 && distributed) {
+        distributed = false; // Reset for each iteration
+
+        for (let troopType of troopTypes) {
+            const troop = troopGroup[troopType];
+            const trainingTimeInSeconds = convertToSeconds(troop.trainingTime);
+
+            // Skip troops that are already maxed out or have no valid training time
+            if (!trainingTimeInSeconds || troop.promotableBatches >= troop.maxPromotableBatches) continue;
+
+            // Assign only **one** batch per iteration (round-robin distribution)
+            if (remainingSpeedup >= trainingTimeInSeconds) {
+                troop.promotableBatches += 1;
+                remainingSpeedup -= trainingTimeInSeconds;
+                distributed = true; // Mark that at least one troop received a batch
+            }
+        }
+    }
+
+    return remainingSpeedup; // Return remaining speedup for further processing
+};
+
+// Function to find the tier value directly below the given target tier
+const getLowerTierValue = (targetTierValue) => {
+    const tierEntries = Object.entries(TROOP_TIER_MULTIPLIERS);
+    console.log("Sorted Tiers:", Object.entries(TROOP_TIER_MULTIPLIERS));
+    console.log("Looking for base tier of:", targetTierValue);
+
+    for (let i = 0; i < tierEntries.length; i++) {
+        if (tierEntries[i][1] === targetTierValue) {
+            return i < tierEntries.length - 1 ? tierEntries[i + 1][1] : null; // Return the value of the tier directly below
+        }
+    }
+    return null; // No lower tier exists
+};
+
+
+const sortTroopsByTier = (troops) => {
+    console.log("Initial Troops:", JSON.stringify(troops, null, 2));
+
+    // Step 1: Remove troops with missing or empty values
+    let validTroops = Object.entries(troops).filter(([_, troop]) =>
+        troop.targetTier && troop.baseTier && troop.availableTroops && troop.promotedTroopsPerBatch
+    );
+
+    console.log("Valid Troops After Filtering:", JSON.stringify(validTroops, null, 2));
+
+    // Step 2: Find the highest target tier dynamically
+    const highestTargetTier = Math.max(...validTroops.map(([_, troop]) => troop.targetTier || 0));
+
+    // Step 3: Keep only troops with the highest target tier
+    let higherTierTroops = validTroops.filter(([_, troop]) => troop.targetTier === highestTargetTier);
+
+    console.log("Troops with highest target tier:", JSON.stringify(higherTierTroops, null, 2));
+
+    // Step 4: Use the object literal to find the valid lower base tier
+    const expectedBaseTier = getLowerTierValue(highestTargetTier);
+
+    console.log("Expected Base Tier:", expectedBaseTier);
+
+    // Step 5: Keep only troops where the base tier matches the correct lower tier
+    higherTierTroops = higherTierTroops.filter(([_, troop]) => troop.baseTier === expectedBaseTier);
+
+    console.log("Final higherTierTroops:", JSON.stringify(higherTierTroops, null, 2));
+
+    return Object.fromEntries(higherTierTroops);
+};
+
+
+// Reset the batch values for each troop before calculations.
+const resetTroopBatchValues = (troops) => {
+    Object.values(troops).forEach(troop => {
         troop.promotableBatches = 0;
+        troop.maxPromotableBatches = 0;
     });
 };
 
-export const calculatePromotableBatches = (highestTierTroops, lowerTierTroops, trainingSpeedup) => {
-    if (!highestTierTroops || Object.keys(highestTierTroops).length === 0) return { highestTierTroops, remainingSpeedup: trainingSpeedup };
-
-    const highestTierTrainingTime = Object.values(highestTierTroops)[0].trainingTime;
-    const lowerTierTrainingTime = lowerTierTroops && Object.keys(lowerTierTroops).length > 0
-        ? Object.values(lowerTierTroops)[0].trainingTime
-        : 0;
-    let totalBatchesAvailable
-    let decimalCarryOver
-
-    // Reset batch values for both troop groups at the start of each calculation
-    resetPromotableBatches(highestTierTroops);
-    if (lowerTierTroops && Object.keys(lowerTierTroops).length > 0) {
-        resetPromotableBatches(lowerTierTroops);
-    }
-
-    ({ totalBatchesAvailable, decimalCarryOver } = calculateAvailableBatches(trainingSpeedup, highestTierTrainingTime));
-    console.log("totalBatchesAvailable: ", totalBatchesAvailable);
-
-    // calculate the number of high-tier batches can be promoted
-    totalBatchesAvailable = distributeBatches(highestTierTroops, totalBatchesAvailable);
-    console.log('totalBatchesAvailable remaining after high-tier distribution: ', totalBatchesAvailable);
-
-    // reverse speedup calculation to allow for accurate lower tier calculation
-    if (totalBatchesAvailable > 0) {
-        trainingSpeedup = reverseBatchCalculation(totalBatchesAvailable, highestTierTrainingTime, decimalCarryOver);
-    } else {
-        trainingSpeedup = 0;
-    }
-
-    // proceed with lower tier promotion if speed up time remain
-    if (trainingSpeedup > 0) {
-        console.log("distribute to lower tiers");
-        ({ totalBatchesAvailable, decimalCarryOver } = calculateAvailableBatches(trainingSpeedup, lowerTierTrainingTime));
-        totalBatchesAvailable = distributeBatches(lowerTierTroops, totalBatchesAvailable);
-    }
-
-
-
-    // if there is any remaining speedup, turn it back into minutes
-    if (totalBatchesAvailable > 0) {
-        trainingSpeedup = reverseBatchCalculation(totalBatchesAvailable, lowerTierTrainingTime, decimalCarryOver)
-    }
-
-    return {
-        updatedHighestTierTroops: highestTierTroops,
-        updatedLowerTierTroops: lowerTierTroops,
-        remainingSpeedup: trainingSpeedup
-    };
-}
 
 export const calculateTroopPromotionScore = (troopGroup) => {
     let totalTroopPromotionScore = 0;
     let updatedTroopGroup = { ...troopGroup };
 
+    // Reset score for each troop before calculations
+    Object.values(updatedTroopGroup).forEach(troop => {
+        troop.troopTotalScore = 0;
+    });
+
+
     Object.entries(updatedTroopGroup).forEach(([troopType, troop]) => {
-        if (troop.promotableBatches > 0) {
-            // Calculate the score per troop
-            const scorePerTroop = (troop.targetTier - troop.baseTier) * troop.promotedTroopPerBatch;
-            // Calculate total score for this troop type
-            updatedTroopGroup[troopType] = {
-                ...troop,
-                troopTotalScore: scorePerTroop * troop.promotableBatches
-            };
-            // Accumulate total score across all troop types
-            totalTroopPromotionScore += updatedTroopGroup[troopType].troopTotalScore;
-        } else {
-            // Reset score if no batches are promoted
+        // Skip troops with 0 promotableBatches
+        if (!troop.promotableBatches || troop.promotableBatches <= 0) {
             updatedTroopGroup[troopType] = { ...troop, troopTotalScore: 0 };
+            return;
         }
 
-        // Debugging log (optional)
+        const scorePerTroop = (troop.targetTier - troop.baseTier) * troop.promotedTroopsPerBatch;
+
+        updatedTroopGroup[troopType] = {
+            ...troop,
+            troopTotalScore: scorePerTroop * troop.promotableBatches
+        };
+
+        totalTroopPromotionScore += updatedTroopGroup[troopType].troopTotalScore;
         console.log(`${troopType} Score Updated: ${updatedTroopGroup[troopType].troopTotalScore}`);
     });
 
     console.log(`Total Troop Promotion Score: ${totalTroopPromotionScore}`);
-    return { 
-        updatedTroops: updatedTroopGroup, 
-        promotionScore: totalTroopPromotionScore };
+    return {
+        updatedTroops: updatedTroopGroup,
+        promotionScore: totalTroopPromotionScore
+    };
 };
-
-
-

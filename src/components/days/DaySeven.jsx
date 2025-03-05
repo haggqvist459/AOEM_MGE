@@ -1,8 +1,9 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDaySeven, resetStateDaySeven } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
-import { DAY_KEYS } from '../../utils'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { DAY_KEYS } from '../../utils';
+import { calculateDailyScoreDaySeven, resetStateDaySeven } from '../../redux/slices';
+import { DayContainer, PreviousEventScore, FormButtons, FormHeader } from '../../components';
+
 
 const DaySeven = () => {
 
@@ -10,7 +11,7 @@ const DaySeven = () => {
   const daySevenData = useSelector((state) => state.daySeven);
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_SEVEN, field, value }))
+    dispatch(updateField({ day: DAY_KEYS.DAY_SEVEN, field, value }))
   }
 
   const cancelForm = () => {
@@ -25,25 +26,21 @@ const DaySeven = () => {
   }
 
   return (
-    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
-      <div className='px-5'>
-        <div className=''>
-          <FormHeader title={'Day Seven'} />
-          <form onSubmit={submitForm}>
-            <div className='flex flex-col md:flex-row md:pr-2'>
-              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-                {/* Input */}
-                <PreviousEventScore dayKey={DAY_KEYS.DAY_SEVEN} />
-              </div>
-              <div className='w-full md:w-1/2 relative'>
-                {/* Output */}
-              </div>
-            </div>
-            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-          </form>
+    <DayContainer>
+      <FormHeader title={'Day Seven'} />
+      <form onSubmit={submitForm}>
+        <div className='flex flex-col md:flex-row md:pr-2'>
+          <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+            {/* Input */}
+            <PreviousEventScore dayKey={DAY_KEYS.DAY_SEVEN} />
+          </div>
+          <div className='w-full md:w-1/2 relative'>
+            {/* Output */}
+          </div>
         </div>
-      </div>
-    </section>
+        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+      </form>
+    </DayContainer>
   )
 }
 
@@ -78,7 +75,7 @@ Fine craft 1x = 2000
 
 Power increase
 Citadel building 1x power = 3 
-Research texh 1x power = 6
+Research tech 1x power = 6
 Unit training power = 3
 
 

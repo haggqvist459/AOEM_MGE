@@ -5,13 +5,18 @@ import { POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIERS, loadData, saveData, valid
 
 const savedState = loadData();
 const initialState = savedState?.dayThree || {
-    marches: Array.from({ length: 5 }, () => ({
-        gatherSpeedBonus: '',
-        loadCapacity: '',
-        loadBonus: '',
-    })),
+    marches: [
+        {
+            gatherSpeedBonus: '',
+            loadCapacity: '',
+            loadBonus: '',
+            marchScore: 0,
+            completedTurns: '',
+            fullAtReset: false
+        }
+    ],
     empireCoins: '',
-    totalDailyScore: '',
+    totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',
@@ -25,32 +30,37 @@ const dayThreeSlice = createSlice({
         updateField: (state, action) => updateFieldDelegated(state, action),
         updateMarchField: (state, action) => {
             const { index, field, value } = action.payload;
-        
+
             console.log("updateMarchField action received:", action.payload);
-        
+
             if (!state.marches[index]) {
                 console.error(`Invalid march index: ${index}`);
                 return;
             }
-        
+
             if (!(field in state.marches[index])) {
                 console.error(`Invalid field: ${field} for march at index ${index}`);
                 return;
             }
-        
-            state.marches[index][field] = validateInputForState(value); 
+
+            state.marches[index][field] = validateInputForState(value);
         },
         calculateDailyScore: (state) => {
 
         },
         resetState: (state) => {
-            state.marches = Array.from({ length: 5 }, () => ({
-                gatherSpeedBonus: '',
-                loadCapacity: '',
-                loadBonus: '',
-            }));
+            state.marches = [
+                {
+                    gatherSpeedBonus: '',
+                    loadCapacity: '',
+                    loadBonus: '',
+                    marchScore: 0,
+                    completedTurns: '',
+                    fullAtReset: false
+                }
+            ];
             state.empireCoins = '';
-            state.dailyScore = '';
+            state.dailyScore = 0;
             state.previousEventScore = {
                 topOne: '',
                 topTen: '',

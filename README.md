@@ -23,7 +23,7 @@
     - [x] Input available forge speed up
     - [x] Input available skill points 
     - [x] Input previous event scores 
-    - [ ] Calculate available score based on gear blueprints or speed ups 
+    - [x] Calculate available score based on gear blueprints or speed ups 
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Three
@@ -40,14 +40,14 @@
         - [ ] Input ring levels for more accurate score calculations
     - [x] Input available speed up minutes for building, research and universal 
     - [x] Input previous event scores 
-    - [ ] Calculate available score
+    - [x] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Five 
     - [x] Input number of T1 troops available for promotion and to which level they can be promoted
     - [x] Input amount of training speed ups available 
     - [x] Input previous event scores 
-    - [ ] Calculate available score
+    - [x] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Six
@@ -82,7 +82,9 @@
 - [x] Redux state management 
 - [x] localStorage for data permanence 
 - [ ] Header component
-    - [ ] Hamburger button with nav links to each day, admi and about page 
+    - [x] Hamburger button with nav links to each day, admin and about page 
+     - [x] Custom animation, turns button into cross
+     - [x] Menu hidden under navbar 
 - [ ] Footer 
     - [ ] About page link
     - [x] GitHub source code link 

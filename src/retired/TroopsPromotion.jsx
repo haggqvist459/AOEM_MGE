@@ -1,6 +1,6 @@
 import React from 'react'
-import { TROOP_TIER_MULTIPLIERS } from '../../utils'
-import { FormField } from '../form'
+import { TROOP_TIER_MULTIPLIERS } from '../utils'
+import { FormField } from '../retired'
 
 const TroopsPromotion = ({ troopType, troopData, onChange }) => {
 
@@ -40,7 +40,7 @@ const TroopsPromotion = ({ troopType, troopData, onChange }) => {
                             id={`${troopType}-targetTier`}
                             className='w-full mt-1 px-1 border border-neutral-300 rounded-md shadow-sm appearance-none'
                             value={troopData.targetTier}
-                            onChange={(e) => onChange(troopType, 'targetTier', e.target.value)}
+                            onChange={(e) => onChange(troopType, 'targetTier', e.target.value)} //pass empty string as unit argument
                         >
                             {Object.keys(TROOP_TIER_MULTIPLIERS).map((level, index) => (
                                 <option key={index} value={TROOP_TIER_MULTIPLIERS[level]}>
@@ -57,31 +57,31 @@ const TroopsPromotion = ({ troopType, troopData, onChange }) => {
                 </div>
             </div>
             <div className='flex flex-col sm:flex-row mt-2 space-x-1 text-sm'>
-                    {/* Troops per batch: */}
-                    {/* Troop training time:  */}
-                    {/* Training speed-up:  */}
-                    <FormField
-                        labelValue={'Troops per batch:'}
-                        placeholder={'0'}
-                        value={troopData.promotedTroopPerBatch}
-                        id={`${troopType}-promotedTroopPerBatch`}
-                        onChange={(value) => onChange(troopType, 'promotedTroopPerBatch', value)}
-                    />
-                    <FormField
-                        labelValue={'Training time:'}
-                        placeholder={'Input in minutes'}
-                        value={troopData.trainingTime}
-                        id={`${troopType}-trainingTimePerBatch`}
-                        onChange={(value) => onChange(troopType, 'trainingTime', value)}
-                    />
-                    <FormField
-                        labelValue={'Available troops:'}
-                        placeholder={'0'}
-                        value={troopData.availableTroops}
-                        id={`${troopType}-availableTroops`}
-                        onChange={(value) => onChange(troopType, 'availableTroops', value)}
-                    />
-                </div>
+                {/* Troops per batch: */}
+                {/* Troop training time:  */}
+                {/* Training speed-up:  */}
+                <FormField
+                    labelValue={'Troops per batch:'}
+                    placeholder={'0'}
+                    value={troopData.promotedTroopPerBatch}
+                    id={`${troopType}-promotedTroopPerBatch`}
+                    onChange={(value) => onChange(troopType, 'promotedTroopPerBatch', value)}
+                />
+                {/* <FormField
+                    labelValue={'Training time:'}
+                    placeholder={'Input in minutes'}
+                    value={troopData.trainingTime}
+                    id={`${troopType}-trainingTimePerBatch`}
+                    onChange={(value) => onChange(troopType, 'trainingTime', value)}
+                /> */}
+                <FormField
+                    labelValue={'Available troops:'}
+                    placeholder={'0'}
+                    value={troopData.availableTroops}
+                    id={`${troopType}-availableTroops`}
+                    onChange={(value) => onChange(troopType, 'availableTroops', value)}
+                />
+            </div>
         </div>
     )
 }

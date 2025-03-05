@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
-import { FormButtons, FormHeader, FormSubHeader, FormInput, FormWrapper, PreviousEventScore, PreviousEventScoreBoard, ScoreBoardSection } from '../form'
-
+import {
+  DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput,
+  FormDropdown, PreviousEventScore, PreviousEventScoreBoard, ScoreBoardSection
+} from '../../components'
 
 const DayOne = () => {
 
@@ -46,62 +48,46 @@ const DayOne = () => {
   }
 
   return (
-    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
-      <div className='px-5'>
-        <FormHeader title={'Day One'} />
-        <form onSubmit={submitForm}>
-          {/* Split section in half vertically, input on left and output on the right. */}
-          {/* On smaller breakpoints, display everything in one column. */}
-          <div className='flex flex-col md:flex-row md:pr-2'>
-            <div className='w-full md:w-1/2 relative  md:border-r border-neutral-400 md:pr-2'>
-              {/* Dropdown */}
-              <label htmlFor='tribeLevel' className='block font-bold text-blue-900 mt-2'>Select Tribe Level:</label>
-              <div className='relative w-full'>
-                <select
-                  id="tribeLevel"
-                  className='w-full mt-1 px-1 border border-neutral-300 rounded-md shadow-sm appearance-none'
-                  value={dailyData.tribeLevelMultiplier}
-                  // onChange={(e) => setSelectedDropdownOption(Number(e.target.value))} // ensure selected value remains a number 
-                  onChange={(e) => handleInput('tribeLevelMultiplier', e.target.value)}
-                >
-                  {Object.keys(TRIBE_LEVEL_MULTIPLIERS).map((level, index) => (
-                    <option key={index} value={TRIBE_LEVEL_MULTIPLIERS[level]}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-                <div className='absolute inset-y-0 right-2 flex items-center pointer-events-none'>
-                  <svg className='w-5 h-5 text-black' fill='none' stroke='black' strokeWidth='2' viewBox='0 0 24 24' >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </div>
-              {/* Stamina  */}
-              <FormSubHeader title={'Available stamina:'} />
-              <FormInput
-                id={'stamina'}
-                placeholder={'include daily and villager boosts'}
-                value={localState.stamina}
-                onChange={(value) => handleLocalChange('stamina', value)}
-                onBlur={() => handleBlur('stamina')}
-              />
-              <PreviousEventScore dayKey={DAY_KEYS.DAY_ONE} />
-            </div>
-            <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
-              {/* Output */}
-              <FormSubHeader title={'Day One Score: '} />
-              <div className='grid grid-cols-2 gap-2'>
-                <ScoreBoardSection title={'Hunted tribes: '} value={dailyData.tribesHunted.toLocaleString()} />
-                <ScoreBoardSection title={'Daily score: '} value={dailyData.totalDailyScore.toLocaleString()} />
-              </div>
-              <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_ONE} />
-            </div>
+    <DayContainer>
+      <FormHeader title={'Day One'} size={'text-2xl lg:text-3xl'} />
+      <form onSubmit={submitForm}>
+        {/* Split section in half vertically, input on left and output on the right. */}
+        {/* On smaller breakpoints, display everything in one column. */}
+        <div className='flex flex-col md:flex-row md:pr-2'>
+          <div className='w-full md:w-1/2 relative  md:border-r border-neutral-400 md:pr-2'>
+            {/* Dropdown */}
+            <FormDropdown
+              title={'Select tribe level:'}
+              value={dailyData.tribeLevelMultiplier}
+              onChange={(newValue) => handleInput('tribeLevelMultiplier', newValue)}
+              options={TRIBE_LEVEL_MULTIPLIERS}
+              id={'tribeLevelMultiplier'}
+            />
+            {/* Stamina  */}
+            <FormSubHeader title={'Available stamina:'} />
+            <FormInput
+              id={'stamina'}
+              placeholder={'include daily and villager boosts'}
+              value={localState.stamina}
+              onChange={(value) => handleLocalChange('stamina', value)}
+              onBlur={() => handleBlur('stamina')}
+            />
+            <PreviousEventScore dayKey={DAY_KEYS.DAY_ONE} />
           </div>
-          {/* buttons */}
-          <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-        </form>
-      </div>
-    </section>
+          <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
+            {/* Output */}
+            <FormSubHeader title={'Day One Score: '} size={'text-md lg:text-lg'} weight={'lg:font-bold'} />
+            <div className='grid grid-cols-2 gap-2'>
+              <ScoreBoardSection title={'Hunted tribes: '} value={dailyData.tribesHunted.toLocaleString()} />
+              <ScoreBoardSection title={'Daily score: '} value={dailyData.totalDailyScore.toLocaleString()} />
+            </div>
+            <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_ONE} />
+          </div>
+        </div>
+        {/* buttons */}
+        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+      </form>
+    </DayContainer>
   )
 }
 

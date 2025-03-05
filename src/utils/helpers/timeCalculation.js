@@ -2,8 +2,14 @@
 
 // convert the state into seconds for score calculation
 export const convertToSeconds = ({ days = 0, hours = 0, minutes = 0, seconds = 0 }) => {
-    return (Number(days) * 86400) + (Number(hours) * 3600) + (Number(minutes) * 60) + Number(seconds);
-};
+    // Convert empty strings to 0 before doing the calculation
+    days = days === '' ? 0 : Number(days);
+    hours = hours === '' ? 0 : Number(hours);
+    minutes = minutes === '' ? 0 : Number(minutes);
+    seconds = seconds === '' ? 0 : Number(seconds);
+  
+    return (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+  };
 
 // convert back to properly display remaining values in UI. 
 export const convertFromSeconds = (totalSeconds) => {

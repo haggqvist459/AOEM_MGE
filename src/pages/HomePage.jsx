@@ -4,13 +4,14 @@ import { DayOne, DayTwo, DayThree, DayFour, DayFive, DaySix, DaySeven } from '..
 const HomePage = () => {
   return (
     <>
+      
       <DayOne />
       <DayTwo />
-      {/* <DayThree /> */}
+      <DayThree />
       <DayFour />
-      {/* <DayFive /> */}
-      {/* <DaySix /> */}
-      {/* <DaySeven /> */}
+      <DayFive />
+      <DaySix />
+      <DaySeven />
     </>
   )
 }

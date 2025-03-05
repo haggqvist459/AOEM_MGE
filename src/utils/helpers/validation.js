@@ -1,19 +1,10 @@
 
 export const validateInputForState = (value) => {
-    if (typeof value !== "string") return value;
-
-    // Replace commas with dots
-    let cleaned = value.replace(/,/g, ".");
-
-    // Remove any invalid characters (anything that isn't a number or a single decimal point)
-    cleaned = cleaned.replace(/[^0-9.]/g, "");
-
-    // Ensure only one decimal point exists
-    if ((cleaned.match(/\./g) || []).length > 1) {
-        cleaned = cleaned.substring(0, cleaned.lastIndexOf(".")); // Keep only the first decimal
+    if (typeof value !== "string") {
+        // Handle cases where value is not a string (e.g., undefined, null, number, etc.)
+        return value;
     }
-
-    return cleaned;
+    return value.trim() === "" ? "" : parseFloat(value);
 };
 
 
@@ -28,9 +19,6 @@ export const validateInputForCalculation = (value) => {
     const parsedValue = parseFloat(value);
     return isNaN(parsedValue) ? 0 : parsedValue;
 };
-
-
-
 
 
 
