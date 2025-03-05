@@ -10,7 +10,7 @@ const savedState = loadData();
 // if not, initialise new object 
 const initialState = savedState?.dayOne || {
     stamina: '',
-    tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[dropdownOptions.length - 1]],
+    tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]],
     totalDailyScore: 0,
     tribesHunted: 0,
     previousEventScore: {
@@ -34,14 +34,14 @@ const dayOneSlice = createSlice({
             state.totalDailyScore = state.tribesHunted * state.tribeLevelMultiplier
         },
         resetState: (state) => {
-            state.stamina = '',
-                state.tribeLevelMultiplier = TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[dropdownOptions.length - 1]],
-                state.dailyScore = '',
-                state.tribesHunted = '',
-                state.previousEventScore = {
-                    topOne: '',
-                    topTen: '',
-                };
+            state.stamina = '';
+            state.tribeLevelMultiplier = TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]];
+            state.dailyScore = '';
+            state.tribesHunted = 0;
+            state.previousEventScore = {
+                topOne: '',
+                topTen: '',
+            };
             saveData({ ...loadData(), dayOne: { ...state } });
         },
     },

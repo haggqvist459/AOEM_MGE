@@ -1,16 +1,26 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDaySix, resetStateDaySix } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader } from '../form'
-import { DAY_KEYS } from '../../utils'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { DAY_KEYS } from '../../utils';
+import { calculateDailyScoreDaySix, resetStateDaySix } from '../../redux/slices';
+import { DayContainer, PreviousEventScore, FormButtons, FormHeader } from '../../components';
+
 
 const DaySix = () => {
 
   const dispatch = useDispatch();
-  const daySixData = useSelector((state) => state.daySix);
+  const dailyData = useSelector((state) => state.daySix);
+  const [localState, setLocalState] = useState(dailyData);
+
+  useEffect(() => {
+    setLocalState(dailyData);
+  }, [dailyData]);
+
+  const handleLocalChange = (field, value) => {
+    setLocalState(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_SIX, field, value }))
+    dispatch(updateField({ day: DAY_KEYS.DAY_SIX, field, value }))
   }
 
   const cancelForm = () => {
@@ -25,25 +35,21 @@ const DaySix = () => {
   }
 
   return (
-    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
-      <div className='px-5'>
-        <div className=''>
-          <FormHeader title={'Day Six'} />
-          <form onSubmit={submitForm}>
-            <div className='flex flex-col md:flex-row md:pr-2'>
-              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-                {/* Input */}
-                <PreviousEventScore dayKey={DAY_KEYS.DAY_SIX} />
-              </div>
-              <div className='w-full md:w-1/2 relative'>
-                {/* Output */}
-              </div>
-            </div>
-            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-          </form>
+    <DayContainer>
+      <FormHeader title={'Day Six'} />
+      <form onSubmit={submitForm}>
+        <div className='flex flex-col md:flex-row md:pr-2'>
+          <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+            {/* Input */}
+            <PreviousEventScore dayKey={DAY_KEYS.DAY_SIX} />
+          </div>
+          <div className='w-full md:w-1/2 relative'>
+            {/* Output */}
+          </div>
         </div>
-      </div>
-    </section>
+        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+      </form>
+    </DayContainer>
   )
 }
 
@@ -54,7 +60,7 @@ export default DaySix
 
 Power increase
 Citadel building 1x power = 3 
-Research texh 1x power = 6
+Research tech 1x power = 6
 Unit training power = 3
 
 Input needed: 

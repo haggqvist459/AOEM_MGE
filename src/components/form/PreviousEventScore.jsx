@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour } from '../../redux/slices'
-import { FormField, FormSubHeader, FormInput, FormWrapper } from '../form'
+import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive } from '../../redux/slices'
+import { FormSubHeader, FormInput, FormWrapper } from '../form'
 
 const updateActions = {
   dayOne: updateFieldDayOne,
   dayTwo: updateFieldDayTwo,
   dayThree: updateFieldDayThree,
   dayFour: updateFieldDayFour,
-  // dayFive: updateFieldDayFive,
+  dayFive: updateFieldDayFive,
   // daySix: updateFieldDaySix,
   // daySeven: updateFieldDaySeven,
 };
@@ -17,51 +17,54 @@ const updateActions = {
 const PreviousEventScore = ({ dayKey }) => {
 
   const dispatch = useDispatch();
-  const previousEventScore = useSelector((state) => state[dayKey].previousEventScore);
+  const dailyState = useSelector((state) => state[dayKey]);
 
-  const [localState, setLocalState] = useState(previousEventScore);
+  const [localState, setLocalState] = useState(dailyState)
 
   useEffect(() => {
-    setLocalState(previousEventScore);
-  }, [previousEventScore]);
+    console.log("previousEventScore useEffect state: ", dailyState);
+    setLocalState(dailyState);
+  }, [dailyState]);
 
-  const handleLocalChange = (field, value) => {
-    setLocalState(prev => ({ ...prev, [field]: value }));
+  const handleLocalChange = (field, unit, value) => {
+    setLocalState((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], [unit]: value },
+    }));
   };
 
-  const handleBlur = (field) => {
-    // dispatch(updateFieldDayOne({ field, value: localState[field] }));
+  const handleBlur = (field, unit) => {
 
     if (!updateActions[dayKey]) {
       console.error(`Invalid dayKey: ${dayKey}`);
       return;
     }
-    console.log("dayKey: ", dayKey, ", field: ", field, ', value: ', localState[field]);
-    dispatch(updateActions[dayKey]({ field, value: localState[field] }));
+    console.log("handleBlur before dispatch dayKey: ", dayKey, ", field: ", field, ', unit: ', unit, ', value: ');
+    dispatch(updateActions[dayKey]({ field, unit, value: localState[field][unit] }));
   };
 
   return (
-    <div className='my-2 px-1 '>
-      <FormSubHeader title={'Previous event scores: '} size={'text-md'} />
+    <div className='my-2 px-1'>
+      <FormSubHeader title={'Previous event scores: '} />
       <div className='flex flex-col xs:flex-row space-x-2'>
         <FormWrapper>
           <FormSubHeader title={'1st place:'} />
           <FormInput
-            id={`${dayKey}-topOne`}
+            id={`${dayKey}-previousEventScore-topOne`}
             placeholder={'0'}
-            value={localState.topOne}
-            onChange={(value) => handleLocalChange('topOne', value)}
-            onBlur={() => handleBlur('topOne')}
+            value={localState.previousEventScore.topOne}
+            onChange={(value) => handleLocalChange('previousEventScore', 'topOne', value)}
+            onBlur={() => handleBlur('previousEventScore', 'topOne')}
           />
         </FormWrapper>
         <FormWrapper>
           <FormSubHeader title={'10th place:'} />
           <FormInput
-            id={`${dayKey}-topTen`}
+            id={`${dayKey}-previousEventScore-topTen`}
             placeholder={'0'}
-            value={localState.topTen}
-            onChange={(value) => handleLocalChange('topTen', value)}
-            onBlur={() => handleBlur('topTen')}
+            value={localState.previousEventScore.topTen}
+            onChange={(value) => handleLocalChange('previousEventScore', 'topTen', value)}
+            onBlur={() => handleBlur('previousEventScore','topTen')}
           />
           </FormWrapper>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { FormField } from '../form'
+import { FormField } from '../../retired'
+
 
 const GatherMarch = ({ march, marchIndex, title, onChange }) => {
 
@@ -9,6 +10,7 @@ const GatherMarch = ({ march, marchIndex, title, onChange }) => {
         <div className='px-1 border-b border-neutral-400 pb-1 mb-1'>
             <div className='flex flex-row space-x-1'>
                 <button
+                    type='button'
                     onClick={() => setIsExpanded(!isExpanded)}
                     className="flex flex-row items-center justify-between w-full text-left focus:outline-none"
                 >

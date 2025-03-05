@@ -1,23 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import {calculateDailyScoreDayThree, resetStateDayThree, updateMarchField } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader, GatherMarch } from '../form'
+import { calculateDailyScoreDayThree, resetStateDayThree, updateMarchField, updateFieldDayThree } from '../../redux/slices'
+import { DayContainer, PreviousEventScore, FormButtons, FormHeader, GatherMarch } from '../../components'
 import { DAY_KEYS } from '../../utils'
 
 const DayThree = () => {
 
   const dispatch = useDispatch();
-  const dayThreeData = useSelector((state) => state.dayThree)
+  const dailyData = useSelector((state) => state.dayThree)
+  const [localState, setLocalState] = useState(dailyData);
 
   const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_THREE, field, value }))
+    dispatch(updateField({ day: DAY_KEYS.DAY_THREE, field, value }))
   }
 
   const handleMarchInput = (index, field, value) => {
     console.log("handleMarchInput values, index: ", index, ', field: ', field, ', value: ', value)
-    dispatch(updateMarchField({index, field, value}))
+    dispatch(updateMarchField({ index, field, value }))
   }
-  
+
   const cancelForm = () => {
     dispatch(resetStateDayThree())
   }
@@ -28,34 +29,30 @@ const DayThree = () => {
   }
 
   return (
-    <section className='@container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
-      <div className='px-5'>
-        <div className=''>
-          <FormHeader title={'Day Three'} />
-          <form onSubmit={submitForm}>
-            <div className='flex flex-col md:flex-row md:pr-2'>
-              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-                {/* Input */}
-                {dayThreeData.marches.map((march, index) => (
-                  <GatherMarch
-                    key={index}
-                    march={march}
-                    marchIndex={index}
-                    onChange={handleMarchInput}
-                    title={`March ${index + 1}`}
-                  />
-                ))}
-                <PreviousEventScore dayKey={DAY_KEYS.DAY_THREE} />
-              </div>
-              <div className='w-full md:w-1/2 relative'>
-                {/* Output */}
-              </div>
-            </div>
-            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-          </form>
+    <DayContainer>
+      <FormHeader title={'Day Three'} />
+      <form onSubmit={submitForm}>
+        <div className='flex flex-col md:flex-row md:pr-2'>
+          <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
+            {/* Input */}
+            {dailyData.marches.map((march, index) => (
+              <GatherMarch
+                key={index}
+                march={march}
+                marchIndex={index}
+                onChange={handleMarchInput}
+                title={`March ${index + 1}`}
+              />
+            ))}
+            <PreviousEventScore dayKey={DAY_KEYS.DAY_THREE} />
+          </div>
+          <div className='w-full md:w-1/2'>
+            {/* Output */}
+          </div>
         </div>
-      </div>
-    </section>
+        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+      </form>
+    </DayContainer>
   )
 }
 

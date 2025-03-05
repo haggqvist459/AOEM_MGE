@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TROOP_TIER_MULTIPLIERS, loadData, saveData, validateInputForState, calculatePromotableBatches, calculateTroopPromotionScore } from "../../utils";
-// import { sharedReducers } from '../slices'
+import {
+    TROOP_TIER_MULTIPLIERS, loadData, saveData, validateInputForState,
+    calculatePromotableBatches, calculateTroopPromotionScore, updateFieldDelegated,
+    convertToSeconds, calculateTrainingScore
+} from "../../utils";
 
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
 
@@ -9,52 +12,88 @@ const savedState = loadData();
 const initialState = savedState?.dayFive || {
     troops: {
         Archers: {
-            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
-            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
             availableTroops: '',
-            promotedTroopPerBatch: '',
-            trainingTime: '',
-            troopTotalScore: '',
-            promotableBatches: '',
-            maxPromotableBatches: '',
+            promotedTroopsPerBatch: '',
+            trainingTime: {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            },
+            troopTotalScore: 0,
+            promotableBatches: 0,
+            maxPromotableBatches: 0,
         },
         Cavalry: {
-            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
-            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
             availableTroops: '',
-            promotedTroopPerBatch: '',
-            trainingTime: '',
-            troopTotalScore: '',
-            promotableBatches: '',
-            maxPromotableBatches: '',
+            promotedTroopsPerBatch: '',
+            trainingTime: {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            },
+            troopTotalScore: 0,
+            promotableBatches: 0,
+            maxPromotableBatches: 0,
         },
         Pikemen: {
-            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
-            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
             availableTroops: '',
-            promotedTroopPerBatch: '',
-            trainingTime: '',
-            troopTotalScore: '',
-            promotableBatches: '',
-            maxPromotableBatches: '',
+            promotedTroopsPerBatch: '',
+            trainingTime: {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            },
+            troopTotalScore: 0,
+            promotableBatches: 0,
+            maxPromotableBatches: 0,
         },
         Swordsmen: {
-            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
-            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+            targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+            baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
             availableTroops: '',
-            promotedTroopPerBatch: '',
-            trainingTime: '',
-            troopTotalScore: '',
-            promotableBatches: '',
-            maxPromotableBatches: '',
+            promotedTroopsPerBatch: '',
+            trainingTime: {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
+            },
+            troopTotalScore: 0,
+            promotableBatches: 0,
+            maxPromotableBatches: 0,
         }
     },
-    trainedTroopTier: '',
+    trainedTroopTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
     trainedTroopsPerBatch: '',
-    initialTrainingSpeedup: '',
-    remainingTrainingSpeedup: '',
-    promotionScore: 0,
-    trainingScore: 0,
+    trainedTroopsTrainingTime: {
+        days: '',
+        hours: '',
+        minutes: '',
+        seconds: '',
+    },
+    initialTrainingSpeedup: {
+        days: '',
+        hours: '',
+        minutes: '',
+    },
+    remainingTrainingSpeedup: {
+        days: '',
+        hours: '',
+        minutes: '',
+    },
+    score: {
+        training: 0,
+        promoting: 0,
+    },
     totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
@@ -66,66 +105,133 @@ const dayFiveSlice = createSlice({
     name: 'dayFiveSlice',
     initialState,
     reducers: {
-        updatePromotionField: (state, action) => {
-            const { troopType, field, value } = action.payload;
-            state.troops[troopType][field] = validateInputForState(value);
+        updateField: (state, action) => updateFieldDelegated(state, action),
+        updateTroopField: (state, action) => {
+            const { troopType, field, unit, value } = action.payload;
+            console.log("updateTroopField troopType: ", troopType)
+            console.log("updateTroopField field: ", field)
+            console.log("updateTroopField unit: ", unit)
+            console.log("updateTroopField value: ", value)
+            const validatedValue = validateInputForState(value);
+
+            if (state.troops[troopType]) {
+                state.troops[troopType][field] = unit ? { ...state.troops[troopType][field], [unit]: validatedValue } : validatedValue;
+            } else {
+                console.error(`updateTroopField error, troopType: ${troopType} does not exist in state`);
+            }
+
         },
         calculateDailyScore: (state) => {
-            // find the highest target tier amongst the troops to promote
-            const highestTargetTier = Math.max(...Object.values(state.troops).map(troop => troop.targetTier));
-            // console.log("highestTargetTier:", highestTargetTier);
-            // split the troop types into groups based on target tier
-            let highestTierTroops = {};
-            let lowerTierTroops = {};
 
-            // group the troop types based on promotion tier 
-            Object.keys(state.troops).forEach((troopType) => {
-                const troop = state.troops[troopType];
-                // Check if any of the required values are missing or invalid
-                if (
-                    troop.trainingTime === '' || troop.promotedTroopPerBatch === '' || troop.availableTroops === ''
-                ) return;
+            // calculate the promotable batches, function updates the state
+            let remainingTrainingSpeedup = calculatePromotableBatches(state.troops, state.initialTrainingSpeedup);
 
-                if (
-                    troop.targetTier === highestTargetTier &&
-                    !(troopType in highestTierTroops) // Ensures no duplicates
-                ) {
-                    highestTierTroops[troopType] = troop;
-                } else {
-                    lowerTierTroops[troopType] = troop;
-                }
-            });
 
-            const { updatedHighestTierTroops, updatedLowerTierTroops, remainingSpeedup } = calculatePromotableBatches(highestTierTroops, lowerTierTroops, state.initialTrainingSpeedup)
-
-            // update state with the new values for promotable batches 
-            Object.keys(updatedHighestTierTroops).forEach(troopType => {
-                state.troops[troopType] = updatedHighestTierTroops[troopType];
-            });
-
-            Object.keys(updatedLowerTierTroops).forEach(troopType => {
-                state.troops[troopType] = updatedLowerTierTroops[troopType];
-            });
-
-            // Update remaining speedup in state
-            state.remainingTrainingSpeedup = remainingSpeedup;
-
-            // calculate the score 
+            // calculate the  promotion score 
             const { updatedTroops, promotionScore } = calculateTroopPromotionScore(state.troops);
             state.troops = updatedTroops;
-            state.promotionScore = promotionScore;
+            state.score.promoting = promotionScore;
 
+            // calculate the training score if there's speedup remaining. 
+            let trainingTimeInSeconds = convertToSeconds(state.trainedTroopsTrainingTime)
+            if (remainingTrainingSpeedup > trainingTimeInSeconds) {
+                console.log("calculating training score")
+                state.score.training = calculateTrainingScore(state.trainedTroopTier, state.trainedTroopsPerBatch, trainingTimeInSeconds, remainingTrainingSpeedup)
+            }  else {
+                state.score.training = 0;
+            }
+
+            state.totalDailyScore = state.score.training + state.score.promoting
         },
         resetState: (state) => {
-            state.baseTier = TROOP_TIER_MULTIPLIERS[troopTierOptions[0]];
-            state.targetTier = TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]];
-            state.promotedTroopPerBatch = '';
-            state.trainingTime = '';
-            state.trainingSpeedup = '';
-            state.dailyScore = '';
+            state.troops = {
+                Archers: {
+                    targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+                    baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+                    availableTroops: '',
+                    promotedTroopsPerBatch: '',
+                    trainingTime: {
+                        days: '',
+                        hours: '',
+                        minutes: '',
+                        seconds: '',
+                    },
+                    troopTotalScore: 0,
+                    promotableBatches: 0,
+                    maxPromotableBatches: 0,
+                },
+                Cavalry: {
+                    targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+                    baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+                    availableTroops: '',
+                    promotedTroopsPerBatch: '',
+                    trainingTime: {
+                        days: '',
+                        hours: '',
+                        minutes: '',
+                        seconds: '',
+                    },
+                    troopTotalScore: '',
+                    promotableBatches: '',
+                    maxPromotableBatches: '',
+                },
+                Pikemen: {
+                    targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+                    baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+                    availableTroops: '',
+                    promotedTroopsPerBatch: '',
+                    trainingTime: {
+                        days: '',
+                        hours: '',
+                        minutes: '',
+                        seconds: '',
+                    },
+                    troopTotalScore: 0,
+                    promotableBatches: 0,
+                    maxPromotableBatches: 0,
+                },
+                Swordsmen: {
+                    targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
+                    baseTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[troopTierOptions.length - 1]],
+                    availableTroops: '',
+                    promotedTroopsPerBatch: '',
+                    trainingTime: {
+                        days: '',
+                        hours: '',
+                        minutes: '',
+                        seconds: '',
+                    },
+                    troopTotalScore: 0,
+                    promotableBatches: 0,
+                    maxPromotableBatches: 0,
+                }
+            };
+            state.initialTrainingSpeedup = {
+                days: '',
+                hours: '',
+                minutes: ''
+            };
+            state.remainingTrainingSpeedup = {
+                days: '',
+                hours: '',
+                minutes: ''
+            };
+            state.score = {
+                training: 0,
+                promoting: 0,
+            };
+            state.dailyScore = 0;
             state.previousEventScore = {
                 topOne: '',
                 topTen: '',
+            };
+            state.trainedTroopTier = TROOP_TIER_MULTIPLIERS[troopTierOptions[0]];
+            state.trainedTroopsPerBatch = '';
+            state.trainedTroopsTrainingTime = {
+                days: '',
+                hours: '',
+                minutes: '',
+                seconds: '',
             };
 
 
@@ -137,6 +243,6 @@ const dayFiveSlice = createSlice({
     // }
 })
 
-export const { updatePromotionField, calculateDailyScore, resetState } = dayFiveSlice.actions;
+export const { updateTroopField, calculateDailyScore, resetState, updateField } = dayFiveSlice.actions;
 export default dayFiveSlice.reducer;
 

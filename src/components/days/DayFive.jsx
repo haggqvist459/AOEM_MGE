@@ -1,21 +1,80 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { calculateDailyScoreDayFive, resetStateDayFive, updatePromotionField } from '../../redux/slices'
-import { FormField, PreviousEventScore, FormButtons, FormHeader, TroopsPromotion } from '../form'
-import { DAY_KEYS } from '../../utils'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { DAY_KEYS, TROOP_TIER_MULTIPLIERS } from '../../utils';
+import { calculateDailyScoreDayFive, resetStateDayFive, updateTroopField, updateFieldDayFive } from '../../redux/slices';
+import {
+  DayContainer, PreviousEventScore, FormButtons, FormHeader, FormWrapper, FormSubHeader,
+  TroopType, FormInput, FormDropdown,
+  ScoreBoardWrapper, ScoreBoardSection, PreviousEventScoreBoard
+} from '../../components';
+
 
 const DayFive = () => {
 
   const dispatch = useDispatch();
-  const dayFiveData = useSelector((state) => state.dayFive)
+  const dailyData = useSelector((state) => state.dayFive)
+  const [localState, setLocalState] = useState(dailyData);
+  const [isExpanded, setIsExpanded] = useState(true)
 
-  const handleInput = (field, value) => {
-    dispatch(updateField({day: DAY_KEYS.DAY_FIVE, field, value }))
+  useEffect(() => {
+    console.log("data received from redux: ", dailyData);
+    setLocalState(dailyData);
+  }, [dailyData]);
+
+  const handleLocalChange = (field, value) => {
+    setLocalState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleTimeChange = (field, unit, value) => {
+    setLocalState((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], [unit]: value },
+    }));
+  };
+
+  const handleTroopTypeStateChange = (troopType, field, unit, value) => {
+    console.log('handleTroopTypeStateChange values, troopType: ', troopType);
+    console.log('handleTroopTypeStateChange values, field: ', field);
+    console.log('handleTroopTypeStateChange values, unit: ', unit);
+    console.log('handleTroopTypeStateChange values, value: ', value);
+
+    setLocalState(prev => ({
+      ...prev,
+      troops: {
+        ...prev.troops,
+        [troopType]: {
+          ...prev.troops[troopType],
+          [field]: unit ? {
+            ...prev.troops[troopType][field],
+            [unit]: value
+          } : value, // If no unit, just update the field directly
+        },
+      },
+    }));
+  };
+
+  const handleTroopTypeBlur = (troopType, field, unit) => {
+    const value = unit
+      ? localState.troops[troopType][field][unit] // Handle nested object with unit
+      : localState.troops[troopType][field];
+
+    console.log("handleTroopTypeBlur - Checking localState: ", localState);
+    console.log("handleTroopTypeBlur - Checking troopType: ", troopType);
+    console.log("handleTroopTypeBlur - Checking field: ", field);
+    console.log("handleTroopTypeBlur - Checking unit: ", unit);
+    console.log("handleTroopTypeBlur - Checking value: ", value);
+
+    dispatch(updateTroopField({ troopType, field, unit, value }));
   }
 
-  const handleTroopInput = (troopType, field, value) => {
-    dispatch(updatePromotionField({ troopType, field, value }))
-  }
+  const handleBlur = (field, unit) => {
+    const value = unit
+      ? localState[field][unit]
+      : localState[field];
+
+    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    dispatch(updateFieldDayFive({ field, unit, value }));
+  };
 
   const cancelForm = () => {
     dispatch(resetStateDayFive())
@@ -27,141 +86,190 @@ const DayFive = () => {
 
 
   return (
-    <section className='container bg-neutral-300 mx-auto md:w-3/4 w-11/12 pt-5 border shadow-md rounded-md'>
-      <div className='px-5'>
-        <div className=''>
-          <FormHeader title={'Day Five'} />
-          <form onSubmit={submitForm}>
-            <div className='flex flex-col md:flex-row md:pr-2'>
-              <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-                {/* Input */}
-                {Object.keys(dayFiveData.troops).map((troopType, index) => (
-                  <TroopsPromotion
-                    key={index}
-                    troopType={troopType}
-                    troopData={dayFiveData.troops[troopType]}
-                    onChange={handleTroopInput}
-                  />
-                ))}
-                <FormField
-                  labelValue={'Training Speed-up:'}
-                  placeholder={'Input in minutes'}
-                  id={'initialTrainingSpeedup'}
-                  value={dayFiveData.initialTrainingSpeedup}
-                  onChange={(value) => handleInput('initialTrainingSpeedup', value)}
+    <DayContainer>
+      <FormHeader title={'Day Five'} />
+      <form onSubmit={submitForm}>
+        <div className='flex flex-col md:flex-row md:pr-2'>
+          <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+            <FormSubHeader title={'Troop promotion: '} className={'md:text-lg lg:text-xl'} />
+            {Object.keys(localState.troops).map((troopType, index) => (
+              <TroopType
+                key={index}
+                troopData={localState.troops[troopType]}
+                troopType={troopType}
+                onChange={handleTroopTypeStateChange}
+                onBlur={handleTroopTypeBlur}
+              />
+            ))}
+            {/* Troop training: */}
+            <FormWrapper className='border-b border-neutral-400 mb-2 pb-2'>
+              <div className='flex flex-row space-x-2'>
+                <button
+                  type='button'
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="flex flex-row items-center justify-between w-full text-left focus:outline-none"
+                >
+                  <FormSubHeader title={'Troop Training:'} className={'text-lg md:text-xl'} />
+                  {/* Triangle Icon */}
+                  <span className={`text-blue-900 inline-block transform transition-transform ${isExpanded ? "rotate-90" : "rotate-0"}`}>
+                    ▶
+                  </span>
+                </button>
+              </div>
+              {/* Tier & Troops per batch  */}
+              <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isExpanded ? "max-h-50 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-3"}`}>
+                <FormWrapper className='sm:flex-row space-x-1'>
+                  <div className='w-full sm:w-1/2'>
+                    <FormDropdown
+                      title={'Target tier: '}
+                      options={TROOP_TIER_MULTIPLIERS}
+                      id={'trainedTroopTier'}
+                      value={localState.trainedTroopTier}
+                      onChange={(newValue) => handleLocalChange('trainedTroopTier', newValue)}
+                      onBlur={() => handleBlur('trainedTroopTier',)}
+                    />
+                  </div>
+                  <div className='w-full sm:w-1/2'>
+                    <FormWrapper>
+                      <FormSubHeader title={'Troops per batch:'} />
+                      <FormInput
+                        id={'trainedTroopsPerBatch'}
+                        placeholder={'0'}
+                        value={localState.trainedTroopsPerBatch}
+                        onChange={(newValue) => handleLocalChange('trainedTroopsPerBatch', newValue)}
+                        onBlur={() => handleBlur('trainedTroopsPerBatch')}
+                      />
+                    </FormWrapper>
+                  </div>
+                </FormWrapper>
+                {/* Troop training time: */}
+                <FormWrapper>
+                  <FormSubHeader title={'Troop training time:'} />
+                  <FormWrapper flex={'row'} className='space-x-2'>
+                    <FormInput
+                      id={'troopTrainingTimeDay'}
+                      placeholder={'days'}
+                      value={localState.trainedTroopsTrainingTime.days}
+                      onChange={(value) => handleTimeChange('trainedTroopsTrainingTime', 'days', value)}
+                      onBlur={() => handleBlur('trainedTroopsTrainingTime', 'days')}
+                    />
+                    <FormInput
+                      id={'troopTrainingTimeHours'}
+                      placeholder={'hours'}
+                      value={localState.trainedTroopsTrainingTime.hours}
+                      onChange={(value) => handleTimeChange('trainedTroopsTrainingTime', 'hours', value)}
+                      onBlur={() => handleBlur('trainedTroopsTrainingTime', 'hours')}
+                    />
+                    <FormInput
+                      id={'troopTrainingTimeMinutes'}
+                      placeholder={'minutes'}
+                      value={localState.trainedTroopsTrainingTime.minutes}
+                      onChange={(value) => handleTimeChange('trainedTroopsTrainingTime', 'minutes', value)}
+                      onBlur={() => handleBlur('trainedTroopsTrainingTime', 'minutes')}
+                    />
+                    <FormInput
+                      id={'troopTrainingTimeSeconds'}
+                      placeholder={'seconds'}
+                      value={localState.trainedTroopsTrainingTime.seconds}
+                      onChange={(value) => handleTimeChange('trainedTroopsTrainingTime', 'seconds', value)}
+                      onBlur={() => handleBlur('trainedTroopsTrainingTime', 'seconds')}
+                    />
+                  </FormWrapper>
+                </FormWrapper>
+              </div>
+            </FormWrapper>
+            {/* Training Speedup: */}
+            <FormWrapper>
+              <FormSubHeader title={'Training Speed-up: '} />
+              <FormWrapper flex='row' className='space-x-1'>
+                <FormInput
+                  id={'initialTrainingSpeedupDays'}
+                  placeholder={'days'}
+                  value={localState.initialTrainingSpeedup.days}
+                  onChange={(newValue) => handleTimeChange('initialTrainingSpeedup', 'days', newValue)}
+                  onBlur={() => handleBlur('initialTrainingSpeedup', 'days')}
                 />
-                <PreviousEventScore dayKey={DAY_KEYS.DAY_FIVE} />
+                <FormInput
+                  id={'initialTrainingSpeedupHours'}
+                  placeholder={'hours'}
+                  value={localState.initialTrainingSpeedup.hours}
+                  onChange={(newValue) => handleTimeChange('initialTrainingSpeedup', 'hours', newValue)}
+                  onBlur={() => handleBlur('initialTrainingSpeedup', 'hours')}
+                />
+                <FormInput
+                  id={'initialTrainingSpeedupMinutes'}
+                  placeholder={'minutes'}
+                  value={localState.initialTrainingSpeedup.minutes}
+                  onChange={(newValue) => handleTimeChange('initialTrainingSpeedup', 'minutes', newValue)}
+                  onBlur={() => handleBlur('initialTrainingSpeedup', 'minutes')}
+                />
+              </FormWrapper>
+            </FormWrapper>
+            <PreviousEventScore dayKey={DAY_KEYS.DAY_FIVE} />
+          </div>
+          <div className='w-full md:w-1/2 relative md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
+            {/* Output */}
+            <FormSubHeader title={'Day Five Score: '} weight={'font-bold'} className={'md:text-lg lg:text-xl'} />
+            <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
+            <ScoreBoardWrapper>
+              <ScoreBoardSection title={'Promotion score: '} value={dailyData.score.promoting.toLocaleString()} />
+              <ScoreBoardSection title={'Training score: '} value={dailyData.score.training.toLocaleString()} />
+            </ScoreBoardWrapper>
+            <ScoreBoardWrapper>
+              <div>
+                <FormSubHeader title={'Archers data:'} className={'text-sm lg:text-md'} />
+                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Archers'].promotedTroopsPerBatch || 0) *
+                  (dailyData.troops['Archers'].promotableBatches || 0)).toLocaleString()} />
+                <ScoreBoardSection title={'Troop score:'} value={(dailyData.troops['Archers'].troopTotalScore || 0).toLocaleString()} />
               </div>
-              <div className='w-full md:w-1/2 relative md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
-                {/* Output */}
-                <h5 className='font-bold my-1 text-blue-900'>Score potential day 5:</h5>
-                <p className='font-semibold my-2 text-neutral-600'>Daily score:</p>
-                <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.totalDailyScore.toLocaleString()}</p>
-                <h3 className='font-semibold my-1 text-blue-900'>Cavalry: </h3>
-                <div className='flex flex-col md:flex-row w-full'>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Training time:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].trainingTime}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop per batch:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].promotedTroopPerBatch}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Available troops:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].availableTroops}</p>
-                  </div>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].promotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Max Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].maxPromotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop score:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Cavalry'].troopTotalScore}</p>
-                  </div>
-                </div>
-                <h3 className='font-semibold my-1 text-blue-900'>Archers: </h3>
-                <div className='flex flex-col md:flex-row w-full'>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Training time:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].trainingTime}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop per batch:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].promotedTroopPerBatch}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Available troops:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].availableTroops}</p>
-                  </div>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].promotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Max Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].maxPromotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop score:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Archers'].troopTotalScore}</p>
-                  </div>   
-                </div>
-                <h3 className='font-semibold my-1 text-blue-900'>Pikemen: </h3>
-                <div className='flex flex-col md:flex-row w-full'>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Training time:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].trainingTime}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop per batch:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].promotedTroopPerBatch}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Available troops:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].availableTroops}</p>
-                  </div>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].promotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Max Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].maxPromotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop score:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Pikemen'].troopTotalScore}</p>
-                  </div>
-                </div>
-                <h3 className='font-semibold my-1 text-blue-900'>Swordsmen: </h3>
-                <div className='flex flex-col md:flex-row w-full'>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Training time:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].trainingTime}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop per batch:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].promotedTroopPerBatch}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Available troops:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].availableTroops}</p>
-                  </div>
-                  <div className='w-full'>
-                    <h5 className='font-bold my-1 text-blue-900'>Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].promotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Max Batches:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].maxPromotableBatches}</p>
-                    <h5 className='font-bold my-1 text-blue-900'>Troop score:</h5>
-                    <p className='font-semibold my-2 text-neutral-600'>{dayFiveData.troops['Swordsmen'].troopTotalScore}</p>
-                  </div>
-                </div>
+              <div>
+                <FormSubHeader title={'Cavalry data:'} className={'text-sm lg:text-md'} />
+                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Cavalry'].promotedTroopsPerBatch || 0) *
+                  (dailyData.troops['Cavalry'].promotableBatches || 0)).toLocaleString()} />
+                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Cavalry'].troopTotalScore.toLocaleString()} />
               </div>
-            </div>
-            <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
-          </form>
+              <div>
+                <FormSubHeader title={'Pikemen data:'} className={'text-sm lg:text-md'} />
+                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Pikemen'].promotedTroopsPerBatch || 0) *
+                  (dailyData.troops['Pikemen'].promotableBatches || 0)).toLocaleString()} />
+                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Pikemen'].troopTotalScore.toLocaleString()} />
+              </div>
+              <div>
+                <FormSubHeader title={'Swordsmen data:'} className={'text-sm lg:text-md'} />
+                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Swordsmen'].promotedTroopsPerBatch || 0) *
+                  (dailyData.troops['Swordsmen'].promotableBatches || 0)).toLocaleString()} />
+                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Swordsmen'].troopTotalScore.toLocaleString()} />
+              </div>
+            </ScoreBoardWrapper>
+            <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_FIVE} />
+          </div>
         </div>
-      </div>
-    </section>
+        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+      </form>
+    </DayContainer>
   )
 }
 
 export default DayFive
 
+
 /*
 
-Troop training: 
-1x lvl 1 = 2 
-1x lvl 2 = 3 
+Troop training:
+1x lvl 1 = 2
+1x lvl 2 = 3
 1x lvl 3 = 5
-1x lvl 4 = 10 
+1x lvl 4 = 10
 1x lvl 5 = 20
 1x lvl 6 = 50
 1x lvl 7 = 100
-Promote units based on level gap = 1 point per level 
+Promote units based on level gap = 1 point per level
+stop
 
+Input:
+    Available T1 troops to promote and to which level it will be promoted
 
-Input: 
-    Available T1 troops to promote and to which level it will be promoted 
-    
 Top 1 score 52,5kk
-Top 10 score 11,2kk 
+Top 10 score 11,2kk
 
 */

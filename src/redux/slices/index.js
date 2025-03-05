@@ -20,10 +20,10 @@ export { default as dayFourReducer,
     resetState as resetStateDayFour } from './dayFourSlice';
 
 export { default as dayFiveReducer, 
-    // updateField as updateFieldDayFive, 
+    updateField as updateFieldDayFive, 
     calculateDailyScore as calculateDailyScoreDayFive, 
     resetState as resetStateDayFive,
-    updatePromotionField } from './dayFiveSlice';
+    updateTroopField } from './dayFiveSlice';
 
 export { default as daySixReducer, 
     // updateField as updateFieldDaySix, 
