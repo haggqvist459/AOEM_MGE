@@ -1,8 +1,12 @@
 import React from 'react'
+import { DayContainer, FormHeader } from '../components'
+
 
 const AboutPage = () => {
   return (
-    <div>AboutPage</div>
+   <DayContainer>
+    <FormHeader title={'<aboutTitle>'}/>
+   </DayContainer>
   )
 }
 

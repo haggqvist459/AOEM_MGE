@@ -25,10 +25,19 @@ export const saveData = (data) => {
         localStorage.setItem(LOCALSTORAGE_KEY, serializedData);
 
     } catch (err) {
-        console.log(err);
+        console.log("localStorage saveData error: ", err);
     }
 }
 
 
+export const deleteData = () => {
+    // delete everything in localstorage. 
+    // console.log("deleteData start");
 
-
+    try {
+        console.log("deleteData triggered, all gone.")
+        // localStorage.clear()
+    } catch (err) {
+        console.log("localStorage saveData error: ", err)
+    }
+}
