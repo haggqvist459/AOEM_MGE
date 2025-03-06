@@ -36,7 +36,7 @@ const dayOneSlice = createSlice({
         resetState: (state) => {
             state.stamina = '';
             state.tribeLevelMultiplier = TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]];
-            state.dailyScore = '';
+            state.totalDailyScore = 0;
             state.tribesHunted = 0;
             state.previousEventScore = {
                 topOne: '',

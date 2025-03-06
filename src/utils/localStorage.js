@@ -36,7 +36,7 @@ export const deleteData = () => {
 
     try {
         console.log("deleteData triggered, all gone.")
-        // localStorage.clear()
+        localStorage.clear()
     } catch (err) {
         console.log("localStorage saveData error: ", err)
     }

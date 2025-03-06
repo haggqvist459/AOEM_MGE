@@ -9,16 +9,28 @@ const initialState = savedState?.dayFour || {
     silverSand: '',
     fineGold: '',
     meteorSteel: '',
-    universalSpeedup: '',
-    researchSpeedup: '',
-    buildingSpeedup: '',
+    universalSpeedup: {
+        days: '',
+        hours: '',
+        minutes: '',
+    },
+    researchSpeedup: {
+        days: '',
+        hours: '',
+        minutes: '',
+    },
+    buildingSpeedup: {
+        days: '',
+        hours: '',
+        minutes: '',
+    },
     score: {
         building: 0,
         research: 0,
         universal: 0,
         ring: 0,
     },
-    totalDailyScore: '',
+    totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',
@@ -55,16 +67,28 @@ const dayFourSlice = createSlice({
             state.silverSand = '';
             state.fineGold = '';
             state.meteorSteel = '';
-            state.universalSpeedup = '';
-            state.buildingSpeedup = '';
-            state.researchSpeedup = '';
+            state.universalSpeedup = {
+                days: '',
+                hours: '',
+                minutes: '',
+            };
+            state.buildingSpeedup = {
+                days: '',
+                hours: '',
+                minutes: '',
+            };
+            state.researchSpeedup = {
+                days: '',
+                hours: '',
+                minutes: '',
+            };
             state.score = {
                 building: 0,
                 research: 0,
                 universal: 0,
                 ring: 0,
             };
-            state.totalDailyScore = '';
+            state.totalDailyScore = 0;
             state.previousEventScore = {
                 topOne: '',
                 topTen: ''

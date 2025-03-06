@@ -3,7 +3,7 @@ import React from 'react'
 const FormDropdown = ({ onBlur, onChange, title, options, id, value }) => {
   return (
     <div className='w-full'>
-      <label htmlFor={id} className='block font-semibold lg:font-bold text-sm sm:text-md lg:text-lg text-blue-900 mt-1'>{title}</label>
+      <label htmlFor={id} className='block font-semibold lg:font-bold text-lg md:text-xl text-blue-900 mt-1'>{title}</label>
       <div className='relative w-full'>
         <select
           id={id}

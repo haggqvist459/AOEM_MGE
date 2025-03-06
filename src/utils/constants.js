@@ -12,7 +12,7 @@ export const NAVBAR_OPTIONS = {
     HOME: {
         route: ROUTES.HOME,
         id: 1,
-        text: 'Home'
+        text: 'Calculators'
     },
     TOTAL_SCORE: {
         route: ROUTES.TOTAL_SCORE,
@@ -60,7 +60,7 @@ export const TROOP_POWER_MULTIPLIER = {
 // 10x = 22 
 // 50x = 110
 // 100x = 220
-// 500x = 
+// 500x = 1100
 
 // Tier 5 Power: 
 // 1x = 3  
@@ -69,7 +69,8 @@ export const TROOP_POWER_MULTIPLIER = {
 // 50x = 145
 // 100x = 290
 // 500x = 1450
-// 1000x =
+// 1000x = 2900
+// 2000x = 5800
 
 // Tier 6 Power: 
 // 1x = 4
@@ -77,7 +78,8 @@ export const TROOP_POWER_MULTIPLIER = {
 // 10x = 42 
 // 50x = 210
 // 100x = 420
-// 500x = 
+// 500x = 2100
+// 2000x = 
 
 
 

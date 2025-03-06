@@ -5,7 +5,7 @@
 ### Main Page: 
 
 - [ ] Initial setup 
-    - [ ] Display components one by one
+    - [x] Display components one by one
 
 
 - [ ] Day One Component 
@@ -81,14 +81,13 @@
 ### Misc: 
 - [x] Redux state management 
 - [x] localStorage for data permanence 
-- [ ] Header component
+- [x] Header component
     - [x] Hamburger button with nav links to each day, admin and about page 
      - [x] Custom animation, turns button into cross
      - [x] Menu hidden under navbar 
 - [ ] Footer 
-    - [ ] About page link
     - [x] GitHub source code link 
-
+- [ ] Remove trash can from non day component headers / use different header for those pages
 ### About page: 
 - [ ] Explain how data is gathered and kept 
 - [ ] Link to GitHub 

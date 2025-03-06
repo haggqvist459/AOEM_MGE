@@ -8,7 +8,7 @@ import {
 } from '../../components';
 
 
-const DayFour = () => {
+const DayFour = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch()
   const dailyData = useSelector((state) => state.dayFour)
@@ -30,13 +30,16 @@ const DayFour = () => {
     }));
   };
 
-  const handleBlur = (field) => {
-    dispatch(updateFieldDayFour({ field, value: localState[field] }));
+  const handleBlur = (field, unit) => {
+    const value = unit
+      ? localState[field][unit]
+      : localState[field];
+
+    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    dispatch(updateFieldDayFour({ field, unit, value }));
+    dispatch(calculateDailyScoreDayFour())
   };
 
-  const handleInput = (field, value) => {
-    dispatch(updateFieldDayFour({ day: DAY_KEYS.DAY_FOUR, field, value }))
-  }
 
   const cancelForm = () => {
     dispatch(resetStateDayFour())
@@ -49,7 +52,7 @@ const DayFour = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Four'} size={'text-2xl lg:text-3xl'} />
+      <FormHeader title={'Day Four'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
@@ -119,21 +122,21 @@ const DayFour = () => {
                     placeholder={'day'}
                     value={localState.universalSpeedup.days}
                     onChange={(value) => handleTimeChange('universalSpeedup', 'days', value)}
-                    onBlur={() => handleBlur('universalSpeedup')}
+                    onBlur={() => handleBlur('universalSpeedup', 'days')}
                   />
                   <FormInput
                     id={'universalSpeedupHours'}
                     placeholder={'hour'}
                     value={localState.universalSpeedup.hours}
                     onChange={(value) => handleTimeChange('universalSpeedup', 'hours', value)}
-                    onBlur={() => handleBlur('universalSpeedup')}
+                    onBlur={() => handleBlur('universalSpeedup', 'hours')}
                   />
                   <FormInput
                     id={'universalSpeedupMin'}
                     placeholder={'min'}
                     value={localState.universalSpeedup.minutes}
                     onChange={(value) => handleTimeChange('universalSpeedup', 'minutes', value)}
-                    onBlur={() => handleBlur('universalSpeedup')}
+                    onBlur={() => handleBlur('universalSpeedup', 'minutes')}
                   />
                 </FormWrapper>
               </FormWrapper>
@@ -146,21 +149,21 @@ const DayFour = () => {
                     placeholder={'day'}
                     value={localState.buildingSpeedup.days}
                     onChange={(value) => handleTimeChange('buildingSpeedup', 'days', value)}
-                    onBlur={() => handleBlur('buildingSpeedup')}
+                    onBlur={() => handleBlur('buildingSpeedup', 'days')}
                   />
                   <FormInput
                     id={'buildingSpeedupHours'}
                     placeholder={'hour'}
                     value={localState.buildingSpeedup.hours}
                     onChange={(value) => handleTimeChange('buildingSpeedup', 'hours', value)}
-                    onBlur={() => handleBlur('buildingSpeedup')}
+                    onBlur={() => handleBlur('buildingSpeedup', 'hours')}
                   />
                   <FormInput
                     id={'buildingSpeedupMinutes'}
                     placeholder={'min'}
                     value={localState.buildingSpeedup.minutes}
                     onChange={(value) => handleTimeChange('buildingSpeedup', 'minutes', value)}
-                    onBlur={() => handleBlur('buildingSpeedup')}
+                    onBlur={() => handleBlur('buildingSpeedup', 'minutes')}
                   />
                 </FormWrapper>
               </FormWrapper>
@@ -173,21 +176,21 @@ const DayFour = () => {
                     placeholder={'day'}
                     value={localState.researchSpeedup.days}
                     onChange={(value) => handleTimeChange('researchSpeedup', 'days', value)}
-                    onBlur={() => handleBlur('researchSpeedup')}
+                    onBlur={() => handleBlur('researchSpeedup', 'days')}
                   />
                   <FormInput
                     id={'researchSpeedupHours'}
                     placeholder={'hour'}
                     value={localState.researchSpeedup.hours}
                     onChange={(value) => handleTimeChange('researchSpeedup', 'hours', value)}
-                    onBlur={() => handleBlur('researchSpeedup')}
+                    onBlur={() => handleBlur('researchSpeedup', 'hours')}
                   />
                   <FormInput
                     id={'researchSpeedupMinutes'}
                     placeholder={'min'}
                     value={localState.researchSpeedup.minutes}
                     onChange={(value) => handleTimeChange('researchSpeedup', 'minutes', value)}
-                    onBlur={() => handleBlur('researchSpeedup')}
+                    onBlur={() => handleBlur('researchSpeedup', 'minutes')}
                   />
                 </FormWrapper>
               </FormWrapper>
@@ -196,18 +199,19 @@ const DayFour = () => {
           </div>
           <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
             {/* Output */}
-            <FormSubHeader title={'Day Four Score: '} weight={'lg:font-bold'} />
-            <ScoreBoardSection title={'Total daily score:'} value={dailyData.totalDailyScore.toLocaleString()} />
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-              <ScoreBoardSection title={'Ring upgrades: '} value={dailyData.score.ring.toLocaleString()} />
-              <ScoreBoardSection title={'Universal speed-ups: '} value={dailyData.score.universal.toLocaleString()} />
-              <ScoreBoardSection title={'Building speed-ups: '} value={dailyData.score.building.toLocaleString()} />
-              <ScoreBoardSection title={'Research speed-ups: '} value={dailyData.score.research.toLocaleString()} />
+            <FormSubHeader title={'Day Four Score '} size={'text-lg lg:text-xl'} weight={'font-bold'} />
+            <ScoreBoardSection size={'text-lg'} title={'Total daily score:'} value={dailyData.totalDailyScore.toLocaleString()} />
+            <ScoreBoardSection title={'Ring upgrades: '} value={dailyData.score.ring.toLocaleString()} />
+            <FormSubHeader title={'Speed-up score'} size={'text-lg lg:text-xl'} weight={'font-semibold'} />
+            <div className='flex flex-row justify-between mb-1'>
+              <ScoreBoardSection title={'Universal:'} value={dailyData.score.universal.toLocaleString()} />
+              <ScoreBoardSection title={'Building:'} value={dailyData.score.building.toLocaleString()} />
+              <ScoreBoardSection title={'Research:'} value={dailyData.score.research.toLocaleString()} />
             </div>
             <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_FOUR} />
           </div>
         </div>
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
     </DayContainer>
   )

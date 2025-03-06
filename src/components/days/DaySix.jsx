@@ -5,7 +5,7 @@ import { calculateDailyScoreDaySix, resetStateDaySix } from '../../redux/slices'
 import { DayContainer, PreviousEventScore, FormButtons, FormHeader } from '../../components';
 
 
-const DaySix = () => {
+const DaySix = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.daySix);
@@ -24,8 +24,6 @@ const DaySix = () => {
   }
 
   const cancelForm = () => {
-    // clear the form
-    // reroute to home page or restart the input process? 
     dispatch(resetStateDaySix());
   }
 
@@ -36,7 +34,7 @@ const DaySix = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Six'} />
+      <FormHeader title={'Day Six'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
@@ -47,7 +45,7 @@ const DaySix = () => {
             {/* Output */}
           </div>
         </div>
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
     </DayContainer>
   )
