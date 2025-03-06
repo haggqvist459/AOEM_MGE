@@ -8,7 +8,7 @@ import {
 } from '../../components';
 
 
-const DayTwo = () => {
+const DayTwo = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.dayTwo);
@@ -23,21 +23,24 @@ const DayTwo = () => {
     setLocalState(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleBlur = (field) => {
-    dispatch(updateFieldDayTwo({ field, value: localState[field] }));
-  };
 
   const handleTimeChange = (field, unit, value) => {
+    console.log('Day Two handleTimeChange values, field: ', field, ', unit: ', unit, ', value: ', value)
     setLocalState((prev) => ({
       ...prev,
       [field]: { ...prev[field], [unit]: value },
     }));
   };
 
-  const submitForm = (e) => {
-    e.preventDefault();
+  const handleBlur = (field, unit) => {
+    const value = unit
+      ? localState[field][unit]
+      : localState[field];
+
+    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    dispatch(updateFieldDayTwo({ field, unit, value }));
     dispatch(calculateDailyScoreDayTwo());
-  }
+  };
 
   const cancelForm = () => {
     dispatch(resetStateDayTwo());
@@ -46,161 +49,170 @@ const DayTwo = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Two'} size={'text-2xl lg:text-3xl'} />
-      <form onSubmit={submitForm}>
+      <FormHeader title={'Day Two'} onClick={cancelForm} />
+      <form>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
             {/* Input */}
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-2 px-1'>
-              {/* Medals */}
-              <FormWrapper>
-                <FormSubHeader title={'Epic medals:'} />
-                <FormInput
-                  id={'epicMedals'}
-                  placeholder={'0'}
-                  value={localState.epicMedals}
-                  onChange={(value) => handleLocalChange('epicMedals', value)}
-                  onBlur={() => handleBlur('epicMedals')}
-                />
-              </FormWrapper>
-              <FormWrapper>
-                <FormSubHeader title={'Legendary medals:'} />
-                <FormInput
-                  id={'legendaryMedals'}
-                  placeholder={'0'}
-                  value={localState.legendaryMedals}
-                  onChange={(value) => handleLocalChange('legendaryMedals', value)}
-                  onBlur={() => handleBlur('legendaryMedals')}
-                />
-              </FormWrapper>
-              {/* Scrolls */}
-              <FormWrapper>
-                <FormSubHeader title={'Epic scrolls:'} />
-                <FormInput
-                  id={'epicScrolls'}
-                  placeholder={'0'}
-                  value={localState.epicScrolls}
-                  onChange={(value) => handleLocalChange('epicScrolls', value)}
-                  onBlur={() => handleBlur('epicScrolls')}
-                />
-              </FormWrapper>
-              <FormWrapper>
-                <FormSubHeader title={'Legendary scrolls:'} />
-                <FormInput
-                  id={'legendaryScrolls'}
-                  placeholder={'0'}
-                  value={localState.legendaryScrolls}
-                  onChange={(value) => handleLocalChange('legendaryScrolls', value)}
-                  onBlur={() => handleBlur('legendaryScrolls')}
-                />
-              </FormWrapper>
-              {/* Blueprints */}
-              <FormWrapper>
-                <FormSubHeader title={'Legendary blueprints:'} />
-                <FormInput
-                  id={'legendaryBlueprints'}
-                  placeholder={'0'}
-                  value={localState.legendaryBlueprints}
-                  onChange={(value) => handleLocalChange('legendaryBlueprints', value)}
-                  onBlur={() => handleBlur('legendaryBlueprints')}
-                />
-              </FormWrapper>
-              <FormWrapper>
-                <FormSubHeader title={'Pre-forged blueprints:'} />
-                <FormInput
-                  id={'preforgedBlueprints'}
-                  placeholder={'0'}
-                  value={localState.preforgedBlueprints}
-                  onChange={(value) => handleLocalChange('preforgedBlueprints', value)}
-                  onBlur={() => handleBlur('preforgedBlueprints')}
-                />
-              </FormWrapper>
-              {/* Time & Speed-up */}
-              <FormWrapper>
-                <FormSubHeader title={'Forging time:'} />
-                <FormWrapper flex={'row'} className='space-x-1'>
+
+            {/* Medals */}
+            <FormWrapper className='mb-4'>
+              <FormSubHeader title={'Medals'} size={'text-lg md:text-xl'} />
+              <FormWrapper flex={'row'} className='space-x-1'>
+                <FormWrapper>
+                  <FormSubHeader title={'Legendary:'} size='text-sm' weight='font-medium' />
                   <FormInput
-                    id={'forgingTimeDay'}
-                    placeholder={'day'}
-                    value={localState.forgingTime.days}
-                    onChange={(value) => handleTimeChange('forgingTime', 'days', value)}
-                    onBlur={() => handleBlur('forgingTime')}
+                    id={'legendaryMedals'}
+                    placeholder={'0'}
+                    value={localState.legendaryMedals}
+                    onChange={(value) => handleLocalChange('legendaryMedals', value)}
+                    onBlur={() => handleBlur('legendaryMedals')}
                   />
+                </FormWrapper>
+                <FormWrapper>
+                  <FormSubHeader title={'Epic:'} size='text-sm' weight='font-medium' />
                   <FormInput
-                    id={'forgingTimeHours'}
-                    placeholder={'hour'}
-                    value={localState.forgingTime.hours}
-                    onChange={(value) => handleTimeChange('forgingTime', 'hours', value)}
-                    onBlur={() => handleBlur('forgingTime')}
-                  />
-                  <FormInput
-                    id={'forgingTimeMinutes'}
-                    placeholder={'min'}
-                    value={localState.forgingTime.minutes}
-                    onChange={(value) => handleTimeChange('forgingTime', 'minutes', value)}
-                    onBlur={() => handleBlur('forgingTime')}
-                  />
-                  <FormInput
-                    id={'forgingTimeSeconds'}
-                    placeholder={'sec'}
-                    value={localState.forgingTime.seconds}
-                    onChange={(value) => handleTimeChange('forgingTime', 'seconds', value)}
-                    onBlur={() => handleBlur('forgingTime')}
+                    id={'epicMedals'}
+                    placeholder={'0'}
+                    value={localState.epicMedals}
+                    onChange={(value) => handleLocalChange('epicMedals', value)}
+                    onBlur={() => handleBlur('epicMedals')}
                   />
                 </FormWrapper>
               </FormWrapper>
-              <FormWrapper>
-                <FormSubHeader title={'Forging speed-up:'} />
-                <FormWrapper flex={'row'} className='space-x-1'>
+            </FormWrapper>
+
+            {/* Scrolls make epic/legendary headers smaller */}
+            <FormWrapper className='mb-4'>
+              <FormSubHeader title={'Scrolls'} size={'text-lg md:text-xl'} />
+              <FormWrapper flex={'row'} className='space-x-1'>
+                <FormWrapper>
+                  <FormSubHeader title={'Legendary:'} size='text-sm' weight='font-medium' />
                   <FormInput
-                    id={'forgingSpeedupDay'}
-                    placeholder={'day'}
-                    value={localState.forgingSpeedup.days}
-                    onChange={(value) => handleTimeChange('forgingSpeedup', 'days', value)}
-                    onBlur={() => handleBlur('forgingSpeedup')}
+                    id={'legendaryScrolls'}
+                    placeholder={'0'}
+                    value={localState.legendaryScrolls}
+                    onChange={(value) => handleLocalChange('legendaryScrolls', value)}
+                    onBlur={() => handleBlur('legendaryScrolls')}
                   />
+                </FormWrapper>
+                <FormWrapper>
+                  <FormSubHeader title={'Epic:'} size='text-sm' weight='font-medium' />
                   <FormInput
-                    id={'forgingSpeedupHours'}
-                    placeholder={'hour'}
-                    value={localState.forgingSpeedup.hours}
-                    onChange={(value) => handleTimeChange('forgingSpeedup', 'hours', value)}
-                    onBlur={() => handleBlur('forgingSpeedup')}
-                  />
-                  <FormInput
-                    id={'forgingSpeedupMinutes'}
-                    placeholder={'min'}
-                    value={localState.forgingSpeedup.minutes}
-                    onChange={(value) => handleTimeChange('forgingSpeedup', 'minutes', value)}
-                    onBlur={() => handleBlur('forgingSpeedup')}
+                    id={'epicScrolls'}
+                    placeholder={'0'}
+                    value={localState.epicScrolls}
+                    onChange={(value) => handleLocalChange('epicScrolls', value)}
+                    onBlur={() => handleBlur('epicScrolls')}
                   />
                 </FormWrapper>
               </FormWrapper>
-            </div>
+            </FormWrapper>
+
+
+            {/* Blueprints */}
+            <FormWrapper className='mb-4'>
+              <FormSubHeader title={'Blueprints'} size={'text-lg md:text-xl'} />
+              <FormWrapper flex={'row'} className='space-x-1'>
+                <FormWrapper>
+                  <FormSubHeader title={'Legendary:'} size='text-sm' weight='font-medium' />
+                  <FormInput
+                    id={'legendaryBlueprints'}
+                    placeholder={'0'}
+                    value={localState.legendaryBlueprints}
+                    onChange={(value) => handleLocalChange('legendaryBlueprints', value)}
+                    onBlur={() => handleBlur('legendaryBlueprints')}
+                  />
+                </FormWrapper>
+                <FormWrapper>
+                  <FormSubHeader title={'Pre-forged:'} size='text-sm' weight='font-medium' />
+                  <FormInput
+                    id={'preforgedBlueprints'}
+                    placeholder={'0'}
+                    value={localState.preforgedBlueprints}
+                    onChange={(value) => handleLocalChange('preforgedBlueprints', value)}
+                    onBlur={() => handleBlur('preforgedBlueprints')}
+                  />
+                </FormWrapper>
+              </FormWrapper>
+            </FormWrapper>
+
+            {/* Time & Speed-up */}
+            <FormWrapper className='mb-4'>
+              <FormSubHeader title={'Forging time:'} size={'text-lg md:text-xl'} />
+              <FormWrapper flex={'row'} className='space-x-1'>
+                <FormInput
+                  id={'forgingTimeDay'}
+                  placeholder={'day'}
+                  value={localState.forgingTime.days}
+                  onChange={(value) => handleTimeChange('forgingTime', 'days', value)}
+                  onBlur={() => handleBlur('forgingTime', 'days')}
+                />
+                <FormInput
+                  id={'forgingTimeHours'}
+                  placeholder={'hour'}
+                  value={localState.forgingTime.hours}
+                  onChange={(value) => handleTimeChange('forgingTime', 'hours', value)}
+                  onBlur={() => handleBlur('forgingTime', 'hours')}
+                />
+                <FormInput
+                  id={'forgingTimeMinutes'}
+                  placeholder={'min'}
+                  value={localState.forgingTime.minutes}
+                  onChange={(value) => handleTimeChange('forgingTime', 'minutes', value)}
+                  onBlur={() => handleBlur('forgingTime', 'minutes')}
+                />
+                <FormInput
+                  id={'forgingTimeSeconds'}
+                  placeholder={'sec'}
+                  value={localState.forgingTime.seconds}
+                  onChange={(value) => handleTimeChange('forgingTime', 'seconds', value)}
+                  onBlur={() => handleBlur('forgingTime', 'seconds')}
+                />
+              </FormWrapper>
+            </FormWrapper>
+            <FormWrapper className='mb-4'>
+              <FormSubHeader title={'Forging speed-up:'} size={'text-lg md:text-xl'} />
+              <FormWrapper flex={'row'} className='space-x-1'>
+                <FormInput
+                  id={'forgingSpeedupDay'}
+                  placeholder={'day'}
+                  value={localState.forgingSpeedup.days}
+                  onChange={(value) => handleTimeChange('forgingSpeedup', 'days', value)}
+                  onBlur={() => handleBlur('forgingSpeedup', 'days')}
+                />
+                <FormInput
+                  id={'forgingSpeedupHours'}
+                  placeholder={'hour'}
+                  value={localState.forgingSpeedup.hours}
+                  onChange={(value) => handleTimeChange('forgingSpeedup', 'hours', value)}
+                  onBlur={() => handleBlur('forgingSpeedup', 'hours')}
+                />
+                <FormInput
+                  id={'forgingSpeedupMinutes'}
+                  placeholder={'min'}
+                  value={localState.forgingSpeedup.minutes}
+                  onChange={(value) => handleTimeChange('forgingSpeedup', 'minutes', value)}
+                  onBlur={() => handleBlur('forgingSpeedup', 'minutes')}
+                />
+              </FormWrapper>
+            </FormWrapper>
+
             <PreviousEventScore dayKey={DAY_KEYS.DAY_TWO} />
           </div>
           <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
             {/* Output */}
-            <FormSubHeader title={'Day Two Score: '} size={'text-md lg:text-xl'} weight={'lg:font-bold'} />
-            <div className='grid grid-cols-2 gap-2 mt-1'>
-              <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
-              <ScoreBoardSection title={'Forging score: '} value={dailyData.score.forging.toLocaleString()} />
-              <ScoreBoardSection title={'Scroll score: '} value={dailyData.score.scrolls.toLocaleString()} />
-              <ScoreBoardSection title={'Medal score: '} value={dailyData.score.medals.toLocaleString()} />
+            <FormSubHeader title={'Day Two Score'} size={'text-lg lg:text-xl'} weight={'font-bold'} />
+            <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
+            <div className='flex flex-row justify-between mb-1'>
+              <ScoreBoardSection title={'Forging: '} value={dailyData.score.forging.toLocaleString()} />
+              <ScoreBoardSection title={'Scrolls: '} value={dailyData.score.scrolls.toLocaleString()} />
+              <ScoreBoardSection title={'Medals: '} value={dailyData.score.medals.toLocaleString()} />
             </div>
-            <FormSubHeader title={'Forging details: '} size='text-md lg:text-lg' />
-            <div className='grid grid-cols-2 gap-2 mt-1'>
-              <ScoreBoardSection title={'Used blueprints: '} value={dailyData.completedBlueprints} />
-              <ScoreBoardSection title={'Remaining blueprints: '} value={dailyData.remainingBlueprints} />
-            </div>
-            <ScoreBoardSection title={'Remaining speed-up: '}>
-              <p>{dailyData.remainingForgingSpeedup.days} days,</p>
-              <p>{dailyData.remainingForgingSpeedup.hours} hours, </p>
-              <p>{dailyData.remainingForgingSpeedup.minutes} minutes</p>
-            </ScoreBoardSection>
             <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_TWO} />
           </div>
         </div>
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
     </DayContainer>
   )
@@ -254,5 +266,11 @@ Feb 10 start:
 Top 1 score 5,3kk 
 Top 10 score 2,9kk
 
+
+<FormSubHeader title={'Blueprints: '} size='text-md lg:text-lg' />
+            <div className='flex flex-row space-x-5'>
+              <ScoreBoardSection title={'Used: '} value={dailyData.completedBlueprints} />
+              <ScoreBoardSection title={'Remaining: '} value={dailyData.remainingBlueprints} />
+            </div>
 
  */

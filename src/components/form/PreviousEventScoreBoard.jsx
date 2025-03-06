@@ -8,7 +8,7 @@ const PreviousEventScoreBoard = ({ dayKey }) => {
 
     return (
         <div className=''>
-            <FormSubHeader title={'Previous event scores: '} size={'text-md lg:text-xl'} weight={'lg:font-bold'} />
+            <FormSubHeader title={'Previous event scores'} size={'text-lg md:text-xl'} weight={'font-bold'} />
             <div className='flex flex-col text-sm lg:text-lg'>
                 <div className='flex flex-row mt-1 space-x-1'>
                     <h3 className='block font-semibold text-blue-900'>1st place: </h3>

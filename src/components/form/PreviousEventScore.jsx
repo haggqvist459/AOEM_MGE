@@ -44,9 +44,9 @@ const PreviousEventScore = ({ dayKey }) => {
   };
 
   return (
-    <div className='my-2 px-1'>
-      <FormSubHeader title={'Previous event scores: '} />
-      <div className='flex flex-col xs:flex-row space-x-2'>
+    <div className='my-2'>
+      <FormSubHeader title={'Previous event scores'} size={'text-lg md:text-xl'}/>
+      <div className='flex flex-row space-x-2'>
         <FormWrapper>
           <FormSubHeader title={'1st place:'} />
           <FormInput

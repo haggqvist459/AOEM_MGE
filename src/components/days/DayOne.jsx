@@ -7,7 +7,7 @@ import {
   FormDropdown, PreviousEventScore, PreviousEventScoreBoard, ScoreBoardSection
 } from '../../components'
 
-const DayOne = () => {
+const DayOne = ({ activeDay, setActiveDay }) => {
 
 
   const dispatch = useDispatch();
@@ -30,6 +30,7 @@ const DayOne = () => {
 
   const handleBlur = (field) => {
     dispatch(updateFieldDayOne({ field, value: localState[field] }));
+    dispatch(calculateDailyScoreDayOne());
   };
 
   const cancelForm = () => {
@@ -49,7 +50,7 @@ const DayOne = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day One'} size={'text-2xl lg:text-3xl'} />
+        <FormHeader title={'Day One'} onClick={cancelForm}/>
       <form onSubmit={submitForm}>
         {/* Split section in half vertically, input on left and output on the right. */}
         {/* On smaller breakpoints, display everything in one column. */}
@@ -64,7 +65,7 @@ const DayOne = () => {
               id={'tribeLevelMultiplier'}
             />
             {/* Stamina  */}
-            <FormSubHeader title={'Available stamina:'} />
+            <FormSubHeader title={'Available stamina:'} size='text-lg md:text-xl' weight='font-semibold'/>
             <FormInput
               id={'stamina'}
               placeholder={'include daily and villager boosts'}
@@ -76,7 +77,7 @@ const DayOne = () => {
           </div>
           <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
             {/* Output */}
-            <FormSubHeader title={'Day One Score: '} size={'text-md lg:text-lg'} weight={'lg:font-bold'} />
+            <FormSubHeader title={'Day One Score'} size={'text-lg lg:text-xl'} weight={'font-bold'} />
             <div className='grid grid-cols-2 gap-2'>
               <ScoreBoardSection title={'Hunted tribes: '} value={dailyData.tribesHunted.toLocaleString()} />
               <ScoreBoardSection title={'Daily score: '} value={dailyData.totalDailyScore.toLocaleString()} />
@@ -85,7 +86,7 @@ const DayOne = () => {
           </div>
         </div>
         {/* buttons */}
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
     </DayContainer>
   )
@@ -112,6 +113,11 @@ Input amount of stamina available
 Calculate score outcome based on tribes hunted
 Display score
 
+
+March 3 start:
+1st: 173700
+10th: 115500
+Score: 133500 (4th) 
 
 Feb 17 start:
 Top 1 score: 323400

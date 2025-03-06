@@ -70,9 +70,9 @@ const dayTwoSlice = createSlice({
             state.epicScrolls = '';
             state.legendaryScrolls = '';
             state.legendaryBlueprints = '';
-            state.remainingBlueprints = '';
-            state.completedBlueprints = '';
             state.preforgedBlueprints = '';
+            state.remainingBlueprints = 0;
+            state.completedBlueprints = 0;
             state.forgingTime = {
                 days: '',
                 hours: '',

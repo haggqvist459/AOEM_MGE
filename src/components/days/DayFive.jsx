@@ -9,7 +9,7 @@ import {
 } from '../../components';
 
 
-const DayFive = () => {
+const DayFive = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.dayFive)
@@ -33,10 +33,6 @@ const DayFive = () => {
   };
 
   const handleTroopTypeStateChange = (troopType, field, unit, value) => {
-    console.log('handleTroopTypeStateChange values, troopType: ', troopType);
-    console.log('handleTroopTypeStateChange values, field: ', field);
-    console.log('handleTroopTypeStateChange values, unit: ', unit);
-    console.log('handleTroopTypeStateChange values, value: ', value);
 
     setLocalState(prev => ({
       ...prev,
@@ -58,13 +54,8 @@ const DayFive = () => {
       ? localState.troops[troopType][field][unit] // Handle nested object with unit
       : localState.troops[troopType][field];
 
-    console.log("handleTroopTypeBlur - Checking localState: ", localState);
-    console.log("handleTroopTypeBlur - Checking troopType: ", troopType);
-    console.log("handleTroopTypeBlur - Checking field: ", field);
-    console.log("handleTroopTypeBlur - Checking unit: ", unit);
-    console.log("handleTroopTypeBlur - Checking value: ", value);
-
     dispatch(updateTroopField({ troopType, field, unit, value }));
+    dispatch(calculateDailyScoreDayFive());
   }
 
   const handleBlur = (field, unit) => {
@@ -74,6 +65,7 @@ const DayFive = () => {
 
     console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDayFive({ field, unit, value }));
+    dispatch(calculateDailyScoreDayFive());
   };
 
   const cancelForm = () => {
@@ -87,11 +79,11 @@ const DayFive = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Five'} />
+      <FormHeader title={'Day Five'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
-            <FormSubHeader title={'Troop promotion: '} className={'md:text-lg lg:text-xl'} />
+            <FormSubHeader title={'Troop Promotion '} className={'md:text-lg lg:text-xl'} />
             {Object.keys(localState.troops).map((troopType, index) => (
               <TroopType
                 key={index}
@@ -209,44 +201,52 @@ const DayFive = () => {
           </div>
           <div className='w-full md:w-1/2 relative md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
             {/* Output */}
-            <FormSubHeader title={'Day Five Score: '} weight={'font-bold'} className={'md:text-lg lg:text-xl'} />
+            <FormSubHeader title={'Day Five Score: '} weight={'font-bold'} size={'text-lg lg:text-xl'} />
             <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
-            <ScoreBoardWrapper>
+            <div className='flex flex-row space-x-5'>
               <ScoreBoardSection title={'Promotion score: '} value={dailyData.score.promoting.toLocaleString()} />
               <ScoreBoardSection title={'Training score: '} value={dailyData.score.training.toLocaleString()} />
-            </ScoreBoardWrapper>
+            </div>
             <ScoreBoardWrapper>
-              <div>
-                <FormSubHeader title={'Archers data:'} className={'text-sm lg:text-md'} />
-                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Archers'].promotedTroopsPerBatch || 0) *
-                  (dailyData.troops['Archers'].promotableBatches || 0)).toLocaleString()} />
-                <ScoreBoardSection title={'Troop score:'} value={(dailyData.troops['Archers'].troopTotalScore || 0).toLocaleString()} />
+              <div className='flex flex-col'>
+                <FormSubHeader title={'Archers data:'} className={'text-lg'} />
+                <div className='flex flex-row'>
+                  <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Archers'].promotedTroopsPerBatch || 0) *
+                    (dailyData.troops['Archers'].promotableBatches || 0)).toLocaleString()} />
+                  <ScoreBoardSection className={'ml-5'} title={'Troop score:'} value={(dailyData.troops['Archers'].troopTotalScore || 0).toLocaleString()} />
+                </div>
               </div>
-              <div>
-                <FormSubHeader title={'Cavalry data:'} className={'text-sm lg:text-md'} />
-                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Cavalry'].promotedTroopsPerBatch || 0) *
-                  (dailyData.troops['Cavalry'].promotableBatches || 0)).toLocaleString()} />
-                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Cavalry'].troopTotalScore.toLocaleString()} />
+              <div className='flex flex-col'>
+                <FormSubHeader title={'Cavalry data:'} className={'text-sm'} />
+                <div className='flex flex-row'>
+                  <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Cavalry'].promotedTroopsPerBatch || 0) *
+                    (dailyData.troops['Cavalry'].promotableBatches || 0)).toLocaleString()} />
+                  <ScoreBoardSection className={'ml-5'} title={'Troop score:'} value={dailyData.troops['Cavalry'].troopTotalScore.toLocaleString()} />
+                </div>
               </div>
-              <div>
-                <FormSubHeader title={'Pikemen data:'} className={'text-sm lg:text-md'} />
-                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Pikemen'].promotedTroopsPerBatch || 0) *
-                  (dailyData.troops['Pikemen'].promotableBatches || 0)).toLocaleString()} />
-                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Pikemen'].troopTotalScore.toLocaleString()} />
+              <div className='flex flex-col'>
+                <FormSubHeader title={'Pikemen data:'} className={'text-sm'} />
+                <div className='flex flex-row'>
+                  <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Pikemen'].promotedTroopsPerBatch || 0) *
+                    (dailyData.troops['Pikemen'].promotableBatches || 0)).toLocaleString()} />
+                  <ScoreBoardSection className={'ml-5'} title={'Troop score:'} value={dailyData.troops['Pikemen'].troopTotalScore.toLocaleString()} />
+                </div>
               </div>
-              <div>
-                <FormSubHeader title={'Swordsmen data:'} className={'text-sm lg:text-md'} />
-                <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Swordsmen'].promotedTroopsPerBatch || 0) *
-                  (dailyData.troops['Swordsmen'].promotableBatches || 0)).toLocaleString()} />
-                <ScoreBoardSection title={'Troop score:'} value={dailyData.troops['Swordsmen'].troopTotalScore.toLocaleString()} />
+              <div className='flex flex-col'>
+                <FormSubHeader title={'Swordsmen data:'} className={'text-sm'} />
+                <div className='flex flex-row '>
+                  <ScoreBoardSection title={'Promoted troops: '} value={((dailyData.troops['Swordsmen'].promotedTroopsPerBatch || 0) *
+                    (dailyData.troops['Swordsmen'].promotableBatches || 0)).toLocaleString()} />
+                  <ScoreBoardSection className={'ml-5'} title={'Troop score:'} value={dailyData.troops['Swordsmen'].troopTotalScore.toLocaleString()} />
+                </div>
               </div>
             </ScoreBoardWrapper>
             <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_FIVE} />
           </div>
         </div>
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
-    </DayContainer>
+    </DayContainer >
   )
 }
 
@@ -271,5 +271,22 @@ Input:
 
 Top 1 score 52,5kk
 Top 10 score 11,2kk
+
+
+
+    console.log('handleTroopTypeStateChange values, troopType: ', troopType);
+    console.log('handleTroopTypeStateChange values, field: ', field);
+    console.log('handleTroopTypeStateChange values, unit: ', unit);
+    console.log('handleTroopTypeStateChange values, value: ', value);
+
+
+
+    console.log("handleTroopTypeBlur - Checking localState: ", localState);
+    console.log("handleTroopTypeBlur - Checking troopType: ", troopType);
+    console.log("handleTroopTypeBlur - Checking field: ", field);
+    console.log("handleTroopTypeBlur - Checking unit: ", unit);
+    console.log("handleTroopTypeBlur - Checking value: ", value);
+
+
 
 */

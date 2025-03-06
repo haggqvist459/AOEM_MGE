@@ -1,8 +1,9 @@
-// for future backup functionality on Admin Page
+import { loadData, saveData } from "./localStorage";
+
 
 export const exportLocalStorageToFile = () => {
 
-    const localStorageData = loadList() // Get the list of mugs from localStorage
+    const localStorageData = loadData() // Get the list of mugs from localStorage
 
     if (!localStorageData || localStorageData === 'null' || (Array.isArray(localStorageData) && localStorageData.length === 0)) {
         alert('No data found to export!');
@@ -18,7 +19,7 @@ export const exportLocalStorageToFile = () => {
     // Create a temporary link element
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'MoominMugs_Backup.txt'; // File name for the download
+    a.download = 'AoEM_MGE_backup.txt'; // File name for the download
     document.body.appendChild(a);
     a.click(); // Trigger the download
     document.body.removeChild(a); // Clean up
@@ -33,8 +34,9 @@ export const importLocalStorageFromFile = (event) => {
     reader.onload = function (e) {
       try {
         const data = JSON.parse(e.target.result); // Parse the file contents
-        saveList(data);
+        saveData(data);
         alert('Data successfully imported into localStorage!');
+        window.location.reload()
       } catch (error) {
         alert('Invalid file format!');
       }

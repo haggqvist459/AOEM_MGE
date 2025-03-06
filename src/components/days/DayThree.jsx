@@ -4,7 +4,7 @@ import { calculateDailyScoreDayThree, resetStateDayThree, updateMarchField, upda
 import { DayContainer, PreviousEventScore, FormButtons, FormHeader, GatherMarch } from '../../components'
 import { DAY_KEYS } from '../../utils'
 
-const DayThree = () => {
+const DayThree = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.dayThree)
@@ -30,7 +30,7 @@ const DayThree = () => {
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Three'} />
+      <FormHeader title={'Day Three'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
@@ -50,7 +50,7 @@ const DayThree = () => {
             {/* Output */}
           </div>
         </div>
-        <FormButtons onSubmit={submitForm} onCancel={cancelForm} />
+        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
       </form>
     </DayContainer>
   )
