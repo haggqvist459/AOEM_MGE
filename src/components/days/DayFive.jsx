@@ -17,7 +17,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
   const [isExpanded, setIsExpanded] = useState(true)
 
   useEffect(() => {
-    console.log("data received from redux: ", dailyData);
+    // console.log("data received from redux: ", dailyData);
     setLocalState(dailyData);
   }, [dailyData]);
 
@@ -81,8 +81,8 @@ const DayFive = ({ activeDay, setActiveDay }) => {
     <DayContainer>
       <FormHeader title={'Day Five'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
-        <div className='flex flex-col md:flex-row md:pr-2'>
-          <div className='w-full md:w-1/2 relative md:border-r border-neutral-400 md:pr-2'>
+        <div className='flex flex-col md:flex-row'>
+          <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
             <FormSubHeader title={'Troop Promotion '} className={'md:text-lg lg:text-xl'} />
             {Object.keys(localState.troops).map((troopType, index) => (
               <TroopType
@@ -118,7 +118,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
                       id={'trainedTroopTier'}
                       value={localState.trainedTroopTier}
                       onChange={(newValue) => handleLocalChange('trainedTroopTier', newValue)}
-                      onBlur={() => handleBlur('trainedTroopTier',)}
+                      onBlur={() => handleBlur('trainedTroopTier')}
                     />
                   </div>
                   <div className='w-full sm:w-1/2'>
@@ -199,7 +199,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
             </FormWrapper>
             <PreviousEventScore dayKey={DAY_KEYS.DAY_FIVE} />
           </div>
-          <div className='w-full md:w-1/2 relative md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
+          <div className='w-full md:w-1/2  md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
             {/* Output */}
             <FormSubHeader title={'Day Five Score: '} weight={'font-bold'} size={'text-lg lg:text-xl'} />
             <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />

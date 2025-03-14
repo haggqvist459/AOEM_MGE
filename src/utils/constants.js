@@ -3,6 +3,7 @@ export const LOCALSTORAGE_KEY = 'aoem_mge_calc';
 export const ROUTES = {
     HOME: '/',
     TOTAL_SCORE: '/totalScore',
+    STRATEGY: '/strategy',
     ADMIN: '/admin',
     ABOUT: '/about',
     ERROR: '/*',
@@ -18,6 +19,11 @@ export const NAVBAR_OPTIONS = {
         route: ROUTES.TOTAL_SCORE,
         id: 2,
         text: 'Total Score'
+    },
+    STRATEGY: {
+        route: ROUTES.STRATEGY,
+        id: 3,
+        text: 'Strategy'
     },
     ADMIN: {
         route: ROUTES.ADMIN,
@@ -45,43 +51,14 @@ export const DAY_KEYS = {
 }
 
 export const TROOP_POWER_MULTIPLIER = {
-    'Tier 7': 0,
-    'Tier 6': 4,
-    'Tier 5': 3,
-    'Tier 4': 2,
-    'Tier 3': 1,
-    'Tier 2': 1,
+    'Tier 7': 6,
+    'Tier 6': 4.2,
+    'Tier 5': 2.9,
+    'Tier 4': 2.2,
+    'Tier 3': 1.7,
+    'Tier 2': 1.3,
     'Tier 1': 1,
 }
-
-// Tier 4 Power: 
-// 1x = 2 
-// 5x = 11
-// 10x = 22 
-// 50x = 110
-// 100x = 220
-// 500x = 1100
-
-// Tier 5 Power: 
-// 1x = 3  
-// 5x = 15
-// 10x = 29 
-// 50x = 145
-// 100x = 290
-// 500x = 1450
-// 1000x = 2900
-// 2000x = 5800
-
-// Tier 6 Power: 
-// 1x = 4
-// 5x = 21
-// 10x = 42 
-// 50x = 210
-// 100x = 420
-// 500x = 2100
-// 2000x = 
-
-
 
 export const TRIBE_LEVEL_MULTIPLIERS = {
     'Level 29-30': 300,
@@ -105,11 +82,14 @@ export const TROOP_TIER_MULTIPLIERS = {
 }
 
 export const RESOURCE_MULTIPLIERS = {
-    LEVEL_SIX_SPEED: 210000,
-    LEVEL_SIX_CAP: 3780000,
-    RICH_LEVEL_SIX_SPEED: 420000,
-    RICH_LEVEL_SIX_CAP: 12600000,
-    ALLIANCE_CENTER_SPEED: 250000
+    REGULAR: 3780000,
+    RICH: 12600000,
+}
+
+export const RESOURCE_FIELD_MAP = {
+    REGULAR: 'Regular field',
+    RICH: 'Rich field',
+    ALLIANCE: 'Alliance center'
 }
 
 export const RESOURCE_MULTIPLIER_MAP = {

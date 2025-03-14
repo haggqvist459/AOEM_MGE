@@ -15,7 +15,7 @@ const NavBar = () => {
                     className='px-3 py-3 text-blue-50 hover:text-white font-bold'
                     to={ROUTES.HOME}>
                     <p className='text-lg md:text-xl m-0'>AoEM M.G.E </p>
-                    <p className='text-sm md:text-lg m-0 text-right'>Calculator</p>
+                    <p className='text-sm md:text-lg m-0'>Calculator</p>
                 </NavLink>
                 <NavButton isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
             </div>

@@ -4,7 +4,7 @@ import { DayContainer, FormHeader } from '../components'
 const TotalScorePage = () => {
   return (
     <DayContainer>
-      <FormHeader title={'Total Score:'}/>
+      <FormHeader title={'Total Score'} showTrash={false}/>
     </DayContainer>
   )
 }

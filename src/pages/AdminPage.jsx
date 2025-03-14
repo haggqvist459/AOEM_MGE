@@ -11,7 +11,7 @@ const AdminPage = () => {
 
   return (
     <DayContainer className={'text-center'}>
-      <FormHeader title={'Data management'} />
+      <FormHeader title={'Data management'}  showTrash={false}/>
       <div className='flex flex-col md:flex-row space-x-5 justify-center'>
         {/* Export stuff */}
         <div className='w-full  md:w-1/3 flex flex-col items-center mb-5 pb-3 border-b border-neutral-400 md:border-none'>

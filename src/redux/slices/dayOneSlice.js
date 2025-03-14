@@ -11,8 +11,8 @@ const savedState = loadData();
 const initialState = savedState?.dayOne || {
     stamina: '',
     tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]],
-    totalDailyScore: 0,
     tribesHunted: 0,
+    totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
         topTen: '',

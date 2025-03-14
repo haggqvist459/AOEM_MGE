@@ -21,7 +21,7 @@ const NavMenu = ({ isExpanded }) => {
 
     return (
         <div className='overflow-hidden transition-all duration-500 ease-in-out' style={{ height: isExpanded ? '36px' : '0px' }}>
-            <div className={`px-5 w-full md:w-1/2 xl:w-1/3 mx-auto flex flex-row justify-between transition-transform duration-[600ms] ease-in-out
+            <div className={`overflow-x-auto whitespace-nowrap scroll-smooth flex-nowrap snap-x snap-mandatory px-5 gap-x-5 w-full md:w-1/2 xl:w-1/3 md:mx-auto flex flex-row transition-transform duration-[600ms] ease-in-out
             ${isExpanded ? "translate-y-0 " : "-translate-y-full "}`}>
                 {menuItems}
             </div>

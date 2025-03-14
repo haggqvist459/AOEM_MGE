@@ -6,9 +6,9 @@ export const updateFieldDelegated = (state, action) => {
     console.log("updateFieldDelegated field: ", field)
     console.log("updateFieldDelegated unit: ", unit)
     console.log("updateFieldDelegated value: ", value)
-    
-    const validatedValue = validateInputForState(value)
 
+    // If the value is numeric, proceed with validation
+    const validatedValue = validateInputForState(value)
     // Case 1: Top-level objects with primitive fields (e.g., previousEventScore, initialTrainingSpeedup)
 
     if (state[field] && typeof state[field] === "object" && !Array.isArray(state[field])) {

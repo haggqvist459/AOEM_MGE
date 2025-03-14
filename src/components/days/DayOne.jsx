@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFieldDayOne, calculateDailyScoreDayOne, resetStateDayOne } from '../../redux/slices'
+import { calculateDailyScoreDayOne, resetStateDayOne, updateFieldDayOne } from '../../redux/slices'
 import { TRIBE_LEVEL_MULTIPLIERS, DAY_KEYS } from '../../utils'
 import {
   DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput,
@@ -19,11 +19,6 @@ const DayOne = ({ activeDay, setActiveDay }) => {
     setLocalState(dailyData);
   }, [dailyData]);
 
-  const handleInput = (field, value) => {
-    // console.log('DayOne.jsx handleInput triggered, field: ', field, ' value: ', value );
-    dispatch(updateFieldDayOne({ field, value }))
-  }
-
   const handleLocalChange = (field, value) => {
     setLocalState(prev => ({ ...prev, [field]: value }));
   };
@@ -41,16 +36,12 @@ const DayOne = ({ activeDay, setActiveDay }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    // calculate the score for day one, 
     dispatch(calculateDailyScoreDayOne());
-
-    // update localstorage?
-    // navigate to next day? 
   }
 
   return (
     <DayContainer>
-        <FormHeader title={'Day One'} onClick={cancelForm}/>
+      <FormHeader title={'Day One'} onClick={cancelForm} />
       <form onSubmit={submitForm}>
         {/* Split section in half vertically, input on left and output on the right. */}
         {/* On smaller breakpoints, display everything in one column. */}
@@ -58,14 +49,15 @@ const DayOne = ({ activeDay, setActiveDay }) => {
           <div className='w-full md:w-1/2 relative  md:border-r border-neutral-400 md:pr-2'>
             {/* Dropdown */}
             <FormDropdown
-              title={'Select tribe level:'}
-              value={dailyData.tribeLevelMultiplier}
-              onChange={(newValue) => handleInput('tribeLevelMultiplier', newValue)}
-              options={TRIBE_LEVEL_MULTIPLIERS}
               id={'tribeLevelMultiplier'}
+              title={'Select tribe level:'}
+              value={localState.tribeLevelMultiplier}
+              options={TRIBE_LEVEL_MULTIPLIERS}
+              onChange={(newValue) => handleLocalChange('tribeLevelMultiplier', newValue)}
+              onBlur={() => handleBlur('tribeLevelMultiplier')}
             />
             {/* Stamina  */}
-            <FormSubHeader title={'Available stamina:'} size='text-lg md:text-xl' weight='font-semibold'/>
+            <FormSubHeader title={'Available stamina:'} size='text-lg md:text-xl' weight='font-semibold' />
             <FormInput
               id={'stamina'}
               placeholder={'include daily and villager boosts'}

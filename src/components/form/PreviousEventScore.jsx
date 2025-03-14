@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive } from '../../redux/slices'
-import { FormSubHeader, FormInput, FormWrapper } from '../form'
+import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../../redux/slices'
+import { FormSubHeader, FormInput, FormWrapper } from '../form';
 
 const updateActions = {
   dayOne: updateFieldDayOne,
@@ -9,8 +9,8 @@ const updateActions = {
   dayThree: updateFieldDayThree,
   dayFour: updateFieldDayFour,
   dayFive: updateFieldDayFive,
-  // daySix: updateFieldDaySix,
-  // daySeven: updateFieldDaySeven,
+  daySix: updateFieldDaySix,
+  daySeven: updateFieldDaySeven,
 };
 
 
@@ -22,7 +22,7 @@ const PreviousEventScore = ({ dayKey }) => {
   const [localState, setLocalState] = useState(dailyState)
 
   useEffect(() => {
-    console.log("previousEventScore useEffect state: ", dailyState);
+    // console.log("previousEventScore useEffect state: ", dailyState);
     setLocalState(dailyState);
   }, [dailyState]);
 

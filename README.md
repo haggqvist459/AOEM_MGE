@@ -12,7 +12,7 @@
     - [x] Input available stamina
     - [x] Input previous event scores 
     - [x] Calculate available score
-    - [x] Compare score to previous events 
+    - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Two
     - [x] Input available epic and legendary medals 
@@ -51,15 +51,15 @@
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Six
-    - [ ] Input potential power gain for building, troop training and research 
-    - [ ] Input previous event scores 
-    - [ ] Calculate available score
+    - [x] Input potential power gain for building, troop training and research 
+    - [x] Input previous event scores 
+    - [x] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Seven
-    - [ ] Re-use the previous component code for all the repeated scores 
-    - [ ] Input previous event scores 
-    - [ ] Calculate available score
+    - [x] Re-use the previous component code for all the repeated scores 
+    - [x] Input previous event scores 
+    - [x] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Total Score Component
@@ -71,9 +71,10 @@
 
 ### Admin Page: 
 
-- [ ] Export localstorage data into text file 
-- [ ] Import text file to localstorage
-- [ ]
+- [x] Export localstorage data into text file 
+- [x] Import text file to localstorage
+- [x] Delete button for local storage data
+- [ ] Separate Import / Export for previous event scores?
 
 ### Error Page: 
 - [ ] Custom error page
@@ -87,9 +88,16 @@
      - [x] Menu hidden under navbar 
 - [ ] Footer 
     - [x] GitHub source code link 
-- [ ] Remove trash can from non day component headers / use different header for those pages
+- [x] Remove trash can from non day component headers / use different header for those pages
+- [ ] Update the previous components with the local state handler from day six. 
+- [ ] Update the slices with validation, ensure no calculation occur with missing values
+- [ ] Final Stylefixes: 
+    - [ ] Text sizes across components
+    - [ ] Re-use Expandable components across the project
+    - [ ] Fix bottom border and padding on Expandable section
+
 ### About page: 
-- [ ] Explain how data is gathered and kept 
-- [ ] Link to GitHub 
+- [x] Explain how data is gathered and kept 
+
 
 

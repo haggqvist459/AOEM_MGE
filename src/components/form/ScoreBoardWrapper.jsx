@@ -1,8 +1,8 @@
 import React from 'react'
 
-const ScoreBoardWrapper = ({ children, className }) => {
+const ScoreBoardWrapper = ({ children, className, gridCols='grid-cols-2' }) => {
     return (
-        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 ${className}`}>
+        <div className={`grid ${gridCols} gap-2 mt-1 ${className}`}>
             {children}
         </div>
     )
