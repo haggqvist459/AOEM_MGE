@@ -10,8 +10,7 @@ const store = configureStore({
     dayFour: dayFourReducer,
     dayFive: dayFiveReducer,
     daySix: daySixReducer,
-    daySeven: daySevenReducer,
-    // shared: sharedReducer
+    daySeven: daySevenReducer
   },
 });
 

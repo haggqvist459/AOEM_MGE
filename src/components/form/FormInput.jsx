@@ -1,10 +1,10 @@
 import React from 'react';
 
-const FormInput = ({ id, placeholder, value, onChange, onBlur, required = false, allowDecimals = false }) => {
+const FormInput = ({ id, placeholder, value, onChange, onBlur, required = false, allowDecimals = false, type='number' }) => {
     return (
         <input
-            type="number"
-            inputMode="numeric"
+            type={type}
+            inputMode={type === 'number' ? 'numeric' : undefined}
             step={allowDecimals ? "any" : "1"}
             id={id}
             name={id}

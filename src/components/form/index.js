@@ -8,4 +8,7 @@ export { default as ScoreBoardSection } from './ScoreBoardSection';
 export { default as FormInput } from './FormInput';
 export { default as FormWrapper } from './FormWrapper';
 export { default as FormDropdown } from './FormDropdown';
-export { default as ScoreBoardWrapper } from './ScoreBoardWrapper'
+export { default as ScoreBoardWrapper } from './ScoreBoardWrapper';
+export { default as ExpandableSection } from './ExpandableSection';
+export { default as ExpandableHeader } from './ExpandableHeader';
+export { default as ToggleButton } from './ToggleButton';

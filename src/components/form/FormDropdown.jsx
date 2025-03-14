@@ -3,7 +3,7 @@ import React from 'react'
 const FormDropdown = ({ onBlur, onChange, title, options, id, value }) => {
   return (
     <div className='w-full'>
-      <label htmlFor={id} className='block font-semibold lg:font-bold text-lg md:text-xl text-blue-900 mt-1'>{title}</label>
+      <label htmlFor={id} className='block font-semibold lg:font-bold text-lg md:text-xl text-blue-900'>{title}</label>
       <div className='relative w-full'>
         <select
           id={id}
@@ -13,7 +13,10 @@ const FormDropdown = ({ onBlur, onChange, title, options, id, value }) => {
             console.log('Selected value:', e.target.value); // Log the selected value
             onChange(e.target.value); // Call the onChange function passed from the parent
           }}
-          onBlur={onBlur}
+          onBlur={(e) => {
+            console.log('Blurred value:', e.target.value); // Log the blurred value
+            onBlur(e.target.value); // Ensure onBlur gets the correct value
+          }}
         >
           {Object.keys(options).map((level) => (
             <option key={level} value={options[level]}>

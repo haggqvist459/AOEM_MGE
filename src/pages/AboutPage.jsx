@@ -5,7 +5,7 @@ import { DayContainer, FormHeader, FormSubHeader } from '../components'
 const AboutPage = () => {
   return (
     <DayContainer>
-      <FormHeader title={'<aboutTitle>'} />
+      <FormHeader title={'<aboutTitle>'} showTrash={false}/>
       <div className='w-full md:w-1/2 mx-auto flex flex-col text-center pb-3'>
         <FormSubHeader size={'text-md lg:text-lg'} title={'The calculators'} />
         <p>
@@ -23,7 +23,7 @@ const AboutPage = () => {
         </p>
         <p>
           This means that your calculator data is stored in your browser.
-          If you want to clear the data, you can erase your browser history or head over to the admin page and hit delete.
+          If you want to clear the data, erase your browser history or head over to the admin page and click delete.
         </p>
         <p>You can move your calculator data between devices by exporting it into a .txt file on the admin page, and then import it again on the next device. </p>
         <FormSubHeader size={'text-md lg:text-lg'} title={'The website'} className={'mt-2'} />
