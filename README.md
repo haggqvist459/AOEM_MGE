@@ -27,11 +27,14 @@
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Three
-    - [ ] Select number of gather marches, their completion bonus and gather speed bonuses
-    - [ ] Add functionality for full marches ready at day start 
-    - [ ] Input available empire coins for wheel spins 
-    - [ ] Input previous event scores 
-    - [ ] Calculate available score
+    - [x] Select number of gather marches
+        - [x] loadBonus & completedTurns to calculate score per day
+        - [x] if full at start of day, add loadCapacity to score.
+    - [x] FormDropdowns that assign a march to Rich fields and Alliance Centres
+    - [x] Add functionality for full marches ready at day start 
+    - [x] Input available empire coins for wheel spins 
+    - [x] Input previous event scores 
+    - [x] Calculate available score
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Day Four
@@ -95,7 +98,7 @@
     - [ ] Text sizes across components
     - [ ] Re-use Expandable components across the project
     - [ ] Fix bottom border and padding on Expandable section
-
+- [ ] Re-do FormDropdown across the project, so that it does not rely on onBlur for updates to Redux 
 ### About page: 
 - [x] Explain how data is gathered and kept 
 

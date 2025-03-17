@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from 'uuid';
 import {
     POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIERS, RESOURCE_FIELD_MAP,
-    loadData, saveData, validateInputForState, updateFieldDelegated
+    loadData, saveData, validateInputForState, updateFieldDelegated,
+    calculateGatheringScore
 } from "../../utils";
 
 const resourceOptions = Object.keys(RESOURCE_FIELD_MAP);
@@ -14,7 +15,7 @@ const initialState = savedState?.dayThree || {
             id: 1,
             marchName: 'March 1',
             loadBonus: '',
-            gatheringTurns: '',
+            completedTurns: '',
             loadCapacity: '',
             fullAtReset: false,
             score: 0,
@@ -24,6 +25,10 @@ const initialState = savedState?.dayThree || {
     richField: '0',
     allianceCentre: '0',
     empireCoins: '',
+    score: {
+        gathering: 0,
+        spins: 0
+    },
     totalDailyScore: 0,
     previousEventScore: {
         topOne: '',
@@ -39,7 +44,7 @@ const dayThreeSlice = createSlice({
         updateMarchField: (state, action) => {
             const { id, field, value } = action.payload;
 
-            console.log("updateMarchField action received:", action.payload);
+            // console.log("updateMarchField payload received:", action.payload);
 
             const marchIndex = state.marches.findIndex(march => march.id === id);
             if (marchIndex === -1) {
@@ -55,7 +60,7 @@ const dayThreeSlice = createSlice({
             const containsCharacters = /[a-zA-Z$%&!*()_+\-=\[\]{};':"\\|,.<>\/?`~\s]/.test(value);
 
             if (containsCharacters) {
-                console.log("The value contains characters or special symbols.");
+                // console.log("The value contains characters or special symbols.");
                 state.marches[marchIndex][field] = value
             } else {
                 state.marches[marchIndex][field] = validateInputForState(value);
@@ -73,7 +78,7 @@ const dayThreeSlice = createSlice({
                 id: state.nextMarchId,
                 marchName: `March ${state.nextMarchId}`,
                 loadBonus: '',
-                gatheringTurns: '',
+                completedTurns: '',
                 loadCapacity: '',
                 fullAtReset: false,
                 score: 0,
@@ -84,56 +89,60 @@ const dayThreeSlice = createSlice({
         },
         calculateDailyScore: (state, action) => {
             const { id } = action.payload;
+            console.log("calculateDailyScoreDayThree triggered for ID:", id);
             const marchIndex = state.marches.findIndex(march => march.id === id);
             if (id === '0') {
                 console.log("Default value selected in dropdown. No score calculation necessary");
+                return;
+            }
+            if (id === '999') {
+                // calculate empire coins score, add to daily score
+                state.score.spins = 0;
+                const fiveSpinCount = Math.floor(state.empireCoins / POINTS_AND_MULTIPLIERS.FIVE_SPIN_COST);
+                const remainingCoins = state.empireCoins % POINTS_AND_MULTIPLIERS.FIVE_SPIN_COST;
+                const singleSpinCount = Math.floor(remainingCoins / POINTS_AND_MULTIPLIERS.SINGLE_SPIN_COST);
+
+                state.score.spins = (fiveSpinCount * POINTS_AND_MULTIPLIERS.ADVENT_SCORE * 5) + (singleSpinCount * POINTS_AND_MULTIPLIERS.ADVENT_SCORE);
+                state.totalDailyScore = state.score.spins + state.score.gathering
+
+                // do not calculate march score 
                 return;
             }
             if (marchIndex === -1) {
                 console.error(`Invalid march ID: ${id}`);
                 return;
             }
-            if (id === '999') {
-                // calculate empire coins score, add to daily score
 
-                // do not calculate march score 
-                return;
-            }
 
             const march = state.marches[marchIndex];
 
             // Ensure necessary values exist before calculations
-            if (!march.loadCapacity || !march.gatheringTurns) {
+            if (!march.loadCapacity || !march.completedTurns) {
                 console.warn(`Missing values for march ${id}. Skipping score calculation.`);
                 return;
             }
 
-            let gatheredResources = 0;
+            // Reset score to 0,
+            state.marches[marchIndex].score = 0;
 
-            // If fullAtReset is true, first assign score based on the load capacity alone
-            if (march.fullAtReset) {
-                gatheredResources += march.loadCapacity || 0;
+            // Check if the march is selected for a special field
+            if (state.richField === id) {
+                console.log("Rich field calculation triggered")
+                calculateGatheringScore(march, RESOURCE_FIELD_MAP.RICH);
+            } else if (state.allianceCentre === id) {
+                console.log("alliance centre calculation triggered. ")
+                calculateGatheringScore(march, RESOURCE_FIELD_MAP.ALLIANCE);
+            } else {
+                console.log("Regular field calculation triggered.");
+                calculateGatheringScore(march, RESOURCE_FIELD_MAP.REGULAR);
             }
 
-            // // Check if the march is at a Rich Field
-            // if (march.fieldType === RESOURCE_FIELD_MAP.RICH) {
-            //     const cappedYield = Math.min(march.loadCapacity || 0, RESOURCE_MULTIPLIERS.RICH);
-            //     gatheredResources += cappedYield * (march.gatheringTurns || 0);
-            // }
-            // // Check if the march is at the Alliance Center
-            // else if (march.fieldType === RESOURCE_FIELD_MAP.ALLIANCE) {
-            //     gatheredResources += (march.loadCapacity || 0) * (march.gatheringTurns || 0);
-            // }
-            // Regular Field gathering
-            else {
-                const cappedYield = Math.min(march.loadCapacity || 0, RESOURCE_MULTIPLIERS.REGULAR);
-                gatheredResources += cappedYield * (march.gatheringTurns || 0);
-            }
+            // Score assignment, to score.gathering and totalDailyScore
+            // Recalculate gathering score by summing up all marches' scores
+            state.score.gathering = state.marches.reduce((total, march) => total + march.score, 0);
 
-            // use this divider to calculate the score as each 100 resources gathered results in 1 point
-            // POINTS_AND_MULTIPLIERS.RESOURCE_DIVIDER 
-
-            march.score = Math.floor(gatheredResources / POINTS_AND_MULTIPLIERS.RESOURCE_DIVIDER);
+            // Update totalDailyScore to reflect both gathering and spins scores
+            state.totalDailyScore = state.score.gathering + state.score.spins;
 
         },
         resetState: (state) => {
@@ -142,7 +151,7 @@ const dayThreeSlice = createSlice({
                     id: 1,
                     marchName: 'March 1',
                     loadBonus: '',
-                    gatheringTurns: '',
+                    completedTurns: '',
                     loadCapacity: '',
                     fullAtReset: false,
                     score: 0,
@@ -152,7 +161,11 @@ const dayThreeSlice = createSlice({
                 state.richField = '0',
                 state.allianceCentre = '0',
                 state.empireCoins = '';
-            state.dailyScore = 0;
+            state.score = {
+                gathering: 0,
+                spins: 0
+            };
+            state.totalDailyScore = 0;
             state.previousEventScore = {
                 topOne: '',
                 topTen: '',

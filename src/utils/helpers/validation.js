@@ -4,7 +4,7 @@ export const validateInputForState = (value) => {
         // Handle cases where value is not a string (e.g., undefined, null, number, etc.)
         return value;
     }
-    console.log("validateInputForState value: ", value);
+    // console.log("validateInputForState value: ", value);
     return value.trim() === "" ? "" : parseFloat(value);
 };
 

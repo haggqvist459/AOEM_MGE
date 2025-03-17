@@ -2,10 +2,10 @@ import { validateInputForState } from '../helpers'
 
 export const updateFieldDelegated = (state, action) => {
     const { field, unit, value } = action.payload;
-    console.log("updateFieldDelegated state: ", JSON.parse(JSON.stringify(state)));
-    console.log("updateFieldDelegated field: ", field)
-    console.log("updateFieldDelegated unit: ", unit)
-    console.log("updateFieldDelegated value: ", value)
+    // console.log("updateFieldDelegated state: ", JSON.parse(JSON.stringify(state)));
+    // console.log("updateFieldDelegated field: ", field)
+    // console.log("updateFieldDelegated unit: ", unit)
+    // console.log("updateFieldDelegated value: ", value)
 
     // If the value is numeric, proceed with validation
     const validatedValue = validateInputForState(value)
@@ -28,17 +28,17 @@ export const updateFieldDelegated = (state, action) => {
 
 // Internal function for top-level field updates
 const updatePrimitiveField = (state, field, value) => {
-    console.log(`updatePrimitiveField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
-    console.log(`updatePrimitiveField before update: value: `, value);
+    // console.log(`updatePrimitiveField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
+    // console.log(`updatePrimitiveField before update: value: `, value);
     state[field] = value;
-    console.log(`updatePrimitiveField after update: state[field]`, state[field]);
+    // console.log(`updatePrimitiveField after update: state[field]`, state[field]);
 };
 
 
 const updateObjectField = (state, field, unit, value) => {
-    console.log(`updateObjectField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
-    console.log(`updateObjectField before update: unit: `, unit);
-    console.log(`updateObjectField before update: value: `, value);
+    // console.log(`updateObjectField before update: state[field] `, JSON.parse(JSON.stringify(state[field])));
+    // console.log(`updateObjectField before update: unit: `, unit);
+    // console.log(`updateObjectField before update: value: `, value);
 
 
     state[field] = {
@@ -47,6 +47,6 @@ const updateObjectField = (state, field, unit, value) => {
     };
 
 
-    console.log(`updateObjectField after update: state[field]`, state[field]);
+    // console.log(`updateObjectField after update: state[field]`, state[field]);
 };
 

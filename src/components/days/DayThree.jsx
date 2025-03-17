@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux'
 import { calculateDailyScoreDayThree, resetStateDayThree, updateMarchField, updateFieldDayThree, addMarch, removeMarch } from '../../redux/slices'
-import { DayContainer, PreviousEventScore, FormButtons, FormHeader, GatherMarch, ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, FormDropdown } from '../../components'
+import { DayContainer, PreviousEventScore, FormButtons, FormHeader, GatherMarch, ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, FormDropdown, ScoreBoardSection } from '../../components'
 import { DAY_KEYS, RESOURCE_FIELD_MAP } from '../../utils'
 
 const DayThree = ({ activeDay, setActiveDay }) => {
@@ -14,28 +14,28 @@ const DayThree = ({ activeDay, setActiveDay }) => {
   const [allianceCentreOptions, setAllianceCentreOptions] = useState({})
 
   useEffect(() => {
-    console.log("data received from redux: ", dailyData);
+    // console.log("data received from redux: ", dailyData);
     setLocalState(dailyData);
   }, [dailyData]);
 
   useEffect(() => {
 
     const richOptions = {
-      "Select a march": "0",  // Default option
-      ...localState.marches
-        .filter(march => march.id !== localState.allianceCentre)  // Remove the selected alliance march
+      "Select a march": "0",
+      ...dailyData.marches
+        .filter(march => march.id !== dailyData.allianceCentre)  // remove the alliance centre march
         .reduce((options, march) => {
-          options[march.marchName] = march.id;  // Use march.marchName instead of "March X"
+          options[march.marchName] = march.id;
           return options;
         }, {})
     };
 
     const allianceOptions = {
-      "Select a march": "0",  // Default option
-      ...localState.marches
-        .filter(march => march.id !== localState.richField)  // Remove the selected rich march
+      "Select a march": "0",
+      ...dailyData.marches
+        .filter(march => march.id !== dailyData.richField)  // Remove the selected rich march
         .reduce((options, march) => {
-          options[march.marchName] = march.id;  // Use march.marchName instead of "March X"
+          options[march.marchName] = march.id;
           return options;
         }, {})
     };
@@ -43,7 +43,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
     setRichFieldOptions(richOptions);
     setAllianceCentreOptions(allianceOptions);
 
-  }, [localState.marches, localState.richField, localState.allianceCentre])
+  }, [localState.marches, dailyData.richField, dailyData.allianceCentre])
 
 
 
@@ -55,12 +55,26 @@ const DayThree = ({ activeDay, setActiveDay }) => {
 
   const handleRemoveMarch = (id) => {
     console.log("handleRemoveMarch ID to remove: ", id)
-    dispatch(removeMarch({ id })); // Redux handles filtering, useEffect syncs localState
+    dispatch(removeMarch({ id }));
   };
+
+
+  const handleInstantDispatch = ( field, value, id=null ) => {
+    console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ', id: ', id);
+
+    
+    if (id) {
+      dispatch(updateMarchField({ id, field, value }));
+      dispatch(calculateDailyScoreDayThree({ id }));
+  } else {
+      dispatch(updateFieldDayThree({ field, value }));
+      dispatch(calculateDailyScoreDayThree({ id: Number(value)}));
+  }
+  }
 
   // Array based inputs 
   const handleMarchLocalChange = (id, field, value) => {
-    console.log("handleMarchLocalChange triggered: id:", id, "field:", field, "value:", value);
+    // console.log("handleMarchLocalChange triggered: id:", id, "field:", field, "value:", value);
 
     setLocalState(prev => ({
       ...prev,
@@ -87,7 +101,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
       return;
     }
 
-    console.log("marchInputBlur values, id: ", id, ', field: ', field, ', value: ', march[field]);
+    // console.log("marchInputBlur values, id: ", id, ', field: ', field, ', value: ', march[field]);
 
     dispatch(updateMarchField({ id, field, value: march[field] }));
     dispatch(calculateDailyScoreDayThree({ id }));
@@ -95,7 +109,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
 
   // Non-array based inputs
   const handleLocalChange = (field, value, unit = null) => {
-    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
+    // console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
@@ -106,17 +120,17 @@ const DayThree = ({ activeDay, setActiveDay }) => {
 
   // Non-array based inputs
   const handleBlur = (field, unit = null) => {
-    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    // console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     const value = unit
       ? localState[field][unit]
       : localState[field];
 
-    let id; 
+    let id;
     if (field === RESOURCE_FIELD_MAP.RICH || field === RESOURCE_FIELD_MAP.ALLIANCE) {
-      id = value; 
+      id = value;
     } else if (field === 'empireCoins') {
       id = '999'
-    } 
+    }
 
     dispatch(updateFieldDayThree({ field, unit, value }));
     if (id !== undefined) {
@@ -140,13 +154,14 @@ const DayThree = ({ activeDay, setActiveDay }) => {
           {/*  */}
           {localState.marches.map((march, index) => (
             <GatherMarch
-              title={march.marchName}
+              title={dailyData.marches.find(m => m.id === march.id)?.marchName}
               key={index}
               march={march}
               marchId={march.id}
               onChange={handleMarchLocalChange}
               onBlur={marchInputBlur}
               onDelete={handleRemoveMarch}
+              handleInstantDispatch={handleInstantDispatch}
             />
           ))}
           {/* Add button */}
@@ -169,16 +184,16 @@ const DayThree = ({ activeDay, setActiveDay }) => {
               title={'Rich Resource'}
               value={localState.richField}
               options={richFieldOptions}
-              onChange={(newValue) => handleLocalChange('richField', newValue)}
-              onBlur={() => handleBlur('richField')}
+              onChange={(newValue) => handleInstantDispatch('richField', newValue)}
+              onBlur={() => {}}
             />
             <FormDropdown
               id={'allianceFieldDropdown'}
               title={'Alliance Centre'}
               value={localState.allianceCentre}
               options={allianceCentreOptions}
-              onChange={(newValue) => handleLocalChange('allianceCentre', newValue)}
-              onBlur={() => handleBlur('allianceCentre')}
+              onChange={(newValue) => handleInstantDispatch('allianceCentre', newValue)}
+              onBlur={() =>{}}
             />
           </div>
           <FormSubHeader title={'Empire Coins'} />
@@ -194,6 +209,13 @@ const DayThree = ({ activeDay, setActiveDay }) => {
 
         <div className='w-full md:w-1/2'>
           {/* Output */}
+          <FormSubHeader title={'Day Three Score '} />
+          <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
+          {dailyData.marches.map((march, index) => (
+            <div key={index}>
+              <ScoreBoardSection title={march.marchName} value={march.score.toLocaleString()} />
+            </div>
+          ))}
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />

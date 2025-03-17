@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormDropdown = ({ onBlur, onChange, title, options, id, value }) => {
+const FormDropdown = ({ onBlur = ()=>{}, onChange, title, options, id, value }) => {
   return (
     <div className='w-full'>
       <label htmlFor={id} className='block font-semibold lg:font-bold text-lg md:text-xl text-blue-900'>{title}</label>
@@ -10,11 +10,11 @@ const FormDropdown = ({ onBlur, onChange, title, options, id, value }) => {
           className='w-full px-1 text-sm lg:text-lg text-neutral-600 border border-neutral-600 rounded-md shadow-sm appearance-none'
           value={value}
           onChange={(e) => {
-            console.log('Selected value:', e.target.value); // Log the selected value
+            // console.log('FormDropdown onChange Selected value:', e.target.value); // Log the selected value
             onChange(e.target.value); // Call the onChange function passed from the parent
           }}
           onBlur={(e) => {
-            console.log('Blurred value:', e.target.value); // Log the blurred value
+            // console.log('FormDropdown onBlur Blurred value:', e.target.value); // Log the blurred value
             onBlur(e.target.value); // Ensure onBlur gets the correct value
           }}
         >

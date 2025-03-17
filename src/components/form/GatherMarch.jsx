@@ -4,9 +4,10 @@ import { ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, ToggleBu
 import { FormField } from '../../retired'
 
 
-const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete }) => {
+const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handleInstantDispatch }) => {
 
     const [isExpanded, setIsExpanded] = useState(false)
+    
 
     return (
         <div className='pb-1 mb-1'>
@@ -37,7 +38,7 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete }) => {
                         <FormSubHeader title={'Load bonus'} />
                         <FormInput
                             id={`March-${marchId}-loadBonus`}
-                            placeholder={'0'}
+                            placeholder={'0%'}
                             value={march.loadBonus}
                             onChange={(newValue) => onChange(marchId, 'loadBonus', newValue)}
                             onBlur={() => onBlur(marchId, 'loadBonus')}
@@ -46,11 +47,11 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete }) => {
                     <div>
                         <FormSubHeader title={'Completed turns'} />
                         <FormInput
-                            id={`March-${marchId}-gatheringTurns`}
+                            id={`March-${marchId}-completedTurns`}
                             placeholder={'0'}
-                            value={march.gatheringTurns}
-                            onChange={(newValue) => onChange(marchId, 'gatheringTurns', newValue)}
-                            onBlur={() => onBlur(marchId, 'gatheringTurns')}
+                            value={march.completedTurns}
+                            onChange={(newValue) => onChange(marchId, 'completedTurns', newValue)}
+                            onBlur={() => onBlur(marchId, 'completedTurns')}
                         />
                     </div>
                     <div className='flex justify-between'>
@@ -58,7 +59,8 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete }) => {
                             <FormSubHeader title={'Full on reset'} />
                             <ToggleButton
                                 isToggled={march.fullAtReset}
-                                onChange={() => onChange(marchId, 'fullAtReset', !march.fullAtReset)}
+
+                                onChange={() => handleInstantDispatch('fullAtReset', !march.fullAtReset, marchId)}
                                 onBlur={() => onBlur(marchId, 'fullAtReset')}
                             />
                         </div>
