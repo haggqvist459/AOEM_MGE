@@ -108,10 +108,6 @@ const dayFiveSlice = createSlice({
         updateField: (state, action) => updateFieldDelegated(state, action),
         updateTroopField: (state, action) => {
             const { troopType, field, unit, value } = action.payload;
-            console.log("updateTroopField troopType: ", troopType)
-            console.log("updateTroopField field: ", field)
-            console.log("updateTroopField unit: ", unit)
-            console.log("updateTroopField value: ", value)
             const validatedValue = validateInputForState(value);
  
             if (state.troops[troopType]) {
@@ -238,9 +234,6 @@ const dayFiveSlice = createSlice({
             saveData({ ...loadData(), dayFive: { ...state } });
         }
     },
-    // extraReducers: (builder) => {
-    //     sharedReducers(builder);    
-    // }
 })
 
 export const { updateTroopField, calculateDailyScore, resetState, updateField } = dayFiveSlice.actions;

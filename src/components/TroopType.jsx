@@ -51,29 +51,29 @@ const TroopType = ({ troopData, troopType, onChange, onBlur, handleInstantDispat
               id={`${troopType}-trainingTimeDay`}
               placeholder={'days'}
               value={troopData.trainingTime.days}
-              onChange={(value) => onChange(troopType, 'trainingTime', 'days', value)}
-              onBlur={() => onBlur(troopType, 'trainingTime', 'days')}
+              onChange={(value) => onChange('trainingTime', value, troopType, 'days' )}
+              onBlur={() => onBlur('trainingTime', 'days', troopType)}
             />
             <FormInput
               id={`${troopType}-trainingTimeHours`}
               placeholder={'hours'}
               value={troopData.trainingTime.hours}
-              onChange={(value) => onChange(troopType, 'trainingTime', 'hours', value)}
-              onBlur={() => onBlur(troopType, 'trainingTime', 'hours')}
+              onChange={(value) => onChange('trainingTime', value, troopType, 'hours')}
+              onBlur={() => onBlur('trainingTime', 'hours', troopType)}
             />
             <FormInput
               id={`${troopType}-trainingTimeMinutes`}
               placeholder={'minutes'}
               value={troopData.trainingTime.minutes}
-              onChange={(value) => onChange(troopType, 'trainingTime', 'minutes', value)}
-              onBlur={() => onBlur(troopType, 'trainingTime', 'minutes')}
+              onChange={(value) => onChange('trainingTime', value, troopType, 'minutes')}
+              onBlur={() => onBlur('trainingTime', 'minutes', troopType)}
             />
             <FormInput
               id={`${troopType}-trainingTimeSeconds`}
               placeholder={'seconds'}
               value={troopData.trainingTime.seconds}
-              onChange={(value) => onChange(troopType, 'trainingTime', 'seconds', value)}
-              onBlur={() => onBlur(troopType, 'trainingTime', 'seconds')}
+              onChange={(value) => onChange('trainingTime', value, troopType, 'seconds')}
+              onBlur={() => onBlur('trainingTime', 'seconds', troopType)}
             />
           </FormWrapper>
         </FormWrapper>
@@ -84,8 +84,8 @@ const TroopType = ({ troopData, troopType, onChange, onBlur, handleInstantDispat
               id={`${troopType}-promotedTroopsPerBatch`}
               placeholder={'0'}
               value={troopData.promotedTroopsPerBatch}
-              onChange={(newValue) => onChange(troopType, 'promotedTroopsPerBatch', null, newValue)}
-              onBlur={() => onBlur(troopType, 'promotedTroopsPerBatch', null)}
+              onChange={(newValue) => onChange('promotedTroopsPerBatch', newValue, troopType)}
+              onBlur={() => onBlur('promotedTroopsPerBatch', null, troopType)}
             />
           </FormWrapper>
           <FormWrapper>
@@ -94,8 +94,8 @@ const TroopType = ({ troopData, troopType, onChange, onBlur, handleInstantDispat
               id={`${troopType}-availableTroops`}
               placeholder={'0'}
               value={troopData.availableTroops}
-              onChange={(newValue) => onChange(troopType, 'availableTroops', null, newValue)}
-              onBlur={() => onBlur(troopType, 'availableTroops', null)}
+              onChange={(newValue) => onChange('availableTroops', newValue, troopType)}
+              onBlur={() => onBlur('availableTroops', null, troopType)}
             />
           </FormWrapper>
         </FormWrapper>

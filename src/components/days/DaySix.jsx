@@ -21,7 +21,7 @@ const DaySix = ({ activeDay, setActiveDay }) => {
 
   const handleInstantDispatch = (field, unit, value) => {
     dispatch(updateFieldDaySix({ field, unit, value }));
-    dispatch(calculateDailyScoreDaySix());
+    dispatch(calculateDailyScoreDaySix( { field, unit }));
   }
 
   const handleLocalChange = (field, value, unit=null) => {
@@ -41,22 +41,17 @@ const DaySix = ({ activeDay, setActiveDay }) => {
 
     console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDaySix({ field, unit, value }));
-    dispatch(calculateDailyScoreDaySix());
+    dispatch(calculateDailyScoreDaySix({ field, unit }));
   };
 
   const cancelForm = () => {
     dispatch(resetStateDaySix());
   }
 
-  const submitForm = (e) => {
-    e.preventDefault();
-    dispatch(calculateDailyScoreDaySix());
-  }
 
   return (
     <DayContainer>
       <FormHeader title={'Day Six'} onClick={cancelForm} />
-      <form onSubmit={submitForm}>
         <div className='flex flex-col md:flex-row md:pr-2'>
           <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
             {/* Input */}
@@ -132,7 +127,6 @@ const DaySix = ({ activeDay, setActiveDay }) => {
           </div>
         </div>
         <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
-      </form>
     </DayContainer>
   )
 }

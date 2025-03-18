@@ -28,7 +28,7 @@ const initialState = savedState?.dayFour || {
         building: 0,
         research: 0,
         universal: 0,
-        ring: 0,
+        rings: 0,
     },
     totalDailyScore: 0,
     previousEventScore: {
@@ -43,25 +43,54 @@ const dayFourSlice = createSlice({
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
         calculateDailyScore: (state, action) => {
-            const { field } = action.payload;
+            const { field, unit } = action.payload;
 
-            // calculate score potential for the various minor resources
-            state.score.ring = Object.entries(RESOURCE_MULTIPLIER_MAP).reduce((total, [resource, multiplierKey]) => {
-                return total + state[resource] * POINTS_AND_MULTIPLIERS[multiplierKey];
-            }, 0);
 
-            const buildingMinutes = convertToMinutes(state.buildingSpeedup);
-            const researchMinutes = convertToMinutes(state.researchSpeedup);
-            const universalMinutes = convertToMinutes(state.universalSpeedup);
-
-            state.score.building = buildingMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_BUILDING;
-            state.score.research = researchMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_RESEARCH;
-            state.score.universal = universalMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_UNIVERSAL;
-
+            switch (field) {
+                case 'fineGold':
+                case 'hammers':
+                case 'copperSand':
+                case 'silverSand':
+                case 'meteorSteel':
+                    state.score.rings = 0;
+                    if (state.hammers > 0) {
+                        state.score.rings += state.hammers * POINTS_AND_MULTIPLIERS.FINE_CRAFT;
+                    }
+                    if (state.copperSand > 0) {
+                        state.score.rings += state.copperSand * POINTS_AND_MULTIPLIERS.COPPER_SAND;
+                    }
+                    if (state.silverSand > 0) {
+                        state.score.rings += state.silverSand * POINTS_AND_MULTIPLIERS.SILVER_SAND;
+                    }
+                    if (state.fineGold > 0) {
+                        state.score.rings += state.fineGold * POINTS_AND_MULTIPLIERS.FINE_GOLD;
+                    }
+                    if (state.meteorSteel > 0) {
+                        state.score.rings += state.meteorSteel * POINTS_AND_MULTIPLIERS.METEOR_STEEL
+                    }
+                    break;
+                case 'universalSpeedup':
+                    if (unit && state.universalSpeedup !== '') {
+                        const universalMinutes = convertToMinutes(state.universalSpeedup);
+                        state.score.universal = universalMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_UNIVERSAL;
+                    }
+                case 'researchSpeedup':
+                    if (unit && state.researchSpeedup !== '') {
+                        const researchMinutes = convertToMinutes(state.researchSpeedup);
+                        state.score.research = researchMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_RESEARCH;
+                    }
+                case 'buildingSpeedup':
+                    if (unit && state.buildingSpeedup !== '') {
+                        const buildingMinutes = convertToMinutes(state.buildingSpeedup);
+                        state.score.building = buildingMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_BUILDING;
+                    }
+                default:
+                    console.log("Error, incorrect field supplied to score calculation: ", field);
+            }
+         
             // calculate total score
             state.totalDailyScore = Object.values(state.score)
-            .reduce((total, score) => total + (score || 0), 0);
-
+                .reduce((total, score) => total + (score || 0), 0);
 
         },
         resetState: (state) => {
@@ -89,7 +118,7 @@ const dayFourSlice = createSlice({
                 building: 0,
                 research: 0,
                 universal: 0,
-                ring: 0,
+                rings: 0,
             };
             state.totalDailyScore = 0;
             state.previousEventScore = {

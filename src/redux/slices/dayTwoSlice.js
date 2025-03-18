@@ -94,22 +94,24 @@ const dayTwoSlice = createSlice({
                 case 'preforgedBlueprints':
                 case 'forgingTime':
                     state.score.forging = 0;
-                    if(state.preforgedBlueprints > 0){
+                    if (state.preforgedBlueprints > 0) {
                         if (state.preforgedBlueprints > 5) {
                             state.preforgedBlueprints = 5; // Maximum of 5 queues available
                         }
-                        state.score.forging = state.preforgedBlueprints * POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT; 
+                        state.score.forging = state.preforgedBlueprints * POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT;
                     }
                     const forgingSpeedupSeconds = convertToSeconds(state.forgingSpeedup);
                     const forgingTimeSeconds = convertToSeconds(state.forgingTime);
 
-                    if(unit && state.legendaryBlueprints > 0 && forgingTimeSeconds > 0 && forgingSpeedupSeconds > forgingTimeSeconds) {
+                    if (unit && state.legendaryBlueprints > 0 && forgingTimeSeconds > 0 && forgingSpeedupSeconds > forgingTimeSeconds) {
                         const forgingResult = calculateForgingScore(state.legendaryBlueprints, POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT, forgingTimeSeconds, forgingSpeedupSeconds);
                         state.score.forging += forgingResult.score;
                         state.remainingBlueprints = forgingResult.remainingBlueprints;
                         state.completedBlueprints = forgingResult.completedBlueprints;
                         state.remainingForgingSpeedup = forgingResult.remainingSpeedup
                     }
+                default:
+                    console.log("Error, incorrect field supplied to score calculation: ", field);
 
             }
 

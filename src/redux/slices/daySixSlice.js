@@ -35,10 +35,35 @@ const daySixSlice = createSlice({
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
-        calculateDailyScore: (state) => {
-            console.log('calculateDailyScore start');
+        calculateDailyScore: (state, action) => {
+            const { field, unit } = action.payload;
         
-            // Building Score Calculation (Ignoring Empty Values)
+
+            switch (field) {
+                case 'researchPower':
+                    if (state.researchPower !== '') {
+                        state.score.research = state.researchPower * POINTS_AND_MULTIPLIERS.POWER_RESEARCH;
+                    }
+                    break;
+                case 'buildingPower':
+                    if (unit && state.buildingPower[unit] !== '') {
+                        state.score.building = Object.values(state.buildingPower)
+                            .filter(value => value !== '') // Ignore missing values
+                            .reduce((total, power) => total + (POINTS_AND_MULTIPLIERS.POWER_BUILDING * power), 0);
+                    }
+                    break;
+                case 'troopPower':
+                    if (unit && state.troopPower[unit] !== '') {
+                        state.score.troop = state.troopPower.troopsTrainedTotal * state.troopPower.tier * POINTS_AND_MULTIPLIERS.POWER_TRAINING
+                    }
+                    break;
+                default:
+                    console.log("Error, incorrect field supplied to score calculation: ", field);
+            }
+
+
+
+            // Building Score Calculation (Ignoring empty values)
             state.score.building = Object.values(state.buildingPower)
                 .filter(value => value !== '') // Ignore missing values
                 .reduce((total, power) => total + (POINTS_AND_MULTIPLIERS.POWER_BUILDING * power), 0);

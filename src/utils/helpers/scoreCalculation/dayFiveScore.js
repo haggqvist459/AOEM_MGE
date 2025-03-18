@@ -1,14 +1,5 @@
 import { convertToSeconds, convertFromSeconds, TROOP_TIER_MULTIPLIERS } from '../../../utils';
 
-export const calculateTrainingScore = (troopTier, troopsPerBatch, trainingTime, remainingSpeedup) => {
-
-    // calculate number of completed batches
-    const completedBatches = Math.floor(remainingSpeedup / trainingTime);
-    // calculate the score per batch
-    const scorePerBatch = troopTier * troopsPerBatch
-    // multiply with number of batches completed and return the value 
-    return scorePerBatch * completedBatches;
-}
 
 export const calculatePromotableBatches = (troops, initialTrainingSpeedup) => {
     let remainingTrainingSpeedup = convertToSeconds(initialTrainingSpeedup);
@@ -18,13 +9,13 @@ export const calculatePromotableBatches = (troops, initialTrainingSpeedup) => {
 
     // Sort troops into higher and lower tier groups based on their promotion tier.
     let higherTierTroops = sortTroopsByTier(troops);
-    console.log("troopGroup before batch calculation:", higherTierTroops);
-    console.log("Remaining training speedup:", remainingTrainingSpeedup);
+    // console.log("troopGroup before batch calculation:", higherTierTroops);
+    // console.log("Remaining training speedup:", remainingTrainingSpeedup);
     // Allocate batches for higher-tier troops first.
     remainingTrainingSpeedup = calculateAvailableBatches(higherTierTroops, remainingTrainingSpeedup);
 
     let convertedRemainingSpeedup = convertFromSeconds(remainingTrainingSpeedup)
-    console.log("remainingTrainingSpeedup after highTier distribution: ", convertedRemainingSpeedup)
+    // console.log("remainingTrainingSpeedup after highTier distribution: ", convertedRemainingSpeedup)
 
     return remainingTrainingSpeedup;
 };
@@ -75,30 +66,17 @@ const calculateAvailableBatches = (troopGroup, trainingSpeedup) => {
     return remainingSpeedup; // Return remaining speedup for further processing
 };
 
-// Function to find the tier value directly below the given target tier
-const getLowerTierValue = (targetTierValue) => {
-    const tierEntries = Object.entries(TROOP_TIER_MULTIPLIERS);
-    console.log("Sorted Tiers:", Object.entries(TROOP_TIER_MULTIPLIERS));
-    console.log("Looking for base tier of:", targetTierValue);
-
-    for (let i = 0; i < tierEntries.length; i++) {
-        if (tierEntries[i][1] === targetTierValue) {
-            return i < tierEntries.length - 1 ? tierEntries[i + 1][1] : null; // Return the value of the tier directly below
-        }
-    }
-    return null; // No lower tier exists
-};
 
 
 const sortTroopsByTier = (troops) => {
-    console.log("Initial Troops:", JSON.stringify(troops, null, 2));
+    // console.log("Initial Troops:", JSON.stringify(troops, null, 2));
 
     // Step 1: Remove troops with missing or empty values
     let validTroops = Object.entries(troops).filter(([_, troop]) =>
         troop.targetTier && troop.baseTier && troop.availableTroops && troop.promotedTroopsPerBatch
     );
 
-    console.log("Valid Troops After Filtering:", JSON.stringify(validTroops, null, 2));
+    // console.log("Valid Troops After Filtering:", JSON.stringify(validTroops, null, 2));
 
     // Step 2: Find the highest target tier dynamically
     const highestTargetTier = Math.max(...validTroops.map(([_, troop]) => troop.targetTier || 0));
@@ -106,20 +84,25 @@ const sortTroopsByTier = (troops) => {
     // Step 3: Keep only troops with the highest target tier
     let higherTierTroops = validTroops.filter(([_, troop]) => troop.targetTier === highestTargetTier);
 
-    console.log("Troops with highest target tier:", JSON.stringify(higherTierTroops, null, 2));
+    // console.log("Troops with highest target tier:", JSON.stringify(higherTierTroops, null, 2));
 
-    // Step 4: Use the object literal to find the valid lower base tier
-    const expectedBaseTier = getLowerTierValue(highestTargetTier);
+    // // Step 4: Use the object literal to find the valid lower base tier
+    // const expectedBaseTier = getLowerTierValue(highestTargetTier);
 
-    console.log("Expected Base Tier:", expectedBaseTier);
+    // console.log("Expected Base Tier:", expectedBaseTier);
 
-    // Step 5: Keep only troops where the base tier matches the correct lower tier
-    higherTierTroops = higherTierTroops.filter(([_, troop]) => troop.baseTier === expectedBaseTier);
+    // // Step 5: Keep only troops where the base tier matches the correct lower tier
+    // higherTierTroops = higherTierTroops.filter(([_, troop]) => troop.baseTier === expectedBaseTier);
 
-    console.log("Final higherTierTroops:", JSON.stringify(higherTierTroops, null, 2));
+    // console.log("Final higherTierTroops:", JSON.stringify(higherTierTroops, null, 2));
 
     return Object.fromEntries(higherTierTroops);
 };
+
+
+
+
+
 
 
 // Reset the batch values for each troop before calculations.
@@ -129,6 +112,14 @@ const resetTroopBatchValues = (troops) => {
         troop.maxPromotableBatches = 0;
     });
 };
+
+
+
+
+
+
+
+
 
 
 export const calculateTroopPromotionScore = (troopGroup) => {
@@ -164,4 +155,39 @@ export const calculateTroopPromotionScore = (troopGroup) => {
         updatedTroops: updatedTroopGroup,
         promotionScore: totalTroopPromotionScore
     };
+};
+
+
+
+export const calculateTrainingScore = (troopTier, troopsPerBatch, trainingTime, remainingSpeedup) => {
+
+    // calculate number of completed batches
+    const completedBatches = Math.floor(remainingSpeedup / trainingTime);
+    // calculate the score per batch
+    const scorePerBatch = troopTier * troopsPerBatch
+    // multiply with number of batches completed and return the value 
+    return scorePerBatch * completedBatches;
+}
+
+
+
+
+
+
+
+
+
+
+// Function to find the tier value directly below the given target tier
+const getLowerTierValue = (targetTierValue) => {
+    const tierEntries = Object.entries(TROOP_TIER_MULTIPLIERS);
+    console.log("Sorted Tiers:", Object.entries(TROOP_TIER_MULTIPLIERS));
+    console.log("Looking for base tier of:", targetTierValue);
+
+    for (let i = 0; i < tierEntries.length; i++) {
+        if (tierEntries[i][1] === targetTierValue) {
+            return i < tierEntries.length - 1 ? tierEntries[i + 1][1] : null; // Return the value of the tier directly below
+        }
+    }
+    return null; // No lower tier exists
 };

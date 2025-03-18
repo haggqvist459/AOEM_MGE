@@ -3,7 +3,7 @@ import { DayOne, DayTwo, DayThree, DayFour, DayFive, DaySix, DaySeven } from '..
 
 const HomePage = () => {
 
-  const [activeDay, setActiveDay] = useState(3);
+  const [activeDay, setActiveDay] = useState(5);
 
 
   useEffect(() => {
