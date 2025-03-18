@@ -17,7 +17,15 @@ input, select, textarea {
     -webkit-appearance: textfield;
     appearance: textfield;
   }
-
+  ::-webkit-scrollbar {
+    display: none; /* Hides scrollbar */
+  }
+  html, body {
+    scrollbar-width: none; /* Hides scrollbar */
+  }
+  html, body {
+    -ms-overflow-style: none; /* Hides scrollbar */
+  }
   .no-spinner::-webkit-inner-spin-button,
   .no-spinner::-webkit-outer-spin-button {
     -webkit-appearance: none;

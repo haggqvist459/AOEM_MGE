@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../../redux/slices'
 import { FormSubHeader, FormInput, FormWrapper } from '../form';
+import { DAY_KEYS } from '../../utils';
 
 const updateActions = {
   dayOne: updateFieldDayOne,

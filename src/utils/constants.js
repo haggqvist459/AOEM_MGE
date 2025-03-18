@@ -38,8 +38,6 @@ export const NAVBAR_OPTIONS = {
 
 }
 
-
-
 export const DAY_KEYS = {
     DAY_ONE: 'dayOne',
     DAY_TWO: 'dayTwo',
@@ -49,6 +47,18 @@ export const DAY_KEYS = {
     DAY_SIX: 'daySix',
     DAY_SEVEN: 'daySeven'
 }
+
+export const DAY_TITLES = [
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    'Six',
+    'Seven'
+];
+
+
 
 export const TROOP_POWER_MULTIPLIER = {
     'Tier 7': 6,

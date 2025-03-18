@@ -171,7 +171,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
               type='button'
               onClick={handleAddMarch}
               disabled={localState.marches.length >= 5}
-              className={'my-2 w-1/3 mx-auto px-4 rounded border-2 border-blue-950 font-semibold text-blue-50 bg-blue-950 hover:bg-blue-900 hover:border-blue-50 disabled:opacity-50 disabled:hover:border-none'}
+              className={'my-2 w-1/2 lg:w-1/3 mx-auto px-4 rounded border-2 border-blue-950 font-semibold text-blue-50 bg-blue-950 hover:bg-blue-900 hover:border-blue-50 disabled:opacity-50 disabled:hover:border-none'}
             >
               Add March
             </button>

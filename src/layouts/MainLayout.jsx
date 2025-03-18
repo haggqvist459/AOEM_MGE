@@ -9,7 +9,7 @@ const MainLayout = () => {
   return (
     <div>
       <NavBar />
-      <div className='bg-neutral-400 min-h-screen flex flex-col py-5'>
+      <div className='bg-neutral-400 min-h-screen flex flex-col'>
         <Outlet />
       </div>
       <Footer />

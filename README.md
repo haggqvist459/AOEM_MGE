@@ -89,17 +89,18 @@
     - [x] Hamburger button with nav links to each day, admin and about page 
      - [x] Custom animation, turns button into cross
      - [x] Menu hidden under navbar 
-- [ ] Footer 
+- [x] Footer 
     - [x] GitHub source code link 
 - [x] Remove trash can from non day component headers / use different header for those pages
-- [ ] Update the previous components with the local state handler from day six. 
-- [ ] Update the slices with validation, ensure no calculation occur with missing values
+- [x] Update the previous components with the local state handler from day six. 
+- [x] Update the slices with validation, ensure no calculation occur with missing values
 - [ ] Final Stylefixes: 
     - [ ] Text sizes across components
     - [ ] Re-use Expandable components across the project
     - [ ] Fix bottom border and padding on Expandable section
 - [x] Re-do FormDropdown across the project, so that it does not rely on onBlur for updates to Redux 
-- [ ] Fix Day Five score calculation
+- [x] Fix Day Five score calculation
+- [x] Add horizontal menu to allow jumping between days 
 
 ### About page: 
 - [x] Explain how data is gathered and kept 
