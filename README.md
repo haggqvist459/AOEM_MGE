@@ -98,7 +98,9 @@
     - [ ] Text sizes across components
     - [ ] Re-use Expandable components across the project
     - [ ] Fix bottom border and padding on Expandable section
-- [ ] Re-do FormDropdown across the project, so that it does not rely on onBlur for updates to Redux 
+- [x] Re-do FormDropdown across the project, so that it does not rely on onBlur for updates to Redux 
+- [ ] Fix Day Five score calculation
+
 ### About page: 
 - [x] Explain how data is gathered and kept 
 

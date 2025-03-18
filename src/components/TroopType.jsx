@@ -2,7 +2,7 @@ import React, { useState, } from 'react';
 import { TROOP_TIER_MULTIPLIERS } from '../utils';
 import { FormSubHeader, FormWrapper, FormDropdown, FormInput } from '../components';
 
-const TroopType = ({ troopData, troopType, onChange, onBlur, }) => {
+const TroopType = ({ troopData, troopType, onChange, onBlur, handleInstantDispatch}) => {
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -31,8 +31,7 @@ const TroopType = ({ troopData, troopType, onChange, onBlur, }) => {
               options={TROOP_TIER_MULTIPLIERS}
               id={`${troopType}-baseTier`}
               value={troopData.baseTier}
-              onChange={(newValue) => onChange(troopType, 'baseTier', '', newValue)}
-              onBlur={() => onBlur(troopType, 'baseTier')}
+              onChange={(newValue) => handleInstantDispatch('baseTier', newValue, troopType)}
             />
           </div>
           <div className='w-full md:w-1/2'>
@@ -41,8 +40,7 @@ const TroopType = ({ troopData, troopType, onChange, onBlur, }) => {
               options={TROOP_TIER_MULTIPLIERS}
               id={`${troopType}-targetTier`}
               value={troopData.targetTier}
-              onChange={(newValue) => onChange(troopType, 'targetTier', '', newValue)}
-              onBlur={() => onBlur(troopType, 'targetTier')}
+              onChange={(newValue) => handleInstantDispatch('targetTier', newValue, troopType)}
             />
           </div>
         </FormWrapper>

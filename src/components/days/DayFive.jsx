@@ -21,6 +21,21 @@ const DayFive = ({ activeDay, setActiveDay }) => {
     setLocalState(dailyData);
   }, [dailyData]);
 
+  // Dropdown dispatch 
+  const handleInstantDispatch = (field, value, troopType = null) => {
+    console.log("handleInstantDispatch values, field: ", field, ", value: ", value);
+
+    if (troopType) {
+      dispatch(updateTroopField({troopType, field, unit: null}))
+      dispatch(calculateDailyScoreDayFive());
+      
+    } else {
+      dispatch(updateFieldDayFive({ field, unit: null, value }));
+      dispatch(calculateDailyScoreDayFive());
+    }
+
+  }
+
   const handleLocalChange = (field, value) => {
     setLocalState(prev => ({ ...prev, [field]: value }));
   };
@@ -49,7 +64,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
     }));
   };
 
-  const handleTroopTypeBlur = (troopType, field, unit) => {
+  const handleTroopTypeBlur = (troopType, field, unit = null) => {
     const value = unit
       ? localState.troops[troopType][field][unit] // Handle nested object with unit
       : localState.troops[troopType][field];
@@ -91,6 +106,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
                 troopType={troopType}
                 onChange={handleTroopTypeStateChange}
                 onBlur={handleTroopTypeBlur}
+                handleInstantDispatch={handleInstantDispatch}
               />
             ))}
             {/* Troop training: */}
@@ -117,8 +133,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
                       options={TROOP_TIER_MULTIPLIERS}
                       id={'trainedTroopTier'}
                       value={localState.trainedTroopTier}
-                      onChange={(newValue) => handleLocalChange('trainedTroopTier', newValue)}
-                      onBlur={() => handleBlur('trainedTroopTier')}
+                      onChange={(newValue) => handleInstantDispatch('trainedTroopTier', newValue)}
                     />
                   </div>
                   <div className='w-full sm:w-1/2'>

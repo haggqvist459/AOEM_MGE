@@ -19,6 +19,10 @@ const DaySix = ({ activeDay, setActiveDay }) => {
     setLocalState(dailyData);
   }, [dailyData]);
 
+  const handleInstantDispatch = (field, unit, value) => {
+    dispatch(updateFieldDaySix({ field, unit, value }));
+    dispatch(calculateDailyScoreDaySix());
+  }
 
   const handleLocalChange = (field, value, unit=null) => {
     console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
@@ -110,8 +114,7 @@ const DaySix = ({ activeDay, setActiveDay }) => {
                 title={'Target tier:'}
                 options={TROOP_POWER_MULTIPLIER}
                 value={localState.troopPower.tier}
-                onChange={(newValue) => handleLocalChange('troopPower',  newValue, 'tier')}
-                onBlur={() => handleBlur('troopPower', 'tier')}
+                onChange={(newValue) => handleInstantDispatch('troopPower', 'tier',  newValue)}
               />
             </FormWrapper>
             <PreviousEventScore dayKey={DAY_KEYS.DAY_SIX} />

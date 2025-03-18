@@ -19,27 +19,24 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
   }, [dailyData]);
 
 
-  const handleLocalChange = (field, value) => {
-    setLocalState(prev => ({ ...prev, [field]: value }));
-  };
-
-
-  const handleTimeChange = (field, unit, value) => {
-    console.log('Day Two handleTimeChange values, field: ', field, ', unit: ', unit, ', value: ', value)
+  const handleLocalChange = (field, value, unit = null) => {
+    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
-      [field]: { ...prev[field], [unit]: value },
+      [field]: unit
+        ? { ...prev[field], [unit]: value }
+        : value,
     }));
   };
 
-  const handleBlur = (field, unit) => {
+  const handleBlur = (field, unit=null) => {
     const value = unit
       ? localState[field][unit]
       : localState[field];
 
     console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDayTwo({ field, unit, value }));
-    dispatch(calculateDailyScoreDayTwo());
+    dispatch(calculateDailyScoreDayTwo({ field, unit }));
   };
 
   const cancelForm = () => {
@@ -145,28 +142,28 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
                   id={'forgingTimeDay'}
                   placeholder={'day'}
                   value={localState.forgingTime.days}
-                  onChange={(value) => handleTimeChange('forgingTime', 'days', value)}
+                  onChange={(value) => handleLocalChange('forgingTime', value, 'days')}
                   onBlur={() => handleBlur('forgingTime', 'days')}
                 />
                 <FormInput
                   id={'forgingTimeHours'}
                   placeholder={'hour'}
                   value={localState.forgingTime.hours}
-                  onChange={(value) => handleTimeChange('forgingTime', 'hours', value)}
+                  onChange={(value) => handleLocalChange('forgingTime', value, 'hours')}
                   onBlur={() => handleBlur('forgingTime', 'hours')}
                 />
                 <FormInput
                   id={'forgingTimeMinutes'}
                   placeholder={'min'}
                   value={localState.forgingTime.minutes}
-                  onChange={(value) => handleTimeChange('forgingTime', 'minutes', value)}
+                  onChange={(value) => handleLocalChange('forgingTime', value, 'minutes')}
                   onBlur={() => handleBlur('forgingTime', 'minutes')}
                 />
                 <FormInput
                   id={'forgingTimeSeconds'}
                   placeholder={'sec'}
                   value={localState.forgingTime.seconds}
-                  onChange={(value) => handleTimeChange('forgingTime', 'seconds', value)}
+                  onChange={(value) => handleLocalChange('forgingTime', value, 'seconds')}
                   onBlur={() => handleBlur('forgingTime', 'seconds')}
                 />
               </FormWrapper>
@@ -178,21 +175,21 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
                   id={'forgingSpeedupDay'}
                   placeholder={'day'}
                   value={localState.forgingSpeedup.days}
-                  onChange={(value) => handleTimeChange('forgingSpeedup', 'days', value)}
+                  onChange={(value) => handleLocalChange('forgingSpeedup', value, 'days')}
                   onBlur={() => handleBlur('forgingSpeedup', 'days')}
                 />
                 <FormInput
                   id={'forgingSpeedupHours'}
                   placeholder={'hour'}
                   value={localState.forgingSpeedup.hours}
-                  onChange={(value) => handleTimeChange('forgingSpeedup', 'hours', value)}
+                  onChange={(value) => handleLocalChange('forgingSpeedup', value, 'hours')}
                   onBlur={() => handleBlur('forgingSpeedup', 'hours')}
                 />
                 <FormInput
                   id={'forgingSpeedupMinutes'}
                   placeholder={'min'}
                   value={localState.forgingSpeedup.minutes}
-                  onChange={(value) => handleTimeChange('forgingSpeedup', 'minutes', value)}
+                  onChange={(value) => handleLocalChange('forgingSpeedup', value, 'minutes')}
                   onBlur={() => handleBlur('forgingSpeedup', 'minutes')}
                 />
               </FormWrapper>

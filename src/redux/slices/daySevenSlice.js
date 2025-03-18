@@ -60,7 +60,7 @@ const daySevenSlice = createSlice({
 
             switch (field) {
                 case 'stamina':
-                    if (state.stamina !== '') {
+                    if (state.stamina === '' || state.stamina <= 0) {
                         const validStamina = state.stamina - (state.stamina % POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE)
                         state.tribesHunted = validStamina / POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE
                         state.score.tribes = state.tribesHunted * state.tribeLevelMultiplier
@@ -69,21 +69,21 @@ const daySevenSlice = createSlice({
                 case 'epicMedals':
                 case 'legendaryMedals':
                     state.score.medals = 0; // Reset before adding values
-                    if (state.epicMedals !== '') {
+                    if (state.epicMedals !== '' || state.epicMedals <= 0) {
                         state.score.medals += state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL;
                     }
-                    if (state.legendaryMedals !== '') {
+                    if (state.legendaryMedals !== '' || state.legendaryMedals <= 0) {
                         state.score.medals += state.legendaryMedals * POINTS_AND_MULTIPLIERS.LEGENDARY_MEDAL;
                     }
                     break;
                 case 'epicScrolls':
                 case 'legendaryScrolls':
                     state.score.scrolls = 0; // Reset before adding values
-                    if (state.epicMedals !== '') {
+                    if (state.epicScrolls !== '' || state.epicScrolls <= 0) {
                         state.score.scrolls += state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL;
                     }
-                    if (state.legendaryMedals !== '') {
-                        state.score.medals += state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL;
+                    if (state.legendaryScrolls !== '' || state.legendaryScrolls <= 0) {
+                        state.score.scrolls += state.legendaryScrolls * POINTS_AND_MULTIPLIERS.LEGENDARY_SCROLL;
                     }
                     break;
                 case 'hammers':
@@ -91,16 +91,16 @@ const daySevenSlice = createSlice({
                 case 'silverSand':
                 case 'fineGold':
                     state.score.rings = 0;
-                    if (state.hammers !== '') {
+                    if (state.hammers !== '' || state.hammers <= 0) {
                         state.score.rings += state.hammers * POINTS_AND_MULTIPLIERS.FINE_CRAFT;
                     }
-                    if (state.copperSand !== '') {
+                    if (state.copperSand !== '' || state.copperSand <= 0) {
                         state.score.rings += state.copperSand * POINTS_AND_MULTIPLIERS.COPPER_SAND;
                     }
-                    if (state.silverSand !== '') {
+                    if (state.silverSand !== '' || state.silverSand <= 0) {
                         state.score.rings += state.silverSand * POINTS_AND_MULTIPLIERS.SILVER_SAND;
                     }
-                    if (state.fineGold !== '') {
+                    if (state.fineGold !== '' || state.fineGold <= 0) {
                         state.score.rings += state.fineGold * POINTS_AND_MULTIPLIERS.FINE_GOLD;
                     }
                     break;

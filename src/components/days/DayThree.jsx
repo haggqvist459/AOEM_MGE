@@ -59,17 +59,17 @@ const DayThree = ({ activeDay, setActiveDay }) => {
   };
 
 
-  const handleInstantDispatch = ( field, value, id=null ) => {
+  const handleInstantDispatch = (field, value, id = null) => {
     console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ', id: ', id);
 
-    
+
     if (id) {
       dispatch(updateMarchField({ id, field, value }));
       dispatch(calculateDailyScoreDayThree({ id }));
-  } else {
+    } else {
       dispatch(updateFieldDayThree({ field, value }));
-      dispatch(calculateDailyScoreDayThree({ id: Number(value)}));
-  }
+      dispatch(calculateDailyScoreDayThree({ id: Number(value) }));
+    }
   }
 
   // Array based inputs 
@@ -185,7 +185,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
               value={localState.richField}
               options={richFieldOptions}
               onChange={(newValue) => handleInstantDispatch('richField', newValue)}
-              onBlur={() => {}}
+              onBlur={() => { }}
             />
             <FormDropdown
               id={'allianceFieldDropdown'}
@@ -193,7 +193,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
               value={localState.allianceCentre}
               options={allianceCentreOptions}
               onChange={(newValue) => handleInstantDispatch('allianceCentre', newValue)}
-              onBlur={() =>{}}
+              onBlur={() => { }}
             />
           </div>
           <FormSubHeader title={'Empire Coins'} />

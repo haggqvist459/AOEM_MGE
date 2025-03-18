@@ -32,14 +32,19 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  
+  // Form Dropdown
+  const handleInstantDispatch = (field, value, unit=null) => {
+      dispatch(updateFieldDaySeven({ field, unit, value }));
+      dispatch(calculateDailyScoreDaySeven({ field, unit })); 
+  }
+
   const handleLocalChange = (field, value, unit = null) => {
     console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
-        ? { ...prev[field], [unit]: value } 
-        : value,  
+        ? { ...prev[field], [unit]: value }
+        : value,
     }));
   };
 
@@ -72,8 +77,7 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
               title={'Select tribe level:'}
               options={TRIBE_LEVEL_MULTIPLIERS}
               value={localState.tribeLevelMultiplier}
-              onChange={(newValue) => handleLocalChange('tribeLevelMultiplier', newValue)}
-              onBlur={() => handleBlur('tribeLevelMultiplier')}
+              onChange={(newValue) => handleInstantDispatch('tribeLevelMultiplier', newValue)}
             />
             <FormWrapper>
               <FormSubHeader title={'Stamina'} />
@@ -248,8 +252,7 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
                 title={'Target tier:'}
                 options={TROOP_POWER_MULTIPLIER}
                 value={localState.troopPower.tier}
-                onChange={(newValue) => handleLocalChange('troopPower', newValue, 'tier')}
-                onBlur={() => handleBlur('troopPower', 'tier')}
+                onChange={(newValue) => handleInstantDispatch('troopPower', newValue, 'tier')}
               />
             </FormWrapper>
           </ExpandableSection>
@@ -257,20 +260,20 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
         </div>
         <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
           {/* Output */}
-          <FormSubHeader title={'Day Seven Score'}/>
+          <FormSubHeader title={'Day Seven Score'} />
           <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
           <ScoreBoardWrapper gridCols={'grid-cols-3'}>
-            <ScoreBoardSection title={'Tribes: '} value={dailyData.score.tribes}/>
-            <ScoreBoardSection title={'Medals: '} value={dailyData.score.medals}/>
-            <ScoreBoardSection title={'Scrolls: '} value={dailyData.score.scrolls}/>
-            <ScoreBoardSection title={'Rings: '} value={dailyData.score.rings}/>
-            <ScoreBoardSection title={'Building: '} value={dailyData.score.building}/>
-            <ScoreBoardSection title={'Research: '} value={dailyData.score.research}/>
-            <ScoreBoardSection title={'Troops: '} value={dailyData.score.troops}/>
-            <ScoreBoardSection title={'Gathering: '} value={dailyData.score.gathering}/>
-            <ScoreBoardSection title={'Advent Spins: '} value={dailyData.score.adventSpins}/>
+            <ScoreBoardSection title={'Tribes: '} value={dailyData.score.tribes} />
+            <ScoreBoardSection title={'Medals: '} value={dailyData.score.medals} />
+            <ScoreBoardSection title={'Scrolls: '} value={dailyData.score.scrolls} />
+            <ScoreBoardSection title={'Rings: '} value={dailyData.score.rings} />
+            <ScoreBoardSection title={'Building: '} value={dailyData.score.building} />
+            <ScoreBoardSection title={'Research: '} value={dailyData.score.research} />
+            <ScoreBoardSection title={'Troops: '} value={dailyData.score.troops} />
+            <ScoreBoardSection title={'Gathering: '} value={dailyData.score.gathering} />
+            <ScoreBoardSection title={'Advent Spins: '} value={dailyData.score.adventSpins} />
           </ScoreBoardWrapper>
-          <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_SEVEN}/>
+          <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_SEVEN} />
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />

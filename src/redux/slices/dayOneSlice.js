@@ -25,6 +25,10 @@ const dayOneSlice = createSlice({
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
         calculateDailyScore: (state) => {
+            
+            if (state.stamina === '' || state.stamina <= 0) {
+                return; // Skip score calculation for empty or negative stamina values
+            }
             // validate stamina as a multiple of staminaCost 
             const validStamina = state.stamina - (state.stamina % POINTS_AND_MULTIPLIERS.STAMINA_PER_TRIBE)
 

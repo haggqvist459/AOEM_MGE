@@ -42,7 +42,8 @@ const dayFourSlice = createSlice({
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
-        calculateDailyScore: (state) => {
+        calculateDailyScore: (state, action) => {
+            const { field } = action.payload;
 
             // calculate score potential for the various minor resources
             state.score.ring = Object.entries(RESOURCE_MULTIPLIER_MAP).reduce((total, [resource, multiplierKey]) => {
@@ -57,7 +58,9 @@ const dayFourSlice = createSlice({
             state.score.research = researchMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_RESEARCH;
             state.score.universal = universalMinutes * POINTS_AND_MULTIPLIERS.SPEEDUP_UNIVERSAL;
 
-            state.totalDailyScore = state.score.building + state.score.research + state.score.universal + state.score.ring
+            // calculate total score
+            state.totalDailyScore = Object.values(state.score)
+            .reduce((total, score) => total + (score || 0), 0);
 
 
         },

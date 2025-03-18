@@ -19,6 +19,15 @@ const DayOne = ({ activeDay, setActiveDay }) => {
     setLocalState(dailyData);
   }, [dailyData]);
 
+  //Dropdown dispatch
+  const handleInstantDispatch = (field, value) => {
+    console.log("handleInstantDispatch values, field: ", field, ", value: ", value);
+
+      dispatch(updateFieldDayOne({ field, value }));
+      dispatch(calculateDailyScoreDayOne());
+  
+  }
+
   const handleLocalChange = (field, value) => {
     setLocalState(prev => ({ ...prev, [field]: value }));
   };
@@ -53,8 +62,7 @@ const DayOne = ({ activeDay, setActiveDay }) => {
               title={'Select tribe level:'}
               value={localState.tribeLevelMultiplier}
               options={TRIBE_LEVEL_MULTIPLIERS}
-              onChange={(newValue) => handleLocalChange('tribeLevelMultiplier', newValue)}
-              onBlur={() => handleBlur('tribeLevelMultiplier')}
+              onChange={(newValue) => handleInstantDispatch('tribeLevelMultiplier', newValue)}
             />
             {/* Stamina  */}
             <FormSubHeader title={'Available stamina:'} size='text-lg md:text-xl' weight='font-semibold' />

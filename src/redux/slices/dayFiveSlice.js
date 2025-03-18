@@ -113,7 +113,7 @@ const dayFiveSlice = createSlice({
             console.log("updateTroopField unit: ", unit)
             console.log("updateTroopField value: ", value)
             const validatedValue = validateInputForState(value);
-
+ 
             if (state.troops[troopType]) {
                 state.troops[troopType][field] = unit ? { ...state.troops[troopType][field], [unit]: validatedValue } : validatedValue;
             } else {
