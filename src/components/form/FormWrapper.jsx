@@ -1,8 +1,12 @@
 import React from 'react'
 
-const FormWrapper = ({ children, className='', flex='col'}) => {
+const FormWrapper = ({ children, className = '' }) => {
   return (
-    <div className={`flex flex-${flex} w-full ${className}`}>{children}</div>
+    <div className={`flex flex-col xs:flex-row xs:space-x-1 w-full mb-2 ${className}`}>
+      {React.Children.map(children, (child) => (
+        <div className="w-full">{child}</div>
+      ))}
+    </div>
   )
 }
 

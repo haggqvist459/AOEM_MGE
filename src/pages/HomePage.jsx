@@ -4,7 +4,7 @@ import { DayOne, DayTwo, DayThree, DayFour, DayFive, DaySix, DaySeven } from '..
 
 const HomePage = () => {
 
-  const [activeDay, setActiveDay] = useState(5);
+  const [activeDay, setActiveDay] = useState(1);
 
   const menuOptions = DAY_TITLES.map((title, index) => (
     <button key={index} onClick={() => setActiveDay(index + 1)} className='text-white font-semibold text-lg'>
@@ -33,7 +33,7 @@ const HomePage = () => {
     <div>
       <div className='w-full px-3 h-10 bg-blue-950 flex flex-row items-center justify-center gap-x-2'>
         <p className='text-white font-semibold min-w-max text-lg'>Jump to Day: </p>
-        <div className='overflow-x-auto whitespace-nowrap scroll-smooth snap-x snap-mandatory gap-x-5 flex flex-row '>
+        <div className='overflow-x-auto flex flex-row  whitespace-nowrap scroll-smooth snap-x snap-mandatory gap-x-5 '>
           {menuOptions}
         </div>
       </div>

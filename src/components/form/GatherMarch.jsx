@@ -1,67 +1,56 @@
 import React, { useState } from 'react'
-import { RESOURCE_FIELD_MAP } from '../../utils';
 import { ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, ToggleButton } from '../../components';
-import { FormField } from '../../retired'
+
 
 
 const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handleInstantDispatch }) => {
 
     const [isExpanded, setIsExpanded] = useState(false)
-    
-
     return (
-        <div className='pb-1 mb-1'>
+        <div className='pb-1 mb-1 border-b border-neutral-400'>
             <ExpandableHeader title={title} isExpanded={isExpanded} toggleExpansion={() => setIsExpanded(!isExpanded)} />
             <ExpandableSection isExpanded={isExpanded}>
                 {/* load bonus & load capacity, number of turns */}
-                <FormSubHeader title={'Rename march:'}/>
-                <FormInput 
+                <FormInput
+                    title={'Rename march:'}
                     id={`March-${marchId}-marchName`}
                     type={'text'}
                     placeholder={'e.g. Harald III'}
                     value={march.marchName}
-                    onChange={(newValue) => onChange(marchId, 'marchName', newValue)}
-                    onBlur={() => onBlur(marchId, 'marchName')}
+                    onChange={(newValue) => onChange('marchName', newValue, marchId)}
+                    onBlur={() => onBlur('marchName', null, marchId)}
                 />
                 <div className='grid grid-cols-1 xs:grid-cols-2 gap-1'>
-                    <div>
-                        <FormSubHeader title={'Load capacity'} />
-                        <FormInput
-                            id={`March-${marchId}-loadCapacity`}
-                            placeholder={'0'}
-                            value={march.loadCapacity}
-                            onChange={(newValue) => onChange(marchId, 'loadCapacity', newValue)}
-                            onBlur={() => onBlur(marchId, 'loadCapacity')}
-                        />
-                    </div>
-                    <div>
-                        <FormSubHeader title={'Load bonus'} />
-                        <FormInput
-                            id={`March-${marchId}-loadBonus`}
-                            placeholder={'0%'}
-                            value={march.loadBonus}
-                            onChange={(newValue) => onChange(marchId, 'loadBonus', newValue)}
-                            onBlur={() => onBlur(marchId, 'loadBonus')}
-                        />
-                    </div>
-                    <div>
-                        <FormSubHeader title={'Completed turns'} />
-                        <FormInput
-                            id={`March-${marchId}-completedTurns`}
-                            placeholder={'0'}
-                            value={march.completedTurns}
-                            onChange={(newValue) => onChange(marchId, 'completedTurns', newValue)}
-                            onBlur={() => onBlur(marchId, 'completedTurns')}
-                        />
-                    </div>
+                    <FormInput
+                        title={'Load capacity:'}
+                        id={`March-${marchId}-loadCapacity`}
+                        placeholder={'0'}
+                        value={march.loadCapacity}
+                        onChange={(newValue) => onChange('loadCapacity', newValue, marchId)}
+                        onBlur={() => onBlur('loadCapacity', null, marchId)}
+                    />
+                    <FormInput
+                        title={'Load bonus:'}
+                        id={`March-${marchId}-loadBonus`}
+                        placeholder={'0%'}
+                        value={march.loadBonus}
+                        onChange={(newValue) => onChange('loadBonus', newValue, marchId)}
+                        onBlur={() => onBlur('loadBonus', null, marchId)}
+                    />
+                    <FormInput
+                        title={'Completed turns:'}
+                        id={`March-${marchId}-completedTurns`}
+                        placeholder={'0'}
+                        value={march.completedTurns}
+                        onChange={(newValue) => onChange('completedTurns', newValue, marchId)}
+                        onBlur={() => onBlur('completedTurns', null, marchId)}
+                    />
                     <div className='flex justify-between'>
                         <div className='flex flex-col justify-around'>
-                            <FormSubHeader title={'Full on reset'} />
+                            <FormSubHeader title={'Full on day start'} />
                             <ToggleButton
                                 isToggled={march.fullAtReset}
-
                                 onChange={() => handleInstantDispatch('fullAtReset', !march.fullAtReset, marchId)}
-                                onBlur={() => onBlur(marchId, 'fullAtReset')}
                             />
                         </div>
                         <button

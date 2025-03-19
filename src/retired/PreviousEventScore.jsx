@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../../redux/slices'
-import { FormSubHeader, FormInput, FormWrapper } from '../form';
-import { DAY_KEYS } from '../../utils';
+import { updateFieldDayOne, updateFieldDayTwo, updateFieldDayThree, updateFieldDayFour, updateFieldDayFive, updateFieldDaySix, updateFieldDaySeven } from '../redux/slices'
+import { FormSubHeader, FormInput, FormWrapper } from '../components/form';
+import { DAY_KEYS } from '../utils';
 
 const updateActions = {
   dayOne: updateFieldDayOne,
@@ -54,7 +54,7 @@ const PreviousEventScore = ({ dayKey }) => {
             id={`${dayKey}-previousEventScore-topOne`}
             placeholder={'0'}
             value={localState.previousEventScore.topOne}
-            onChange={(value) => handleLocalChange('previousEventScore', 'topOne', value)}
+            onChange={(value) => handleLocalChange('previousEventScore', 'first', value)}
             onBlur={() => handleBlur('previousEventScore', 'topOne')}
           />
         </FormWrapper>
@@ -64,7 +64,7 @@ const PreviousEventScore = ({ dayKey }) => {
             id={`${dayKey}-previousEventScore-topTen`}
             placeholder={'0'}
             value={localState.previousEventScore.topTen}
-            onChange={(value) => handleLocalChange('previousEventScore', 'topTen', value)}
+            onChange={(value) => handleLocalChange('previousEventScore', 'tenth', value)}
             onBlur={() => handleBlur('previousEventScore','topTen')}
           />
           </FormWrapper>
@@ -74,3 +74,34 @@ const PreviousEventScore = ({ dayKey }) => {
 }
 
 export default PreviousEventScore
+
+
+/*
+
+          <div className='my-1'>
+            <FormSubHeader title={'Previous event scores'} sizeClass={'subheader-lg'} />
+            <div className='flex flex-col xs:flex-row xs:space-x-1'>
+              <div>
+                <FormSubHeader title={'1st place:'} />
+                <FormInput
+                  id={'previousEventScoreFirst'}
+                  placeholder={'0'}
+                  value={localState.previousEventScore.first}
+                  onChange={(newValue) => handleLocalChange('previousEventScore', newValue, null, 'first')}
+                  onBlur={() => handleBlur('previousEventScore', 'first')}
+                />
+              </div>
+              <div>
+                <FormSubHeader title={'10th place:'} />
+                <FormInput
+                  id={'previousEventScoreTenth'}
+                  placeholder={'0'}
+                  value={localState.previousEventScore.tenth}
+                  onChange={(newValue) => handleLocalChange('previousEventScore', newValue, null, 'tenth')}
+                  onBlur={() => handleBlur('previousEventScore', 'tenth')}
+                />
+              </div>
+            </div>
+          </div>
+
+*/

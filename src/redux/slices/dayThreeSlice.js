@@ -1,12 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from 'uuid';
 import {
-    POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIERS, RESOURCE_FIELD_MAP,
+    POINTS_AND_MULTIPLIERS, RESOURCE_FIELD_MAP,
     loadData, saveData, validateInputForState, updateFieldDelegated,
     calculateGatheringScore
 } from "../../utils";
-
-const resourceOptions = Object.keys(RESOURCE_FIELD_MAP);
 
 const savedState = loadData();
 const initialState = savedState?.dayThree || {
@@ -31,8 +28,8 @@ const initialState = savedState?.dayThree || {
     },
     totalDailyScore: 0,
     previousEventScore: {
-        topOne: '',
-        topTen: '',
+        first: '',
+        tenth: '',
     }
 }
 
@@ -91,11 +88,11 @@ const dayThreeSlice = createSlice({
             const { id } = action.payload;
             console.log("calculateDailyScoreDayThree triggered for ID:", id);
             const marchIndex = state.marches.findIndex(march => march.id === id);
-            if (id === '0') {
+            if (id === 0) {
                 console.log("Default value selected in dropdown. No score calculation necessary");
                 return;
             }
-            if (id === '999') {
+            if (id === 999) {
                 // calculate empire coins score, add to daily score
                 state.score.spins = 0;
                 const fiveSpinCount = Math.floor(state.empireCoins / POINTS_AND_MULTIPLIERS.FIVE_SPIN_COST);
@@ -167,8 +164,8 @@ const dayThreeSlice = createSlice({
             };
             state.totalDailyScore = 0;
             state.previousEventScore = {
-                topOne: '',
-                topTen: '',
+                first: '',
+                tenth: '',
             };
 
             saveData({ ...loadData(), dayThree: { ...state } });

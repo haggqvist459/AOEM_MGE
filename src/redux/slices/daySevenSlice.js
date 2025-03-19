@@ -45,8 +45,8 @@ const initialState = savedState?.daySeven || {
     },
     totalDailyScore: 0,
     previousEventScore: {
-        topOne: '',
-        topTen: '',
+        first: '',
+        tenth: '',
     }
 }
 
@@ -167,8 +167,8 @@ const daySevenSlice = createSlice({
             };
             state.totalDailyScore = 0;
             state.previousEventScore = {
-                topOne: '',
-                topTen: '',
+                first: '',
+                tenth: '',
             };
 
             saveData({ ...loadData(), daySeven: { ...state } });

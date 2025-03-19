@@ -95,12 +95,14 @@
 - [x] Update the previous components with the local state handler from day six. 
 - [x] Update the slices with validation, ensure no calculation occur with missing values
 - [ ] Final Stylefixes: 
-    - [ ] Text sizes across components
-    - [ ] Re-use Expandable components across the project
-    - [ ] Fix bottom border and padding on Expandable section
+    - [x] Text sizes across components
+    - [x] Re-use Expandable components across the project
+    - [x] Fix bottom border and padding on Expandable section
+    - [ ] Remove bottom borders on expanded sections or add bottom borders across all sections
 - [x] Re-do FormDropdown across the project, so that it does not rely on onBlur for updates to Redux 
 - [x] Fix Day Five score calculation
 - [x] Add horizontal menu to allow jumping between days 
+- [x] Retire PreviousEventScore and PreviousEventScoreBoard
 
 ### About page: 
 - [x] Explain how data is gathered and kept 

@@ -11,6 +11,25 @@ input, select, textarea {
   --color-tertiary: #A3A3A3;  /* Default theme tertiary color */
 }
 
+
+@layer components {
+  .subheader {
+    @apply text-base font-medium ;
+  }
+  .subheader-sm {
+    @apply text-sm 
+  }
+  .subheader-md {
+    @apply text-base font-semibold
+  }
+  .subheader-lg {
+    @apply text-lg font-semibold;
+  }
+  .subheader-xl {
+    @apply text-xl font-semibold
+  }
+}
+
 @layer utilities {
   /* Remove number input arrows in Safari */
   .no-spinner {

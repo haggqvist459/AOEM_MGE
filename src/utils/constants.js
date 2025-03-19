@@ -3,7 +3,7 @@ export const LOCALSTORAGE_KEY = 'aoem_mge_calc';
 export const ROUTES = {
     HOME: '/',
     TOTAL_SCORE: '/totalScore',
-    STRATEGY: '/strategy',
+    PREVIOUS_SCORE: '/previousScore',
     ADMIN: '/admin',
     ABOUT: '/about',
     ERROR: '/*',
@@ -20,10 +20,10 @@ export const NAVBAR_OPTIONS = {
         id: 2,
         text: 'Total Score'
     },
-    STRATEGY: {
-        route: ROUTES.STRATEGY,
+    PREVIOUS_SCORE: {
+        route: ROUTES.PREVIOUS_SCORE,
         id: 3,
-        text: 'Strategy'
+        text: 'Previous Event Score'
     },
     ADMIN: {
         route: ROUTES.ADMIN,

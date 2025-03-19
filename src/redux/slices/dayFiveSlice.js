@@ -96,8 +96,8 @@ const initialState = savedState?.dayFive || {
     },
     totalDailyScore: 0,
     previousEventScore: {
-        topOne: '',
-        topTen: '',
+        first: '',
+        tenth: '',
     }
 }
 
@@ -218,8 +218,8 @@ const dayFiveSlice = createSlice({
             };
             state.dailyScore = 0;
             state.previousEventScore = {
-                topOne: '',
-                topTen: '',
+                first: '',
+                tenth: '',
             };
             state.trainedTroopTier = TROOP_TIER_MULTIPLIERS[troopTierOptions[0]];
             state.trainedTroopsPerBatch = '';

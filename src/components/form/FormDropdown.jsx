@@ -1,9 +1,10 @@
 import React from 'react'
+import { FormSubHeader } from '../../components'
 
 const FormDropdown = ({ onChange, title, options, id, value }) => {
   return (
     <div className='w-full'>
-      <label htmlFor={id} className='block font-semibold lg:font-bold text-lg md:text-xl text-blue-900'>{title}</label>
+      <FormSubHeader title={title}/>
       <div className='relative w-full'>
         <select
           id={id}

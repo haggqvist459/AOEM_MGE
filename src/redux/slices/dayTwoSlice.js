@@ -36,8 +36,8 @@ const initialState = savedState?.dayTwo || {
     },
     totalDailyScore: 0,
     previousEventScore: {
-        topOne: '',
-        topTen: '',
+        first: '',
+        tenth: '',
     }
 }
 
@@ -55,7 +55,7 @@ const dayTwoSlice = createSlice({
                 case 'epicMedals':
                 case 'legendaryMedals':
                     state.score.medals = 0; // Reset before adding values
-                    if (state.epicMedals !== '' || state.epicMedals <= 0) {
+                    if (state.epicMedals > 0) {
                         state.score.medals += state.epicMedals * POINTS_AND_MULTIPLIERS.EPIC_MEDAL;
                     }
                     if (state.legendaryMedals !== '' || state.legendaryMedals <= 0) {
@@ -65,7 +65,7 @@ const dayTwoSlice = createSlice({
                 case 'epicScrolls':
                 case 'legendaryScrolls':
                     state.score.scrolls = 0; // Reset before adding values
-                    if (state.epicScrolls !== '' || state.epicScrolls <= 0) {
+                    if (state.epicScrolls > 0) {
                         state.score.scrolls += state.epicScrolls * POINTS_AND_MULTIPLIERS.EPIC_SCROLL;
                     }
                     if (state.legendaryScrolls !== '' || state.legendaryScrolls <= 0) {
@@ -77,22 +77,24 @@ const dayTwoSlice = createSlice({
                 case 'silverSand':
                 case 'fineGold':
                     state.score.rings = 0;
-                    if (state.hammers !== '' || state.hammers <= 0) {
+                    if (state.hammers > 0) {
                         state.score.rings += state.hammers * POINTS_AND_MULTIPLIERS.FINE_CRAFT;
                     }
-                    if (state.copperSand !== '' || state.copperSand <= 0) {
+                    if (state.copperSand > 0) {
                         state.score.rings += state.copperSand * POINTS_AND_MULTIPLIERS.COPPER_SAND;
                     }
-                    if (state.silverSand !== '' || state.silverSand <= 0) {
+                    if (state.silverSand > 0) {
                         state.score.rings += state.silverSand * POINTS_AND_MULTIPLIERS.SILVER_SAND;
                     }
-                    if (state.fineGold !== '' || state.fineGold <= 0) {
+                    if (state.fineGold > 0) {
                         state.score.rings += state.fineGold * POINTS_AND_MULTIPLIERS.FINE_GOLD;
                     }
                     break;
                 case 'legendaryBlueprints':
                 case 'preforgedBlueprints':
                 case 'forgingTime':
+                case 'forgingSpeedup':
+
                     state.score.forging = 0;
                     if (state.preforgedBlueprints > 0) {
                         if (state.preforgedBlueprints > 5) {
@@ -103,13 +105,14 @@ const dayTwoSlice = createSlice({
                     const forgingSpeedupSeconds = convertToSeconds(state.forgingSpeedup);
                     const forgingTimeSeconds = convertToSeconds(state.forgingTime);
 
-                    if (unit && state.legendaryBlueprints > 0 && forgingTimeSeconds > 0 && forgingSpeedupSeconds > forgingTimeSeconds) {
+                    if (state.legendaryBlueprints > 0 && forgingTimeSeconds > 0 && forgingSpeedupSeconds > forgingTimeSeconds) {
                         const forgingResult = calculateForgingScore(state.legendaryBlueprints, POINTS_AND_MULTIPLIERS.LEGENDARY_BLUEPRINT, forgingTimeSeconds, forgingSpeedupSeconds);
                         state.score.forging += forgingResult.score;
                         state.remainingBlueprints = forgingResult.remainingBlueprints;
                         state.completedBlueprints = forgingResult.completedBlueprints;
                         state.remainingForgingSpeedup = forgingResult.remainingSpeedup
                     }
+                    break;
                 default:
                     console.log("Error, incorrect field supplied to score calculation: ", field);
 
@@ -152,8 +155,8 @@ const dayTwoSlice = createSlice({
             };
             state.totalDailyScore = 0;
             state.previousEventScore = {
-                topOne: '',
-                topTen: '',
+                first: '',
+                tenth: '',
             };
 
             saveData({ ...loadData(), dayTwo: { ...state } });

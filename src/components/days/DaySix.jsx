@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DAY_KEYS, TROOP_POWER_MULTIPLIER } from '../../utils';
+import { TROOP_POWER_MULTIPLIER } from '../../utils';
 import { calculateDailyScoreDaySix, resetStateDaySix, updateFieldDaySix } from '../../redux/slices';
 import {
-  DayContainer, PreviousEventScore, FormButtons, FormHeader, FormSubHeader, FormInput, FormDropdown, FormWrapper,
-  ScoreBoardWrapper, ScoreBoardSection, PreviousEventScoreBoard
+  DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput, FormDropdown, FormWrapper,
+  ScoreBoardWrapper, ScoreBoardSection
 } from '../../components';
 
 
@@ -21,20 +21,20 @@ const DaySix = ({ activeDay, setActiveDay }) => {
 
   const handleInstantDispatch = (field, unit, value) => {
     dispatch(updateFieldDaySix({ field, unit, value }));
-    dispatch(calculateDailyScoreDaySix( { field, unit }));
+    dispatch(calculateDailyScoreDaySix({ field, unit }));
   }
 
-  const handleLocalChange = (field, value, unit=null) => {
+  const handleLocalChange = (field, value, unit = null) => {
     console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
-        ? { ...prev[field], [unit]: value }  //  Correctly updates object fields
-        : value,  //  Directly updates primitive fields without spreading
+        ? { ...prev[field], [unit]: value }
+        : value,
     }));
   };
 
-  const handleBlur = (field, unit=null) => {
+  const handleBlur = (field, unit = null) => {
     const value = unit
       ? localState[field][unit]
       : localState[field];
@@ -52,11 +52,12 @@ const DaySix = ({ activeDay, setActiveDay }) => {
   return (
     <DayContainer>
       <FormHeader title={'Day Six'} onClick={cancelForm} />
-        <div className='flex flex-col md:flex-row md:pr-2'>
-          <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
-            {/* Input */}
-            {/* Research estimate */}
-            <FormSubHeader title={'Research'} />
+      <div className='flex flex-col md:flex-row'>
+        <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
+          {/* Input */}
+          {/* Research estimate */}
+          <FormSubHeader title={'Research:'} sizeClass='subheader-lg' />
+          <FormWrapper>
             <FormInput
               id={'researchPower'}
               placeholder={'0'}
@@ -64,69 +65,91 @@ const DaySix = ({ activeDay, setActiveDay }) => {
               onChange={(newValue) => handleLocalChange('researchPower', newValue)}
               onBlur={() => handleBlur('researchPower')}
             />
-            {/* Building estimates */}
-            {/* 3x building queues */}
-            <FormSubHeader title={'Building'} />
-            <FormWrapper flex={'row'} className='space-x-1'>
-              <FormInput
-                id={'buildingPowerFirstQueue'}
-                placeholder={'0'}
-                value={localState.buildingPower.firstQueue}
-                onChange={(newValue) => handleLocalChange('buildingPower', newValue, 'firstQueue')}
-                onBlur={() => handleBlur('buildingPower', 'firstQueue')}
-              />
-              <FormInput
-                id={'buildingPowerSecondQueue'}
-                placeholder={'0'}
-                value={localState.buildingPower.secondQueue}
-                onChange={(newValue) => handleLocalChange('buildingPower', newValue, 'secondQueue')}
-                onBlur={() => handleBlur('buildingPower', 'secondQueue')}
-              />
-              <FormInput
-                id={'buildingPower'}
-                placeholder={'0'}
-                value={localState.buildingPower.thirdQueue}
-                onChange={(newValue) => handleLocalChange('buildingPower', newValue , 'thirdQueue')}
-                onBlur={() => handleBlur('buildingPower', 'thirdQueue')}
-              />
-            </FormWrapper>
-            {/* Troop estimates */}
-            {/* Troop tier dropdown + number input for amount of troops */}
-            <FormSubHeader title={'Troops:'} />
-            <FormWrapper flex={'row'} className={'space-x-1'}>
-              <FormWrapper>
-                <FormSubHeader title={'Expected trained: '} />
-                <FormInput
-                  id={'troopsTrainedTotal'}
-                  placeholder={'0'}
-                  value={localState.troopPower.troopsTrainedTotal}
-                  onChange={(newValue) => handleLocalChange('troopPower', newValue, 'troopsTrainedTotal')}
-                  onBlur={() => handleBlur('troopPower', 'troopsTrainedTotal')}
-                />
-              </FormWrapper>
-              <FormDropdown 
-                id={'troopTargetTier'}
-                title={'Target tier:'}
-                options={TROOP_POWER_MULTIPLIER}
-                value={localState.troopPower.tier}
-                onChange={(newValue) => handleInstantDispatch('troopPower', 'tier',  newValue)}
-              />
-            </FormWrapper>
-            <PreviousEventScore dayKey={DAY_KEYS.DAY_SIX} />
-          </div>
-          <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1'>
-            {/* Output */}
-            <FormSubHeader title={'Day five score'} weight={'font-bold'} size={'text-lg lg:text-xl'} />
-            <ScoreBoardSection title={'Daily score total: '} value={dailyData.totalDailyScore.toLocaleString()} />
-            <ScoreBoardWrapper gridCols={'grid-cols-3'}>
-              <ScoreBoardSection title={'Troops: '} value={dailyData.score.troop.toLocaleString()} />
-              <ScoreBoardSection title={'Building: '} value={dailyData.score.building.toLocaleString()} />
-              <ScoreBoardSection title={'Research: '} value={dailyData.score.research.toLocaleString()} />
-            </ScoreBoardWrapper>
-            <PreviousEventScoreBoard dayKey={DAY_KEYS.DAY_SIX} />
-          </div>
+          </FormWrapper>
+          {/* Building estimates */}
+          {/* 3x building queues */}
+          <FormSubHeader title={'Building queues:'} sizeClass='subheader-lg' />
+          <FormWrapper>
+            <FormInput
+              id={'buildingPowerFirstQueue'}
+              placeholder={'0'}
+              value={localState.buildingPower.firstQueue}
+              onChange={(newValue) => handleLocalChange('buildingPower', newValue, 'firstQueue')}
+              onBlur={() => handleBlur('buildingPower', 'firstQueue')}
+            />
+            <FormInput
+              id={'buildingPowerSecondQueue'}
+              placeholder={'0'}
+              value={localState.buildingPower.secondQueue}
+              onChange={(newValue) => handleLocalChange('buildingPower', newValue, 'secondQueue')}
+              onBlur={() => handleBlur('buildingPower', 'secondQueue')}
+            />
+            <FormInput
+              id={'buildingPowerThirdQueue'}
+              placeholder={'0'}
+              value={localState.buildingPower.thirdQueue}
+              onChange={(newValue) => handleLocalChange('buildingPower', newValue, 'thirdQueue')}
+              onBlur={() => handleBlur('buildingPower', 'thirdQueue')}
+            />
+          </FormWrapper>
+          {/* Troop estimates */}
+          {/* Troop tier dropdown + number input for amount of troops */}
+          <FormSubHeader title={'Troops:'} sizeClass='subheader-lg' />
+          <FormWrapper>
+            <FormInput
+              title={'Expected trained: '}
+              id={'troopsTrainedTotal'}
+              placeholder={'0'}
+              value={localState.troopPower.troopsTrainedTotal}
+              onChange={(newValue) => handleLocalChange('troopPower', newValue, 'troopsTrainedTotal')}
+              onBlur={() => handleBlur('troopPower', 'troopsTrainedTotal')}
+            />
+            <FormDropdown
+              id={'troopTargetTier'}
+              title={'Target tier:'}
+              options={TROOP_POWER_MULTIPLIER}
+              value={localState.troopPower.tier}
+              onChange={(newValue) => handleInstantDispatch('troopPower', 'tier', newValue)}
+            />
+          </FormWrapper>
+          {/* Previous Event Score */}
+          <FormSubHeader title={'Previous Event Scores'} sizeClass={'subheader-lg'} />
+          <FormWrapper>
+            <FormInput
+              title={'1st place:'}
+              id={'previousEventScoreFirst'}
+              placeholder={'0'}
+              value={localState.previousEventScore.first}
+              onChange={(newValue) => handleLocalChange('previousEventScore', newValue, 'first')}
+              onBlur={() => handleBlur('previousEventScore', 'first')}
+            />
+            <FormInput
+              title={'10th place:'}
+              id={'previousEventScoreTenth'}
+              placeholder={'0'}
+              value={localState.previousEventScore.tenth}
+              onChange={(newValue) => handleLocalChange('previousEventScore', newValue, 'tenth')}
+              onBlur={() => handleBlur('previousEventScore', 'tenth')}
+            />
+          </FormWrapper>
         </div>
-        <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+        <div className='w-full md:w-1/2 md:pl-2 border-t border-neutral-400 md:border-0 mt-1 md:mt-0'>
+          {/* Output */}
+          <FormSubHeader title={'Day Five Score'} sizeClass={'subheader-xl'} />
+          <ScoreBoardSection title={'Total daily score:'} sizeClass={'subheader-md'} value={dailyData.totalDailyScore.toLocaleString()} />
+          <ScoreBoardWrapper gridCols={'grid-cols-3'}>
+            <ScoreBoardSection title={'Troops: '} value={dailyData.score.troop.toLocaleString()} />
+            <ScoreBoardSection title={'Building: '} value={dailyData.score.building.toLocaleString()} />
+            <ScoreBoardSection title={'Research: '} value={dailyData.score.research.toLocaleString()} />
+          </ScoreBoardWrapper>
+          <FormSubHeader title={'Previous Event Scores'} sizeClass={'subheader-md'} />
+          <FormWrapper>
+            <ScoreBoardSection title={'1st place: '} value={dailyData.previousEventScore.first.toLocaleString()} />
+            <ScoreBoardSection title={'10th place: '} value={dailyData.previousEventScore.tenth.toLocaleString()} />
+          </FormWrapper>
+        </div>
+      </div>
+      <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
     </DayContainer>
   )
 }
