@@ -4,7 +4,7 @@ import { DayOne, DayTwo, DayThree, DayFour, DayFive, DaySix, DaySeven } from '..
 
 const HomePage = () => {
 
-  const [activeDay, setActiveDay] = useState(1);
+  const [activeDay, setActiveDay] = useState(DAY_KEYS.DAY_ONE);
 
   const menuOptions = Object.values(DAY_KEYS).map((key) => (
     <button key={key} onClick={() => setActiveDay(key)} className='text-white font-semibold text-lg'>
