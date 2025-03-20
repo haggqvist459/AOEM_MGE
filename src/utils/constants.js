@@ -48,15 +48,15 @@ export const DAY_KEYS = {
     DAY_SEVEN: 'daySeven'
 }
 
-export const DAY_TITLES = [
-    'One',
-    'Two',
-    'Three',
-    'Four',
-    'Five',
-    'Six',
-    'Seven'
-];
+export const DAY_TITLES = {
+    [DAY_KEYS.DAY_ONE]: 'Day One',
+    [DAY_KEYS.DAY_TWO]: 'Day Two',
+    [DAY_KEYS.DAY_THREE]: 'Day Three',
+    [DAY_KEYS.DAY_FOUR]: 'Day Four',
+    [DAY_KEYS.DAY_FIVE]: 'Day Five',
+    [DAY_KEYS.DAY_SIX]: 'Day Six',
+    [DAY_KEYS.DAY_SEVEN]: 'Day Seven',
+};
 
 
 

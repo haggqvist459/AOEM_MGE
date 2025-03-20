@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+    DAY_KEYS, TROOP_TIER_MULTIPLIERS, TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS,
     updateFieldDelegated, loadData, saveData,
-    TROOP_TIER_MULTIPLIERS, TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS
 } from "../../utils";
 
 const savedState = loadData();
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS);
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
 
-const initialState = savedState?.daySeven || {
+const initialState = savedState?.[DAY_KEYS.DAY_SEVEN] || {
     stamina: '',
     tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]],
     tribesHunted: 0,
@@ -51,7 +51,7 @@ const initialState = savedState?.daySeven || {
 }
 
 const daySevenSlice = createSlice({
-    name: 'daySevenSlice',
+    name: DAY_KEYS.DAY_SEVEN,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -171,7 +171,7 @@ const daySevenSlice = createSlice({
                 tenth: '',
             };
 
-            saveData({ ...loadData(), daySeven: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_SEVEN]: { ...state } });
         }
     },
 })

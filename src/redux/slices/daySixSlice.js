@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TROOP_POWER_MULTIPLIER, TROOP_TIER_MULTIPLIERS, POINTS_AND_MULTIPLIERS, 
+import { DAY_KEYS, TROOP_TIER_MULTIPLIERS, POINTS_AND_MULTIPLIERS, 
     saveData, loadData, updateFieldDelegated } from "../../utils";
 
 const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
 
 const savedState = loadData();
 
-const initialState = savedState?.daySix || {
+const initialState = savedState?.[DAY_KEYS.DAY_SIX] || {
     troopPower: {
         troopsTrainedTotal: '',
         tier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
@@ -31,7 +31,7 @@ const initialState = savedState?.daySix || {
 
 
 const daySixSlice = createSlice({
-    name: 'daySixSlice',
+    name: DAY_KEYS.DAY_SIX,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -109,7 +109,7 @@ const daySixSlice = createSlice({
                 tenth: '',
             };
 
-            saveData({ ...loadData(), daySix: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_SIX]: { ...state } });
         }
     }
 })

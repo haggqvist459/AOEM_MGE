@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-    TROOP_TIER_MULTIPLIERS, loadData, saveData, validateInputForState,
+    DAY_KEYS, TROOP_TIER_MULTIPLIERS, loadData, saveData, validateInputForState,
     calculatePromotableBatches, calculateTroopPromotionScore, updateFieldDelegated,
     convertToSeconds, calculateTrainingScore
 } from "../../utils";
@@ -9,7 +9,7 @@ const troopTierOptions = Object.keys(TROOP_TIER_MULTIPLIERS);
 
 const savedState = loadData();
 
-const initialState = savedState?.dayFive || {
+const initialState = savedState?.[DAY_KEYS.DAY_FIVE] || {
     troops: {
         Archers: {
             targetTier: TROOP_TIER_MULTIPLIERS[troopTierOptions[0]],
@@ -102,7 +102,7 @@ const initialState = savedState?.dayFive || {
 }
 
 const dayFiveSlice = createSlice({
-    name: 'dayFiveSlice',
+    name: DAY_KEYS.DAY_FIVE,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -130,7 +130,7 @@ const dayFiveSlice = createSlice({
 
             // calculate the training score if there's speedup remaining. 
             let trainingTimeInSeconds = convertToSeconds(state.trainedTroopsTrainingTime)
-            if (remainingTrainingSpeedup > trainingTimeInSeconds) {
+            if (!isNaN(trainingTimeInSeconds) && trainingTimeInSeconds > 0 && remainingTrainingSpeedup > trainingTimeInSeconds) {
                 console.log("calculating training score")
                 state.score.training = calculateTrainingScore(state.trainedTroopTier, state.trainedTroopsPerBatch, trainingTimeInSeconds, remainingTrainingSpeedup)
             }  else {
@@ -216,7 +216,7 @@ const dayFiveSlice = createSlice({
                 training: 0,
                 promoting: 0,
             };
-            state.dailyScore = 0;
+            state.totalDailyScore = 0;
             state.previousEventScore = {
                 first: '',
                 tenth: '',
@@ -231,7 +231,7 @@ const dayFiveSlice = createSlice({
             };
 
 
-            saveData({ ...loadData(), dayFive: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_FIVE]: { ...state } });
         }
     },
 })

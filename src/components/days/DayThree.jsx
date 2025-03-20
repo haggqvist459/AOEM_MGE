@@ -87,7 +87,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
     if (id) {
       dispatch(updateMarchField({ id, field, value }));
     } else {
-      dispatch(updateField({ field, unit, value }));
+      dispatch(updateFieldDayThree({ field, unit, value }));
     }
 
     if (id) {
@@ -196,6 +196,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
           {/* Output */}
           <FormSubHeader title={'Day Three Score '} sizeClass='subheader-lg' />
           <ScoreBoardSection title={'Daily score total: '} sizeClass={'subheader-md'} value={dailyData.totalDailyScore.toLocaleString()} />
+          <ScoreBoardSection title={'Advent wheel score: '} sizeClass={'subheader'} value={dailyData.score.spins.toLocaleString()} />
           <div className='grid grid-cols-1 xs:grid-cols-2 xs:gap-1 md:grid-cols-3'>
             {dailyData.marches.map((march, index) => (
               <div key={index}>

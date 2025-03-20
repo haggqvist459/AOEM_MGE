@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { POINTS_AND_MULTIPLIERS, RESOURCE_MULTIPLIER_MAP, loadData, saveData, updateFieldDelegated, convertToMinutes } from "../../utils";
+import { POINTS_AND_MULTIPLIERS, DAY_KEYS, loadData, saveData, updateFieldDelegated, convertToMinutes } from "../../utils";
 
 
 const savedState = loadData();
-const initialState = savedState?.dayFour || {
+const initialState = savedState?.[DAY_KEYS.DAY_FOUR] || {
     hammers: '',
     copperSand: '',
     silverSand: '',
@@ -38,7 +38,7 @@ const initialState = savedState?.dayFour || {
 }
 
 const dayFourSlice = createSlice({
-    name: 'dayFourSlice',
+    name: DAY_KEYS.DAY_FOUR,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -125,7 +125,7 @@ const dayFourSlice = createSlice({
                 first: '',
                 tenth: ''
             };
-            saveData({ ...loadData(), dayFour: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_FOUR]: { ...state } });
         }
     },
 })

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-    POINTS_AND_MULTIPLIERS, RESOURCE_FIELD_MAP,
+    DAY_KEYS, POINTS_AND_MULTIPLIERS, RESOURCE_FIELD_MAP,
     loadData, saveData, validateInputForState, updateFieldDelegated,
     calculateGatheringScore
 } from "../../utils";
 
 const savedState = loadData();
-const initialState = savedState?.dayThree || {
+const initialState = savedState?.[DAY_KEYS.DAY_THREE] || {
     marches: [
         {
             id: 1,
@@ -34,7 +34,7 @@ const initialState = savedState?.dayThree || {
 }
 
 const dayThreeSlice = createSlice({
-    name: 'dayThreeSlice',
+    name: DAY_KEYS.DAY_THREE,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -168,7 +168,7 @@ const dayThreeSlice = createSlice({
                 tenth: '',
             };
 
-            saveData({ ...loadData(), dayThree: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_THREE]: { ...state } });
         }
     },
 })

@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loadData, saveData, POINTS_AND_MULTIPLIERS, updateFieldDelegated, calculateForgingScore, convertToSeconds } from "../../utils";
+import { DAY_KEYS, POINTS_AND_MULTIPLIERS, loadData, saveData, updateFieldDelegated, calculateForgingScore, convertToSeconds } from "../../utils";
 
 const savedState = loadData();
-const initialState = savedState?.dayTwo || {
+const initialState = savedState?.[DAY_KEYS.DAY_TWO] || {
     epicMedals: '',
     legendaryMedals: '',
     epicScrolls: '',
@@ -42,7 +42,7 @@ const initialState = savedState?.dayTwo || {
 }
 
 const dayTwoSlice = createSlice({
-    name: 'dayTwoSlice',
+    name: DAY_KEYS.DAY_TWO,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -159,7 +159,7 @@ const dayTwoSlice = createSlice({
                 tenth: '',
             };
 
-            saveData({ ...loadData(), dayTwo: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_TWO]: { ...state } });
         }
     },
 })

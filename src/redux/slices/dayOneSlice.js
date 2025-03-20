@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, updateFieldDelegated } from "../../utils";
+import { DAY_KEYS, TRIBE_LEVEL_MULTIPLIERS, POINTS_AND_MULTIPLIERS, loadData, saveData, updateFieldDelegated } from "../../utils";
 
 
 const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
@@ -8,7 +8,7 @@ const dropdownOptions = Object.keys(TRIBE_LEVEL_MULTIPLIERS)
 const savedState = loadData();
 // if localStorage has data for day one, use that
 // if not, initialise new object 
-const initialState = savedState?.dayOne || {
+const initialState = savedState?.[DAY_KEYS.DAY_ONE] || {
     stamina: '',
     tribeLevelMultiplier: TRIBE_LEVEL_MULTIPLIERS[dropdownOptions[0]],
     tribesHunted: 0,
@@ -20,7 +20,7 @@ const initialState = savedState?.dayOne || {
 }
 
 const dayOneSlice = createSlice({
-    name: 'dayOneSlice',
+    name: DAY_KEYS.DAY_ONE,
     initialState,
     reducers: {
         updateField: (state, action) => updateFieldDelegated(state, action),
@@ -46,12 +46,9 @@ const dayOneSlice = createSlice({
                 first: '',
                 tenth: '',
             };
-            saveData({ ...loadData(), dayOne: { ...state } });
+            saveData({ ...loadData(), [DAY_KEYS.DAY_ONE]: { ...state } });
         },
     },
-    // extraReducers: (builder) => {
-    //     sharedReducers(builder, DAY_KEYS.DAY_ONE);    
-    // }
 })
 export const { updateField, calculateDailyScore, resetState } = dayOneSlice.actions;
 export default dayOneSlice.reducer;

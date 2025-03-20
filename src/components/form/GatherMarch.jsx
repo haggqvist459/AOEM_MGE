@@ -36,6 +36,7 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
                         value={march.loadBonus}
                         onChange={(newValue) => onChange('loadBonus', newValue, marchId)}
                         onBlur={() => onBlur('loadBonus', null, marchId)}
+                        allowDecimals={true}
                     />
                     <FormInput
                         title={'Completed turns:'}

@@ -66,10 +66,9 @@
     - [ ] Compare score to previous events 
     - [ ] Information button with small pop up 
 - [ ] Total Score Component
-    - [ ] List total score from entire week
-    - [ ] Compare to listed scores from previous events
+    - [x] List total score from entire week
+    - [x] Compare to listed scores from previous events
     - [ ] List which days are within top 10 range and which arent 
-    - [ ] Determine remaining speed up needs before top 10 score can be achieved 
     - [ ] Information button with small pop up 
 
 ### Admin Page: 
@@ -80,7 +79,7 @@
 - [ ] Separate Import / Export for previous event scores?
 
 ### Error Page: 
-- [ ] Custom error page
+- [x] Custom error page
 
 ### Misc: 
 - [x] Redux state management 
