@@ -1,34 +1,39 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux';
 import { DAY_KEYS, DAY_TITLES } from '../utils';
-import { DayContainer, FormHeader, FormSubHeader } from '../components'
+import { FormHeader, FormSubHeader } from '../components'
 
 const TotalScorePage = () => {
-  const dailyScores = useSelector(state =>
-    Object.fromEntries(Object.values(DAY_KEYS).map(key => [key, state[key]?.totalDailyScore || 0]))
-  );
 
-const previousEventScores = useSelector(state =>
-  Object.fromEntries(Object.values(DAY_KEYS).map(key => [key, {
-    first: state[key]?.previousEventScore?.first === "" ? 0 : state[key]?.previousEventScore?.first || 0,
-    tenth: state[key]?.previousEventScore?.tenth === "" ? 0 : state[key]?.previousEventScore?.tenth || 0
-  }]))
-);
+  const dailyScores = [];
+  const previousEventScores = [];
+
+  Object.keys(DAY_KEYS).forEach(key => {
+    dailyScores.push({
+      day: DAY_KEYS[key], 
+      score: useSelector(state => state[DAY_KEYS[key]].totalDailyScore === '' ? 0 : state[DAY_KEYS[key]].totalDailyScore)
+    });
+  });
+
+  
+  Object.keys(DAY_KEYS).forEach(key => {
+    previousEventScores.push({
+      day: DAY_KEYS[key], 
+      score: {
+        first: useSelector(state => state[DAY_KEYS[key]].previousEventScore.first === '' ? 0 : state[DAY_KEYS[key]].previousEventScore.first),
+        tenth: useSelector(state => state[DAY_KEYS[key]].previousEventScore.tenth === '' ? 0 : state[DAY_KEYS[key]].previousEventScore.tenth)
+      }
+    });
+  });
+  
+
 
   console.log('dailyScores:', dailyScores);
   console.log('previousEventScores:', previousEventScores);
 
-  const totalDailyScore = Object.values(dailyScores).reduce((acc, score) => acc + score, 0);
-
-  const totalPreviousFirst = Object.values(previousEventScores).reduce(
-    (acc, score) => acc + (score.first === '' ? 0 : score.first),
-    0
-  );
-
-  const totalPreviousTenth = Object.values(previousEventScores).reduce(
-    (acc, score) => acc + (score.tenth === '' ? 0 : score.tenth),
-    0
-  );
+  const totalDailyScore = dailyScores.reduce((acc, curr) => acc + curr.score, 0);
+  const totalPreviousFirst = previousEventScores.reduce((acc, curr) => acc + curr.score.first, 0);
+  const totalPreviousTenth = previousEventScores.reduce((acc, curr) => acc + curr.score.tenth, 0);
 
 
   return (
@@ -44,11 +49,11 @@ const previousEventScores = useSelector(state =>
             <br />
             <br />
           </div>
-          {Object.values(DAY_KEYS).map(key => (
-            <div className='p-2 text-right' key={key}>
-              <FormSubHeader title={DAY_TITLES[key]} sizeClass='subheader-md' />
+          {dailyScores.map(({ day, score }) => (
+            <div className='p-2 text-right' key={day}>
+              <FormSubHeader title={DAY_TITLES[day]} sizeClass='subheader-md' />
               <p className='font-medium'>Daily score:</p>
-              <p>{dailyScores[key].toLocaleString()}</p>
+              <p>{score.toLocaleString()}</p>
               <br />
               <br />
             </div>
@@ -64,13 +69,13 @@ const previousEventScores = useSelector(state =>
             <p>{totalPreviousTenth.toLocaleString()}</p>
           </div>
 
-          {Object.values(DAY_KEYS).map(key => (
-            <div className='p-2' key={key}>
-              <FormSubHeader title={DAY_TITLES[key]} sizeClass='subheader-md' />
+          {previousEventScores.map(({ day, score }) => (
+            <div className='p-2' key={day}>
+              <FormSubHeader title={DAY_TITLES[day]} sizeClass='subheader-md' />
               <p className='font-medium'>1st place:</p>
-              <p>{previousEventScores[key].first.toLocaleString()}</p>
+              <p>{score.first.toLocaleString()}</p>
               <p className='font-medium'>10th place:</p>
-              <p>{previousEventScores[key].tenth.toLocaleString()}</p>
+              <p>{score.tenth.toLocaleString()}</p>
             </div>
           ))}
         </div>
@@ -80,3 +85,4 @@ const previousEventScores = useSelector(state =>
 }
 
 export default TotalScorePage
+
