@@ -30,5 +30,3 @@ const FormButtons = ({ activeDay, setActiveDay }) => {
 
 export default FormButtons
 
-
-// rework to handle daily navigation

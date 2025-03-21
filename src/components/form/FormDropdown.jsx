@@ -10,10 +10,7 @@ const FormDropdown = ({ onChange, title, options, id, value }) => {
           id={id}
           className='w-full px-1 text-sm lg:text-lg text-neutral-600 border border-neutral-600 rounded-md shadow-sm appearance-none'
           value={value}
-          onChange={(e) => {
-            // console.log('FormDropdown onChange Selected value:', e.target.value); // Log the selected value
-            onChange(e.target.value); // Call the onChange function passed from the parent
-          }}
+          onChange={(e) => onChange(e.target.value)}
         >
           {Object.keys(options).map((level) => (
             <option key={level} value={options[level]}>

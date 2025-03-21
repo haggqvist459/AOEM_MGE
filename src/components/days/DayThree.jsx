@@ -51,13 +51,13 @@ const DayThree = ({ activeDay, setActiveDay }) => {
   };
 
   const handleRemoveMarch = (id) => {
-    console.log("handleRemoveMarch ID to remove: ", id)
+    // console.log("handleRemoveMarch ID to remove: ", id)
     dispatch(removeMarch({ id }));
   };
 
 
   const handleInstantDispatch = (field, value, id = null) => {
-    console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ', id: ', id);
+    // console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ', id: ', id);
 
     if (id) {
       dispatch(updateMarchField({ id, field, value }));
@@ -82,7 +82,7 @@ const DayThree = ({ activeDay, setActiveDay }) => {
       value = unit ? localState[field][unit] : localState[field];
     }
 
-    console.log("handleBlur before dispatch values: field: ", field, ', id: ', id, ', value: ', value);
+    // console.log("handleBlur before dispatch values: field: ", field, ', id: ', id, ', value: ', value);
 
     if (id) {
       dispatch(updateMarchField({ id, field, value }));
@@ -217,36 +217,3 @@ const DayThree = ({ activeDay, setActiveDay }) => {
 }
 
 export default DayThree
-
-/**
- 
-Gather 100 resources = 1 point
-
-Legendary advent spin = 1000
-    5x spins = 4200 empire coins
-    1x spin = 900 coins
-
-
-Input gather marches resource gather boosts, their load capacity and potential bonuses 
-Input amount of empire coins available for spins 
-
-Gather info:  
-  load capacity
-  load bonus %
-
-
-
-Display max available score based on gathering
-    Include rich resources, and alliance resource center 
-    Include full marches waiting to be deposited at reset
-
-Feb 17 start:
-1st: 1595000
-10th: 1299220
-
-Feb 10 start:
-Top 1 score 1,8kk, 
-Top 10 score 1,1kk
-
-
- */ 

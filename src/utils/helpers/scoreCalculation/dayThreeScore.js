@@ -18,7 +18,7 @@ export const calculateGatheringScore = (march, fieldType) => {
         gatheredResources = cappedYield * march.completedTurns;
     } 
 
-    console.log("calculateGatheringScore gatheredResources before loadMultiplier: ", gatheredResources)
+    // console.log("calculateGatheringScore gatheredResources before loadMultiplier: ", gatheredResources)
 
     // Check if the march has a load bonus 
     if (march.loadBonus) {
@@ -28,16 +28,16 @@ export const calculateGatheringScore = (march, fieldType) => {
         gatheredResources *= loadMultiplier;
     }
 
-    console.log("calculateGatheringScore gatheredResources after loadMultiplier: ", gatheredResources)
+    // console.log("calculateGatheringScore gatheredResources after loadMultiplier: ", gatheredResources)
 
     march.score = Math.floor(gatheredResources / POINTS_AND_MULTIPLIERS.RESOURCE_DIVIDER);
-    console.log("calculateGatheringScore march.score before fullAtReset: ", march.score)
+    // console.log("calculateGatheringScore march.score before fullAtReset: ", march.score)
 
     // Check if the march is full at the start of the day, if so add the load capacity onto the score
     if (march.fullAtReset) {
         march.score += Math.floor(march.loadCapacity / POINTS_AND_MULTIPLIERS.RESOURCE_DIVIDER);
     }
-    console.log("calculateGatheringScore march.score after fullAtReset: ", march.score)
+    // console.log("calculateGatheringScore march.score after fullAtReset: ", march.score)
 
     return;
 }

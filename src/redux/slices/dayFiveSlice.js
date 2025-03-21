@@ -131,7 +131,7 @@ const dayFiveSlice = createSlice({
             // calculate the training score if there's speedup remaining. 
             let trainingTimeInSeconds = convertToSeconds(state.trainedTroopsTrainingTime)
             if (!isNaN(trainingTimeInSeconds) && trainingTimeInSeconds > 0 && remainingTrainingSpeedup > trainingTimeInSeconds) {
-                console.log("calculating training score")
+                // console.log("calculating training score")
                 state.score.training = calculateTrainingScore(state.trainedTroopTier, state.trainedTroopsPerBatch, trainingTimeInSeconds, remainingTrainingSpeedup)
             }  else {
                 state.score.training = 0;

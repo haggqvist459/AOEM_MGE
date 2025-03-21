@@ -65,7 +65,7 @@ const dayThreeSlice = createSlice({
         },
         removeMarch: (state, action) => {
             const { id } = action.payload;
-            console.log("removeMarch reducer with ID: ", id);
+            // console.log("removeMarch reducer with ID: ", id);
             state.marches = state.marches.filter(march => march.id !== id);
         },
         addMarch: (state) => {
@@ -86,10 +86,10 @@ const dayThreeSlice = createSlice({
         },
         calculateDailyScore: (state, action) => {
             const { id } = action.payload;
-            console.log("calculateDailyScoreDayThree triggered for ID:", id);
+            // console.log("calculateDailyScoreDayThree triggered for ID:", id);
             const marchIndex = state.marches.findIndex(march => march.id === id);
             if (id === 0) {
-                console.log("Default value selected in dropdown. No score calculation necessary");
+                // console.log("Default value selected in dropdown. No score calculation necessary");
                 return;
             }
             if (id === 999) {
@@ -124,13 +124,13 @@ const dayThreeSlice = createSlice({
 
             // Check if the march is selected for a special field
             if (state.richField === id) {
-                console.log("Rich field calculation triggered")
+                // console.log("Rich field calculation triggered")
                 calculateGatheringScore(march, RESOURCE_FIELD_MAP.RICH);
             } else if (state.allianceCentre === id) {
-                console.log("alliance centre calculation triggered. ")
+                // console.log("alliance centre calculation triggered. ")
                 calculateGatheringScore(march, RESOURCE_FIELD_MAP.ALLIANCE);
             } else {
-                console.log("Regular field calculation triggered.");
+                // console.log("Regular field calculation triggered.");
                 calculateGatheringScore(march, RESOURCE_FIELD_MAP.REGULAR);
             }
 

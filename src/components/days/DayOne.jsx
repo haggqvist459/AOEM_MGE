@@ -21,7 +21,7 @@ const DayOne = ({ activeDay, setActiveDay }) => {
 
   //Dropdown dispatch
   const handleInstantDispatch = (field, value) => {
-    console.log("handleInstantDispatch values, field: ", field, ", value: ", value);
+    // console.log("handleInstantDispatch values, field: ", field, ", value: ", value);
 
     dispatch(updateFieldDayOne({ field, value }));
     dispatch(calculateDailyScoreDayOne());
@@ -29,7 +29,7 @@ const DayOne = ({ activeDay, setActiveDay }) => {
   }
 
   const handleLocalChange = (field, value, unit = null) => {
-    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
+    // console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
@@ -43,7 +43,7 @@ const DayOne = ({ activeDay, setActiveDay }) => {
       ? localState[field][unit]
       : localState[field];
 
-    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    // console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDayOne({ field, unit, value }));
     dispatch(calculateDailyScoreDayOne())
   };
@@ -118,39 +118,3 @@ const DayOne = ({ activeDay, setActiveDay }) => {
 }
 
 export default DayOne
-
-/*
-
-Defeat tribes, points:
-lvl 1-4 = 50
-lvl 5-8 = 80
-lvl 9-12 = 100
-lvl 13-16 = 150
-lvl 17-20 = 180
-lvl 21-24 = 220
-lvl 25-28 = 260
-lvl 29-30 = 300
-
-5 stamina per tribe
-= 300 points per 5 stamina
-
-Input amount of stamina available
-Calculate score outcome based on tribes hunted
-Display score
-
-
-March 3 start:
-1st: 173700
-10th: 115500
-Score: 133500 (4th) 
-
-Feb 17 start:
-Top 1 score: 323400
-Top 10 score: 61500
-
-Feb 10 start:
-Top 1 score 144k
-Top 10 score 84,3k
-
-
-*/

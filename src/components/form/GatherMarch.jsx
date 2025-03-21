@@ -73,16 +73,3 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
 
 export default GatherMarch
 
-
-/*
-     
-    setLocalState((prev) => ({
-        ...prev,
-        marches: prev.marches.map(march =>
-            march.id === id ? { ...march, [field]: value } : march
-        ),
-    }));
-<ToggleButton isToggled={march.fullAtReset} onToggle={() => onChange('fullAtReset', !march.fullAtReset)} />
-*/
-
-

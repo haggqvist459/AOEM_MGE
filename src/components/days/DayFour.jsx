@@ -19,7 +19,7 @@ const DayFour = ({ activeDay, setActiveDay }) => {
 
 
   const handleLocalChange = (field, value, unit = null) => {
-    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
+    // console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
@@ -34,7 +34,7 @@ const DayFour = ({ activeDay, setActiveDay }) => {
       ? localState[field][unit]
       : localState[field];
 
-    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    // console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDayFour({ field, unit, value }));
     dispatch(calculateDailyScoreDayFour({ field, unit }))
   };
@@ -219,40 +219,3 @@ const DayFour = ({ activeDay, setActiveDay }) => {
 }
 
 export default DayFour
-
-/**
-
-TODO:
-place medals, scrolls and blueprints on rows for sm and above
-
-
-
-Speed up: 
-1m building = 30
-1m research = 30
-
-Craft: 
-Fine craft 1x = 2000
-1x copper sand = 400
-1x silver sand = 1000
-1x fine gold = 3000
-1x meteor steel = 20000
-
-
-
-Input: 
-Speed ups available, in days, hours and minutes 
-Number of hammers stored
-Amount of sand and gold available 
-    For more in-depth calculation, levels on rings to be upgraded 
-
-
-Feb 17 start:
-1st: 14740460
-10th: 5250520
-
-Feb 10 start: 
-1st: 19,9kk 
-10th: 5,8kk
-
- */

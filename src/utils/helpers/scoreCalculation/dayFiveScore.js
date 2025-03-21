@@ -14,8 +14,6 @@ export const calculatePromotableBatches = (troops, initialTrainingSpeedup) => {
     // Allocate batches for higher-tier troops first.
     remainingTrainingSpeedup = calculateAvailableBatches(higherTierTroops, remainingTrainingSpeedup);
 
-    let convertedRemainingSpeedup = convertFromSeconds(remainingTrainingSpeedup)
-    // console.log("remainingTrainingSpeedup after highTier distribution: ", convertedRemainingSpeedup)
 
     return remainingTrainingSpeedup;
 };
@@ -86,23 +84,8 @@ const sortTroopsByTier = (troops) => {
 
     // console.log("Troops with highest target tier:", JSON.stringify(higherTierTroops, null, 2));
 
-    // // Step 4: Use the object literal to find the valid lower base tier
-    // const expectedBaseTier = getLowerTierValue(highestTargetTier);
-
-    // console.log("Expected Base Tier:", expectedBaseTier);
-
-    // // Step 5: Keep only troops where the base tier matches the correct lower tier
-    // higherTierTroops = higherTierTroops.filter(([_, troop]) => troop.baseTier === expectedBaseTier);
-
-    // console.log("Final higherTierTroops:", JSON.stringify(higherTierTroops, null, 2));
-
     return Object.fromEntries(higherTierTroops);
 };
-
-
-
-
-
 
 
 // Reset the batch values for each troop before calculations.
@@ -112,14 +95,6 @@ const resetTroopBatchValues = (troops) => {
         troop.maxPromotableBatches = 0;
     });
 };
-
-
-
-
-
-
-
-
 
 
 export const calculateTroopPromotionScore = (troopGroup) => {
@@ -147,16 +122,15 @@ export const calculateTroopPromotionScore = (troopGroup) => {
         };
 
         totalTroopPromotionScore += updatedTroopGroup[troopType].troopTotalScore;
-        console.log(`${troopType} Score Updated: ${updatedTroopGroup[troopType].troopTotalScore}`);
+        // console.log(`${troopType} Score Updated: ${updatedTroopGroup[troopType].troopTotalScore}`);
     });
 
-    console.log(`Total Troop Promotion Score: ${totalTroopPromotionScore}`);
+    // console.log(`Total Troop Promotion Score: ${totalTroopPromotionScore}`);
     return {
         updatedTroops: updatedTroopGroup,
         promotionScore: totalTroopPromotionScore
     };
 };
-
 
 
 export const calculateTrainingScore = (troopTier, troopsPerBatch, trainingTime, remainingSpeedup) => {
@@ -167,27 +141,4 @@ export const calculateTrainingScore = (troopTier, troopsPerBatch, trainingTime, 
     const scorePerBatch = troopTier * troopsPerBatch
     // multiply with number of batches completed and return the value 
     return scorePerBatch * completedBatches;
-}
-
-
-
-
-
-
-
-
-
-
-// Function to find the tier value directly below the given target tier
-const getLowerTierValue = (targetTierValue) => {
-    const tierEntries = Object.entries(TROOP_TIER_MULTIPLIERS);
-    console.log("Sorted Tiers:", Object.entries(TROOP_TIER_MULTIPLIERS));
-    console.log("Looking for base tier of:", targetTierValue);
-
-    for (let i = 0; i < tierEntries.length; i++) {
-        if (tierEntries[i][1] === targetTierValue) {
-            return i < tierEntries.length - 1 ? tierEntries[i + 1][1] : null; // Return the value of the tier directly below
-        }
-    }
-    return null; // No lower tier exists
 };

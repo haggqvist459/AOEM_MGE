@@ -49,7 +49,7 @@ const dayTwoSlice = createSlice({
         calculateDailyScore: (state, action) => {
             const { field, unit } = action.payload;
 
-            console.log("dayTwo calculateDailyScore action.payload, field: ", field, ', unit: ', unit)
+            // console.log("dayTwo calculateDailyScore action.payload, field: ", field, ', unit: ', unit)
 
             switch (field) {
                 case 'epicMedals':

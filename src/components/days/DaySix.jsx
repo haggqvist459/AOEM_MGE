@@ -25,7 +25,7 @@ const DaySix = ({ activeDay, setActiveDay }) => {
   }
 
   const handleLocalChange = (field, value, unit = null) => {
-    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
+    // console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
     setLocalState((prev) => ({
       ...prev,
       [field]: unit
@@ -39,7 +39,7 @@ const DaySix = ({ activeDay, setActiveDay }) => {
       ? localState[field][unit]
       : localState[field];
 
-    console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
+    // console.log("handleBlur before dispatch values: field: ", field, ', unit: ', unit, ', value: ', localState[field]);
     dispatch(updateFieldDaySix({ field, unit, value }));
     dispatch(calculateDailyScoreDaySix({ field, unit }));
   };
@@ -154,22 +154,4 @@ const DaySix = ({ activeDay, setActiveDay }) => {
   )
 }
 
-export default DaySix
-
-
-/*
-
-Power increase
-Citadel building 1x power = 3 
-Research tech 1x power = 6
-Unit training power = 3
-
-Input needed: 
-Building, how much power increase it yields
-Research, how much power increase it yields
-Troop training total potential 
-
-
-
-
-*/
+export default DaySix;

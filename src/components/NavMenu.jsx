@@ -33,19 +33,3 @@ const NavMenu = ({ isExpanded }) => {
 }
 
 export default NavMenu
-
-
-/** 
- 
-min-h-0
-min-h-[50px]
-NavLinks to: 
- - Home Page (day navigation)
- - Total Score Page
- - Previous Event Score
- - Admin Page
- - About Page
-
-
-
- */

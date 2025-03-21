@@ -30,7 +30,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
 
   // Dropdown dispatch 
   const handleInstantDispatch = (field, value, troopType = null) => {
-    console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ' troopType: ', troopType);
+    // console.log("handleInstantDispatch values, field: ", field, ", value: ", value, ' troopType: ', troopType);
 
     if (troopType) {
       dispatch(updateTroopField({ troopType, field, unit: null, value }))
@@ -43,7 +43,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
 
   // updates the local state 
   const handleLocalChange = (field, value, troopType = null, unit = null) => {
-    console.log("handleLocalChange values: field:", field, ", unit:", unit, ", troopType:", troopType, ", value:", value);
+    // console.log("handleLocalChange values: field:", field, ", unit:", unit, ", troopType:", troopType, ", value:", value);
 
     setLocalState(prev => ({
       ...prev,
@@ -84,7 +84,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
         : localState[field];
     }
 
-    console.log("handleBlur before dispatch values: field: ", field, ', value: ', value, ', unit: ', unit, ', troopType: ', troopType);
+    // console.log("handleBlur before dispatch values: field: ", field, ', value: ', value, ', unit: ', unit, ', troopType: ', troopType);
 
     // Conditionally dispatch actions depending on whether TroopType or not 
     if (troopType) {
@@ -276,59 +276,3 @@ const DayFive = ({ activeDay, setActiveDay }) => {
 
 export default DayFive
 
-
-/*
-
-Troop training:
-1x lvl 1 = 2
-1x lvl 2 = 3
-1x lvl 3 = 5
-1x lvl 4 = 10
-1x lvl 5 = 20
-1x lvl 6 = 50
-1x lvl 7 = 100
-Promote units based on level gap = 1 point per level
-stop
-
-Input:
-    Available T1 troops to promote and to which level it will be promoted
-
-Top 1 score 52,5kk
-Top 10 score 11,2kk
-
-const handleLocalChange = (field, value, unit = null) => {
-    console.log("handleLocalChange values: field: ", field, ', unit: ', unit, ', value: ', value);
-    setLocalState((prev) => ({
-      ...prev,
-      [field]: unit
-        ? { ...prev[field], [unit]: value }
-        : value,
-    }));
-  };
-
-  const handleTroopTypeStateChange = (troopType, field, unit, value) => {
-
-    setLocalState(prev => ({
-      ...prev,
-      troops: {
-        ...prev.troops,
-        [troopType]: {
-          ...prev.troops[troopType],
-          [field]: unit ? {
-            ...prev.troops[troopType][field],
-            [unit]: value
-          } : value,
-        },
-      },
-    }));
-  };
-  const handleTroopTypeBlur = (troopType, field, unit = null) => {
-    const value = unit
-      ? localState.troops[troopType][field][unit] // Handle nested object with unit
-      : localState.troops[troopType][field];
-
-    dispatch(updateTroopField({ troopType, field, unit, value }));
-    dispatch(calculateDailyScoreDayFive());
-  }
-
-*/

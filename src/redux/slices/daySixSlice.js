@@ -68,21 +68,21 @@ const daySixSlice = createSlice({
                 .filter(value => value !== '') // Ignore missing values
                 .reduce((total, power) => total + (POINTS_AND_MULTIPLIERS.POWER_BUILDING * power), 0);
             
-            console.log('state.score.building:', state.score.building);
+            // console.log('state.score.building:', state.score.building);
         
             // Research Score Calculation (Ensuring Empty Values are Skipped)
             state.score.research = state.researchPower !== '' 
                 ? state.researchPower * POINTS_AND_MULTIPLIERS.POWER_RESEARCH 
                 : 0;
             
-            console.log('state.score.research:', state.score.research);
+            // console.log('state.score.research:', state.score.research);
         
             // Troop Score Calculation (Ensuring Empty Values are Skipped)
             state.score.troop = state.troopPower.troopsTrainedTotal !== '' 
             ? state.troopPower.troopsTrainedTotal  * state.troopPower.tier * POINTS_AND_MULTIPLIERS.POWER_TRAINING
             : 0;
             
-            console.log('state.score.troop:', state.score.troop);
+            // console.log('state.score.troop:', state.score.troop);
         
             // Update Total Score
             state.totalDailyScore = state.score.building + state.score.research + state.score.troop;

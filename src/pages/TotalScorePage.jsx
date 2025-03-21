@@ -28,8 +28,8 @@ const TotalScorePage = () => {
   
 
 
-  console.log('dailyScores:', dailyScores);
-  console.log('previousEventScores:', previousEventScores);
+  // console.log('dailyScores:', dailyScores);
+  // console.log('previousEventScores:', previousEventScores);
 
   const totalDailyScore = dailyScores.reduce((acc, curr) => acc + curr.score, 0);
   const totalPreviousFirst = previousEventScores.reduce((acc, curr) => acc + curr.score.first, 0);
