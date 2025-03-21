@@ -4,7 +4,7 @@ import { TROOP_POWER_MULTIPLIER } from '../../utils';
 import { calculateDailyScoreDaySix, resetStateDaySix, updateFieldDaySix } from '../../redux/slices';
 import {
   DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput, FormDropdown, FormWrapper,
-  ScoreBoardWrapper, ScoreBoardSection
+  ScoreBoardWrapper, ScoreBoardSection, InfoPopup, Modal
 } from '../../components';
 
 
@@ -13,6 +13,13 @@ const DaySix = ({ activeDay, setActiveDay }) => {
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.daySix);
   const [localState, setLocalState] = useState(dailyData);
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDaySix());
+    setShowModal(false);
+  };
+
 
   useEffect(() => {
     // console.log("data received from redux: ", dailyData);
@@ -44,19 +51,19 @@ const DaySix = ({ activeDay, setActiveDay }) => {
     dispatch(calculateDailyScoreDaySix({ field, unit }));
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDaySix());
-  }
 
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Six'} onClick={cancelForm} />
+      <FormHeader title={'Day Six'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
           {/* Input */}
           {/* Research estimate */}
-          <FormSubHeader title={'Research:'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Research:'} sizeClass='subheader-lg' />
+            <InfoPopup size='size-5' message={'Input the power gain difference based on the research you estimate to complete'} />
+          </div>
           <FormWrapper>
             <FormInput
               id={'researchPower'}
@@ -68,7 +75,10 @@ const DaySix = ({ activeDay, setActiveDay }) => {
           </FormWrapper>
           {/* Building estimates */}
           {/* 3x building queues */}
-          <FormSubHeader title={'Building queues:'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Building queues:'} sizeClass='subheader-lg' />
+            <InfoPopup size='size-5' message={'Input the power gain difference based on the buildings you estimate to complete'} />
+          </div>
           <FormWrapper>
             <FormInput
               id={'buildingPowerFirstQueue'}
@@ -94,7 +104,10 @@ const DaySix = ({ activeDay, setActiveDay }) => {
           </FormWrapper>
           {/* Troop estimates */}
           {/* Troop tier dropdown + number input for amount of troops */}
-          <FormSubHeader title={'Troops:'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Troops:'} sizeClass='subheader-lg' />
+            <InfoPopup size='size-5' message={'Add the troop total together from all the training queues'} />
+          </div>
           <FormWrapper>
             <FormInput
               title={'Expected trained: '}
@@ -150,6 +163,13 @@ const DaySix = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day six?'}
+      />
     </DayContainer>
   )
 }

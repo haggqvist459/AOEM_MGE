@@ -4,7 +4,7 @@ import { TRIBE_LEVEL_MULTIPLIERS, TROOP_POWER_MULTIPLIER } from '../../utils';
 import { calculateDailyScoreDaySeven, resetStateDaySeven, updateFieldDaySeven } from '../../redux/slices';
 import {
   DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput,
-  FormDropdown, ScoreBoardSection,
+  FormDropdown, ScoreBoardSection, Modal,
   ExpandableHeader, ExpandableSection, ScoreBoardWrapper, FormWrapper,
 } from '../../components';
 
@@ -13,7 +13,6 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.daySeven);
   const [localState, setLocalState] = useState(dailyData);
-
   const [expandedSections, setExpandedSections] = useState({
     tribeHunting: false,
     scrollsMedals: false,
@@ -22,6 +21,12 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
     gathering: false,
     score: false,
   });
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDaySeven());
+    setShowModal(false);
+  };
 
   useEffect(() => {
     // console.log("data received from redux: ", dailyData);
@@ -59,14 +64,10 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
     dispatch(calculateDailyScoreDaySeven({ field, unit }));
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDaySeven())
-  }
-
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Seven'} onClick={cancelForm} />
+      <FormHeader title={'Day Seven'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
           {/* Input */}
@@ -177,7 +178,7 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
           <ExpandableHeader title={'Power Gain'} isExpanded={expandedSections.power} toggleExpansion={() => toggleSection('power')} />
           <ExpandableSection isExpanded={expandedSections.power}>
             {/* Research estimate */}
-            <FormSubHeader title={'Research'} sizeClass='subheader-md' />
+            <FormSubHeader title={'Research:'} sizeClass='subheader-lg' />
             <FormWrapper>
               <FormInput
                 id={'researchPower'}
@@ -189,7 +190,7 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
             </FormWrapper>
             {/* Building estimates */}
             {/* 3x building queues */}
-            <FormSubHeader title={'Building'} sizeClass='subheader-md' />
+            <FormSubHeader title={'Building queues:'} sizeClass='subheader-lg' />
             <FormWrapper flex={'row'} className='space-x-1'>
               <FormInput
                 id={'buildingPowerFirstQueue'}
@@ -215,7 +216,7 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
             </FormWrapper>
             {/* Troop estimates */}
             {/* Troop tier dropdown + number input for amount of troops */}
-            <FormSubHeader title={'Troops:'} sizeClass='subheader-md' />
+            <FormSubHeader title={'Troops:'} sizeClass='subheader-lg' />
             <FormWrapper>
               <FormInput
                 title={'Expected trained: '}
@@ -285,6 +286,13 @@ const DaySeven = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day seven?'}
+      />
     </DayContainer>
   )
 }

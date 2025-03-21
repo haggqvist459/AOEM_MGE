@@ -4,7 +4,7 @@ import { TROOP_TIER_MULTIPLIERS } from '../../utils';
 import { calculateDailyScoreDayFive, resetStateDayFive, updateTroopField, updateFieldDayFive } from '../../redux/slices';
 import {
   DayContainer, FormButtons, FormHeader, FormSubHeader, TroopType, FormInput, FormDropdown,
-  ScoreBoardSection, ExpandableHeader, ExpandableSection,FormWrapper
+  ScoreBoardSection, ExpandableHeader, ExpandableSection, FormWrapper, InfoPopup, Modal
 } from '../../components';
 
 
@@ -17,7 +17,12 @@ const DayFive = ({ activeDay, setActiveDay }) => {
     troopTraining: true,
     troopData: false,
   });
+  const [showModal, setShowModal] = useState(false);
 
+  const confirmReset = () => {
+    dispatch(resetStateDayFive())
+    setShowModal(false);
+  };
   useEffect(() => {
     // console.log("data received from redux: ", dailyData);
     setLocalState(dailyData);
@@ -96,18 +101,18 @@ const DayFive = ({ activeDay, setActiveDay }) => {
     dispatch(calculateDailyScoreDayFive());
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDayFive())
-  }
-
 
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Five'} onClick={cancelForm} />
+      <FormHeader title={'Day Five'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
-          <FormSubHeader title={'Troop Promotion '} sizeClass={'subheader-lg'} />
+          <div className='flex flex-row space-x-1 '>
+            <FormSubHeader title={'Promotion'} sizeClass={'subheader-lg'} />
+            <InfoPopup size='size-5'
+              message={'Input the numbers from your Stable & Archery Range etc. Speed-ups will be evenly split between troop types. Leftover speed-up will be automatically used for training'} />
+          </div>
           {Object.keys(localState.troops).map((troopType, index) => (
             <TroopType
               key={index}
@@ -120,7 +125,7 @@ const DayFive = ({ activeDay, setActiveDay }) => {
           ))}
           {/* Troop training: */}
           <div className='border-b border-neutral-400 mb-2'>
-            <ExpandableHeader title={'Troop Training'} isExpanded={expandedSections.troopTraining} toggleExpansion={() => toggleSection('troopTraining')} />
+            <ExpandableHeader title={'Training'} isExpanded={expandedSections.troopTraining} toggleExpansion={() => toggleSection('troopTraining')} />
             <ExpandableSection isExpanded={expandedSections.troopTraining}>
               <div className='flex flex-col xs:flex-row space-x-1'>
                 {/* Tier & Troops per batch  */}
@@ -270,6 +275,13 @@ const DayFive = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day five?'}
+      />
     </DayContainer >
   )
 }

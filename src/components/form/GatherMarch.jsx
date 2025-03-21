@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
-import { ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, ToggleButton } from '../../components';
+import { ExpandableHeader, ExpandableSection, FormSubHeader, FormInput, ToggleButton, Modal } from '../../components';
 
 
 
 const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handleInstantDispatch }) => {
 
     const [isExpanded, setIsExpanded] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+
+    const confirmDelete = () => {
+        onDelete(marchId)
+        setShowModal(false);
+    };
+
     return (
         <div className='pb-1 mb-1 border-b border-neutral-400'>
             <ExpandableHeader title={title} isExpanded={isExpanded} toggleExpansion={() => setIsExpanded(!isExpanded)} />
@@ -22,14 +29,8 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
                 />
                 <div className='grid grid-cols-1 xs:grid-cols-2 gap-1'>
                     <FormInput
-                        title={'Load capacity:'}
-                        id={`March-${marchId}-loadCapacity`}
-                        placeholder={'0'}
-                        value={march.loadCapacity}
-                        onChange={(newValue) => onChange('loadCapacity', newValue, marchId)}
-                        onBlur={() => onBlur('loadCapacity', null, marchId)}
-                    />
-                    <FormInput
+                        showInfo={true}
+                        message={'Add each hero`s skill and talent based bonuses into one value'}
                         title={'Load bonus:'}
                         id={`March-${marchId}-loadBonus`}
                         placeholder={'0%'}
@@ -37,6 +38,14 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
                         onChange={(newValue) => onChange('loadBonus', newValue, marchId)}
                         onBlur={() => onBlur('loadBonus', null, marchId)}
                         allowDecimals={true}
+                    />
+                    <FormInput
+                        title={'Load capacity:'}
+                        id={`March-${marchId}-loadCapacity`}
+                        placeholder={'0'}
+                        value={march.loadCapacity}
+                        onChange={(newValue) => onChange('loadCapacity', newValue, marchId)}
+                        onBlur={() => onBlur('loadCapacity', null, marchId)}
                     />
                     <FormInput
                         title={'Completed turns:'}
@@ -55,7 +64,7 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
                             />
                         </div>
                         <button
-                            onClick={() => onDelete(marchId)}
+                            onClick={() => setShowModal(true)}
                             aria-label="Clear Form"
                             className="text-blue-900 hover:text-blue-50 self-end"
                         >
@@ -67,6 +76,13 @@ const GatherMarch = ({ march, marchId, title, onChange, onBlur, onDelete, handle
 
                 </div>
             </ExpandableSection>
+            <Modal
+                isOpen={showModal}
+                onCancel={() => setShowModal(false)}
+                onConfirm={confirmDelete}
+                title="Delete March"
+                description={`You are about to delete ${march.marchName}`}
+            />
         </div>
     )
 }

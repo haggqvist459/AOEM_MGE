@@ -4,7 +4,7 @@ import { calculateDailyScoreDayOne, resetStateDayOne, updateFieldDayOne } from '
 import { TRIBE_LEVEL_MULTIPLIERS } from '../../utils'
 import {
   DayContainer, FormButtons, FormHeader, FormSubHeader, FormInput,
-  FormDropdown, FormWrapper, ScoreBoardSection
+  FormDropdown, FormWrapper, ScoreBoardSection, Modal
 } from '../../components'
 
 const DayOne = ({ activeDay, setActiveDay }) => {
@@ -12,8 +12,13 @@ const DayOne = ({ activeDay, setActiveDay }) => {
 
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.dayOne);
-
   const [localState, setLocalState] = useState(dailyData);
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDayOne());
+    setShowModal(false);
+  };
 
   useEffect(() => {
     setLocalState(dailyData);
@@ -48,13 +53,10 @@ const DayOne = ({ activeDay, setActiveDay }) => {
     dispatch(calculateDailyScoreDayOne())
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDayOne())
-  }
 
   return (
     <DayContainer>
-      <FormHeader title={'Day One'} onClick={cancelForm} />
+      <FormHeader title={'Day One'} onClick={() => setShowModal(true)} />
       {/* Split section in half vertically, input on left and output on the right. */}
       {/* On smaller breakpoints, display everything in one column. */}
       <div className='flex flex-col md:flex-row'>
@@ -113,6 +115,13 @@ const DayOne = ({ activeDay, setActiveDay }) => {
       </div>
       {/* buttons */}
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day one?'}
+      />
     </DayContainer>
   )
 }

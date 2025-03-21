@@ -1,12 +1,19 @@
 import React from 'react';
-import { FormSubHeader } from '../../components'
+import { FormSubHeader, InfoPopup } from '../../components'
 
-const FormInput = ({ title, id, placeholder, value, onChange, onBlur, required = false, allowDecimals = false, type = 'number' }) => {
+const FormInput = ({ showInfo = false, message, title, id, placeholder, value, onChange, onBlur, required = false, allowDecimals = false, type = 'number' }) => {
     return (
         <div className='flex flex-col'>
-            {title &&
-                <FormSubHeader title={title} />
-            }
+            <div className='flex flex-row space-x-1'>
+                {title &&
+                    <FormSubHeader title={title} />
+                }
+                {showInfo &&
+                    <div className="relative top-[2px]">
+                        <InfoPopup size='size-4' message={message} />
+                    </div>
+                }
+            </div>
             <input
                 type={type}
                 inputMode={type === 'number' ? 'numeric' : undefined}

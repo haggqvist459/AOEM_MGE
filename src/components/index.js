@@ -6,3 +6,5 @@ export { default as DayContainer } from './DayContainer';
 export { default as TroopType } from './TroopType';
 export { default as NavMenu } from './NavMenu';
 export { default as NavButton } from './NavButton';
+export { default as InfoPopup } from './InfoPopup';
+export { default as Modal } from './Modal';

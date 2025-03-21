@@ -1,17 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { deleteData, exportLocalStorageToFile, importLocalStorageFromFile } from '../utils'
-import { DayContainer, FormHeader, FormSubHeader } from '../components'
+import { DayContainer, FormHeader, FormSubHeader, Modal } from '../components'
 
 const AdminPage = () => {
 
   const handleInputButtonClick = () => {
     document.getElementById('inputBackup').click(); // Trigger the file input click
   };
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmDelete = () => {
+    deleteData()
+    setShowModal(false);
+  };
 
 
   return (
     <DayContainer className={'text-center'}>
-      <FormHeader title={'Data management'}  showTrash={false}/>
+      <FormHeader title={'Data management'} showTrash={false} />
       <div className='flex flex-col md:flex-row space-x-5 justify-center'>
         {/* Export stuff */}
         <div className='w-full  md:w-1/3 flex flex-col items-center mb-5 pb-3 border-b border-neutral-400 md:border-none'>
@@ -51,12 +57,19 @@ const AdminPage = () => {
           <button
             type='button'
             className='w-1/2 mt-4 hover:border-2 hover:border-blue-900 bg-neutral-400 hover:bg-neutral-500 rounded text-blue-900 font-bold'
-            onClick={() => deleteData()}
+            onClick={() => setShowModal(true)}
           >
             Delete
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmDelete}
+        title="Delete everything"
+        description={'Delete all stored data across all seven days?'}
+      />
     </DayContainer>
   )
 }

@@ -32,7 +32,7 @@ const HomePage = () => {
   return (
     <div>
       <div className='relative w-full px-3 h-10 bg-blue-950 flex flex-row items-center justify-center gap-x-2'>
-        <p className='text-white font-semibold min-w-max text-lg'>Jump to Day: </p>
+        <p className='text-white font-semibold min-w-max text-lg'>Jump to: </p>
         <div className='relative overflow-x-auto flex flex-row  whitespace-nowrap scroll-smooth snap-x snap-mandatory gap-x-5 '>
           {menuOptions}
         </div>

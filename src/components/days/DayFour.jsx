@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { calculateDailyScoreDayFour, resetStateDayFour, updateFieldDayFour } from '../../redux/slices';
 import {
   DayContainer, FormInput, FormWrapper, FormButtons, FormHeader,
-  FormSubHeader, ScoreBoardSection
+  FormSubHeader, ScoreBoardSection, InfoPopup, Modal
 } from '../../components';
 
 
@@ -12,6 +12,12 @@ const DayFour = ({ activeDay, setActiveDay }) => {
   const dispatch = useDispatch()
   const dailyData = useSelector((state) => state.dayFour)
   const [localState, setLocalState] = useState(dailyData);
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDayFour())
+    setShowModal(false);
+  };
 
   useEffect(() => {
     setLocalState(dailyData);
@@ -40,17 +46,16 @@ const DayFour = ({ activeDay, setActiveDay }) => {
   };
 
 
-  const cancelForm = () => {
-    dispatch(resetStateDayFour())
-  }
-
   return (
     <DayContainer>
-      <FormHeader title={'Day Four'} onClick={cancelForm} />
+      <FormHeader title={'Day Four'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
           {/* Input */}
-          <FormSubHeader title={'Ring upgrades'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Ring upgrades'} sizeClass='subheader-lg' />
+            <InfoPopup size='size-5' message={'Ring materials are consumed in batches based on individual ring levels, these scores are rough estimates.'} />
+          </div>
           <div className='grid grid-cols-1 xs:grid-cols-2 gap-1'>
             {/* Hammers */}
             <FormInput
@@ -214,6 +219,13 @@ const DayFour = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day four?'}
+      />
     </DayContainer>
   )
 }

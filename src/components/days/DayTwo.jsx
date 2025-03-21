@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { calculateDailyScoreDayTwo, resetStateDayTwo, updateFieldDayTwo } from '../../redux/slices';
-import { DAY_KEYS } from '../../utils';
 import {
   DayContainer, FormWrapper, FormButtons, FormHeader, FormSubHeader,
-  ScoreBoardSection, FormInput
+  ScoreBoardSection, FormInput,
+  InfoPopup, Modal
 } from '../../components';
 
 
@@ -13,6 +13,12 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
   const dispatch = useDispatch();
   const dailyData = useSelector((state) => state.dayTwo);
   const [localState, setLocalState] = useState(dailyData);
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDayTwo());
+    setShowModal(false);
+  };
 
   useEffect(() => {
     setLocalState(dailyData);
@@ -39,19 +45,18 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
     dispatch(calculateDailyScoreDayTwo({ field, unit }));
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDayTwo());
-  }
-
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Two'} onClick={cancelForm} />
+      <FormHeader title={'Day Two'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
           {/* Input */}
           {/* Medals */}
-          <FormSubHeader title={'Medals'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Medals'} sizeClass='subheader-lg' />
+            <InfoPopup message={'As medals are consumed in batches based on individual hero ranks, these scores are rough estimates.'} />
+          </div>
           <FormWrapper>
             <FormInput
               title={'Legendary:'}
@@ -71,7 +76,10 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
             />
           </FormWrapper>
           {/* Scrolls */}
-          <FormSubHeader title={'Scrolls'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Scrolls'} sizeClass='subheader-lg' />
+            <InfoPopup message={'As scrolls are consumed in batches based on individual hero skill ranks, these scores are rough estimates.'} />
+          </div>
           <FormWrapper>
             <FormInput
               title={'Legendary:'}
@@ -91,7 +99,10 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
             />
           </FormWrapper>
           {/* Blueprints */}
-          <FormSubHeader title={'Blueprints'} sizeClass='subheader-lg' />
+          <div className='flex flex-row space-x-1'>
+            <FormSubHeader title={'Blueprints'} sizeClass='subheader-lg' />
+            <InfoPopup message={'For Pre-forged, input the number of blueprints completed but not claimed before day two starts.'} />
+          </div>
           <FormWrapper>
             <FormInput
               title={'Legendary:'}
@@ -205,6 +216,13 @@ const DayTwo = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day two?'}
+      />
     </DayContainer>
   )
 }

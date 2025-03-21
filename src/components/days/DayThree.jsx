@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { calculateDailyScoreDayThree, resetStateDayThree, updateMarchField, updateFieldDayThree, addMarch, removeMarch } from '../../redux/slices'
-import { DayContainer, FormWrapper, FormButtons, FormHeader, GatherMarch, FormSubHeader, FormInput, FormDropdown, ScoreBoardSection } from '../../components'
-import { RESOURCE_FIELD_MAP } from '../../utils'
+import { DayContainer, FormWrapper, FormButtons, FormHeader, GatherMarch, FormSubHeader, FormInput, FormDropdown, ScoreBoardSection, Modal } from '../../components'
 
 const DayThree = ({ activeDay, setActiveDay }) => {
 
@@ -11,6 +10,12 @@ const DayThree = ({ activeDay, setActiveDay }) => {
   const [localState, setLocalState] = useState(dailyData);
   const [richFieldOptions, setRichFieldOptions] = useState({})
   const [allianceCentreOptions, setAllianceCentreOptions] = useState({})
+  const [showModal, setShowModal] = useState(false);
+
+  const confirmReset = () => {
+    dispatch(resetStateDayThree());
+    setShowModal(false);
+  };
 
   useEffect(() => {
     // console.log("data received from redux: ", dailyData);
@@ -113,14 +118,11 @@ const DayThree = ({ activeDay, setActiveDay }) => {
     }));
   };
 
-  const cancelForm = () => {
-    dispatch(resetStateDayThree())
-  }
 
 
   return (
     <DayContainer>
-      <FormHeader title={'Day Three'} onClick={cancelForm} />
+      <FormHeader title={'Day Three'} onClick={() => setShowModal(true)} />
       <div className='flex flex-col md:flex-row'>
         <div className='w-full md:w-1/2 md:border-r border-neutral-400 md:pr-2'>
           {/* Input */}
@@ -212,6 +214,13 @@ const DayThree = ({ activeDay, setActiveDay }) => {
         </div>
       </div>
       <FormButtons activeDay={activeDay} setActiveDay={setActiveDay} />
+      <Modal
+        isOpen={showModal}
+        onCancel={() => setShowModal(false)}
+        onConfirm={confirmReset}
+        title="Reset"
+        description={'Clear all values for day three?'}
+      />
     </DayContainer>
   )
 }
