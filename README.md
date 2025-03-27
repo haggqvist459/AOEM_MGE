@@ -1,5 +1,7 @@
 # A calculator for the M.G.E. event in Age of Empires Mobile 
 
+- Site link: [M.G.E Calculator](https://mge-calc.netlify.app)
+- Save it to the home screen for stand-alone functionality 
 
 ## Todo: 
 ### Main Page: 
