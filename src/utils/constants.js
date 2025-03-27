@@ -134,6 +134,7 @@ export const POINTS_AND_MULTIPLIERS = {
     POWER_BUILDING: 3,
     POWER_RESEARCH: 6,
     POWER_TRAINING: 3
-}
+} as const
 
 
+ 
